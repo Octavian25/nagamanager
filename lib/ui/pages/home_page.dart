@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                     child: GridView.count(
                       shrinkWrap: true,
                       childAspectRatio: 50.sw / 10000,
-                      crossAxisCount: 3, children: barang.map((e) => ItemCard()).toList(), crossAxisSpacing: 15.h, mainAxisSpacing: 15.w, ),
+                      crossAxisCount: 3, children: dummyItemModel.map((e) => ItemCard(itemModel: e)).toList(), crossAxisSpacing: 15.h, mainAxisSpacing: 15.w, ),
                   ),
                 ],
               ),

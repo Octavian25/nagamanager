@@ -1,8 +1,8 @@
 part of 'widgets.dart';
 
 class ItemCard extends StatelessWidget {
-
-  const ItemCard({Key? key}) : super(key: key);
+  final ItemModel itemModel;
+  const ItemCard({Key? key, required this.itemModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,63 +13,7 @@ class ItemCard extends StatelessWidget {
               borderRadius: BorderRadius.only(topRight: Radius.circular(15), topLeft:Radius.circular(15) )
             ),
               context: context, builder: (BuildContext context){
-            return Container(
-              height: 150.h,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  BounceInUp(
-                    child: Container(
-                      width: 160.w,
-                      height: 150.w,
-                      decoration: BoxDecoration(
-                          color: blue,
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 5.h,
-                          ),
-                          Image.asset("assets/stock-in.png", width: 76.w, height: 60.h,),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Text("Stock In", style: normalText.copyWith(color: Colors.white),)
-                        ],
-                      ),
-                    ),
-                    duration: Duration(milliseconds: 500),
-                  ),
-                  SizedBox(
-                    width: 25.w,
-                  ),
-                  BounceInUp(
-                    child: Container(
-                      width: 160.w,
-                      height: 150.w,
-                      decoration: BoxDecoration(
-                          color: red,
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 5.h,
-                          ),
-                          Image.asset("assets/stock-out.png", width: 76.w, height: 60.h,),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Text("Stock Out", style: normalText.copyWith(color: Colors.white),)
-                        ],
-                      ),
-                    ),
-                    duration: Duration(milliseconds: 500),
-                  ),
-                ],
-              ),
-            );
+            return BottomSheetSelectedItem(itemModel: itemModel,);
           })
       },
       child: Container(
@@ -85,16 +29,17 @@ class ItemCard extends StatelessWidget {
             SizedBox(
               width: 5.w,
             ),
-            Image.asset("assets/product-1.png", width: 100.w, height: 100.h,),
+            Image.network(itemModel.image_path, width: 100.w, height: 100.h,),
             SizedBox(
-              width: 5.w,
+              width: 10.w,
             ),
             Expanded(child: Container(
               padding: EdgeInsets.symmetric(horizontal: 2.w),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Macbook Pro M1 Max 2TB 32GB", style: normalText, maxLines: 2,),
+                  Text(itemModel.name, style: normalText, maxLines: 2,),
                   SizedBox(
                     height: 5.h,
                   ),
@@ -104,7 +49,7 @@ class ItemCard extends StatelessWidget {
                       SizedBox(
                         width: 11.w,
                       ),
-                      Expanded(child: Text("KB-00012341", style: normalText.copyWith(fontWeight: FontWeight.w600, fontSize: 14.sp),))
+                      Expanded(child: Text(itemModel.barcode, style: normalText.copyWith(fontWeight: FontWeight.w600, fontSize: 14.sp),))
                     ],
                   ),
                   Row(
@@ -113,7 +58,7 @@ class ItemCard extends StatelessWidget {
                       SizedBox(
                         width: 11.w,
                       ),
-                      Expanded(child: Text("1300", style: normalText.copyWith(fontWeight: FontWeight.w600, fontSize: 14.sp),))
+                      Expanded(child: Text(itemModel.qty.toString(), style: normalText.copyWith(fontWeight: FontWeight.w600, fontSize: 14.sp),))
                     ],
                   )
                 ],
