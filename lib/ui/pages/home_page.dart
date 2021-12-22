@@ -8,10 +8,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<int> barang = [1300, 1400, 1500, 1600,1700,2800, 3914, 1923, 19483];
+  var searchResult = "";
+  TextEditingController search = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    ItemProvider itemProvider = Provider.of<ItemProvider>(context);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     return SafeArea(child: Scaffold(
       backgroundColor: background,
       body: Padding(
@@ -19,7 +22,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Container(
-              height: 100.h,
+              height: 150.h,
               width: 100.sw,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,51 +31,101 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Selamat Datang,", style: titleText.copyWith(fontWeight: FontWeight.w200),),
-                      Text("Octavian", style: titleText,),
+                      Text(authProvider.user!.username, style: titleText,),
                       SizedBox(
                         height: 15.h,
                       ),
                       Container(
-                        height: 30.h,
-                        width: 150.w,
+                        height: 45.h,
+                        width: 129.w,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: red,
-                            onPrimary: white
+                              primary: red,
+                              onPrimary: white
                           ),
-                          onPressed: () => {},
+                          onPressed: () => {
+                            Navigator.pushNamed(context, "/login")
+                          },
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Logout", style: normalText,),
-                              SizedBox(
-                                width: 29.w,
-                              ),
-                              Image.asset("assets/logo-logout.png", scale: 1.3,)
+
+                              Image.asset("assets/logo-logout.png", scale: 1,)
                             ],
                           ),
                         ),
                       )
                     ],
                   )),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/tracking", arguments: true);
+                    },
+                    child: Container(
+                      width: 160.w,
+                      height: 150.w,
+                      decoration: BoxDecoration(
+                          color: blue,
+                          borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/stock-in.png", width: 60.w, height: 76.h,),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          Text("Track In", style: normalText.copyWith(color: Colors.white),)
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 18.w,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/tracking", arguments: false);
+                    },
+                    child: Container(
+                      width: 160.w,
+                      height: 150.w,
+                      decoration: BoxDecoration(
+                          color: red,
+                          borderRadius: BorderRadius.circular(15)
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/stock-out.png", width: 60.w, height: 76.h,),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          Text("Track Out", style: normalText.copyWith(color: Colors.white),)
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 18.w,
+                  ),
                   Container(
                     width: 160.w,
                     height: 150.w,
                     decoration: BoxDecoration(
-                      color: blue,
-                      borderRadius: BorderRadius.circular(15)
+                        color: blue,
+                        borderRadius: BorderRadius.circular(15)
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: 5.h,
-                        ),
                         Image.asset("assets/logo-box.png", width: 30.w, height: 34.h,),
-                        Container(
-                          height: 54.w,
-                          width: 78.w,
-                          child: Text("3.2K", style: bigText.copyWith(color: Colors.white),),
-                        ),
-                        Text("Total In", style: normalText.copyWith(color: Colors.white),)
+                        Text(itemProvider.totalIn.toString(), style: bigText.copyWith(color: Colors.white),),
+                        Text("Monthly Stock In", style: normalText.copyWith(color: Colors.white),)
                       ],
                     ),
                   ),
@@ -87,20 +140,15 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(15)
                     ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          height: 5.h,
-                        ),
                         Image.asset("assets/logo-box.png", width: 30.w, height: 34.h,),
-                        Container(
-                          height: 54.w,
-                          width: 78.w,
-                          child: Text("3.2K", style: bigText.copyWith(color: Colors.white),),
-                        ),
-                        Text("Total Out", style: normalText.copyWith(color: Colors.white),)
+                        Text(itemProvider.totalOut.toString(), style: bigText.copyWith(color: Colors.white),),
+                        Text("Monthly Stock Out", style: normalText.copyWith(color: Colors.white),)
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -114,45 +162,57 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 16.h,
+                  ),
                   Container(
-                    height: 30.h,
+                    height: 45.h,
                     width: 873.w,
                     margin: EdgeInsets.only(bottom: 10.h),
                     decoration: BoxDecoration(
-                      border: Border.all(color: grey, width: 1),
-                      borderRadius: BorderRadius.circular(8)
+                        border: Border.all(color: Colors.black26, width: 1),
+                        borderRadius: BorderRadius.circular(8)
                     ),
                     child: Center(
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 25.w,
-                          ),
-                          Container(
-                            width: 26.w,
-                            child: Icon(Icons.search, size: 25.w,),
-                          ),
-                          SizedBox(
-                            width: 25.w,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              style: normalText,
-                              decoration: InputDecoration.collapsed(
-                                hintText: "Search",
-                                hintStyle: normalText,
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 25.w,
+                            ),
+                            Container(
+                              width: 26.w,
+                              child: Icon(Icons.search, size: 25.w,),
+                            ),
+                            SizedBox(
+                              width: 25.w,
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                style: normalText,
+                                controller: search,
+                                onChanged: (data) => {
+                                setState(() {
+                                searchResult = search.text;
+                                })
+                                },
+                                decoration: InputDecoration.collapsed(
+                                  hintText: "Search",
+                                  hintStyle: normalText,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
+                          ],
+                        )
                     ),
+                  ),
+                  SizedBox(
+                    height: 24.h,
                   ),
                   Expanded(
                     child: GridView.count(
                       shrinkWrap: true,
-                      childAspectRatio: 50.sw / 10000,
-                      crossAxisCount: 3, children: dummyItemModel.map((e) => ItemCard(itemModel: e)).toList(), crossAxisSpacing: 15.h, mainAxisSpacing: 15.w, ),
+                      childAspectRatio: 271.w/130.h,
+                      crossAxisCount: 3, children: itemProvider.item!.where((element) => element.name.toLowerCase().contains(searchResult.toLowerCase())).map((e) => ItemCard(itemModel: e)).toList(), crossAxisSpacing: 15.h, mainAxisSpacing: 15.w, ),
                   ),
                 ],
               ),
@@ -163,3 +223,4 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 }
+
