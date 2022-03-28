@@ -15,151 +15,177 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     ItemProvider itemProvider = Provider.of<ItemProvider>(context);
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    return SafeArea(child: Scaffold(
-      backgroundColor: background,
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
             Container(
-              height: 150.h,
-              width: 100.sw,
+              height: 55.h,
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Selamat Datang,", style: titleText.copyWith(fontWeight: FontWeight.w200),),
-                      Text(authProvider.user!.username, style: titleText,),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      Container(
-                        height: 45.h,
-                        width: 129.w,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: red,
-                              onPrimary: white
-                          ),
-                          onPressed: () => {
-                            Navigator.pushNamed(context, "/login")
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Logout", style: normalText,),
-
-                              Image.asset("assets/logo-logout.png", scale: 1,)
-                            ],
-                          ),
+                  SizedBox(
+                    width: 16.w,
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: "#E8ECF2".toColor(), elevation: 0),
+                    child: Row(
+                      children: [
+                        Icon(Iconsax.arrow_square_left, color: text, size: 20),
+                        SizedBox(
+                          width: 10.w,
                         ),
-                      )
-                    ],
-                  )),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, "/tracking", arguments: true);
-                    },
-                    child: Container(
-                      width: 160.w,
-                      height: 150.w,
-                      decoration: BoxDecoration(
-                          color: blue,
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset("assets/stock-in.png", width: 60.w, height: 76.h,),
-                          SizedBox(
-                            height: 19.h,
-                          ),
-                          Text("Track In", style: normalText.copyWith(color: Colors.white),)
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 18.w,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, "/tracking", arguments: false);
-                    },
-                    child: Container(
-                      width: 160.w,
-                      height: 150.w,
-                      decoration: BoxDecoration(
-                          color: red,
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset("assets/stock-out.png", width: 60.w, height: 76.h,),
-                          SizedBox(
-                            height: 19.h,
-                          ),
-                          Text("Track Out", style: normalText.copyWith(color: Colors.white),)
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 18.w,
-                  ),
-                  Container(
-                    width: 160.w,
-                    height: 150.w,
-                    decoration: BoxDecoration(
-                        color: blue,
-                        borderRadius: BorderRadius.circular(15)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/logo-box.png", width: 30.w, height: 34.h,),
-                        Text(itemProvider.totalIn.toString(), style: bigText.copyWith(color: Colors.white),),
-                        Text("Monthly Stock In", style: normalText.copyWith(color: Colors.white),)
+                        Text(
+                          'Back',
+                          style: normalText.copyWith(color: text),
+                        )
                       ],
                     ),
-                  ),
-                  SizedBox(
-                    width: 18.w,
-                  ),
-                  Container(
-                    width: 160.w,
-                    height: 150.w,
-                    decoration: BoxDecoration(
-                        color: red,
-                        borderRadius: BorderRadius.circular(15)
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset("assets/logo-box.png", width: 30.w, height: 34.h,),
-                        Text(itemProvider.totalOut.toString(), style: bigText.copyWith(color: Colors.white),),
-                        Text("Monthly Stock Out", style: normalText.copyWith(color: Colors.white),)
-                      ],
-                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/dashboard");
+                    },
                   ),
                 ],
               ),
             ),
-            Expanded(child:
             Container(
+              height: 150.h,
+              width: 100.sw,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/tracking",
+                          arguments: true);
+                    },
+                    child: Container(
+                      width: 160.w,
+                      height: 150.w,
+                      decoration: BoxDecoration(
+                          color: blue, borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/stock-in.png",
+                            width: 60.w,
+                            height: 76.h,
+                          ),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          Text(
+                            "Track In",
+                            style: normalText.copyWith(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 18.w,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, "/tracking",
+                          arguments: false);
+                    },
+                    child: Container(
+                      width: 160.w,
+                      height: 150.w,
+                      decoration: BoxDecoration(
+                          color: red, borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/stock-out.png",
+                            width: 60.w,
+                            height: 76.h,
+                          ),
+                          SizedBox(
+                            height: 19.h,
+                          ),
+                          Text(
+                            "Track Out",
+                            style: normalText.copyWith(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  // Container(
+                  //   width: 160.w,
+                  //   height: 150.w,
+                  //   decoration: BoxDecoration(
+                  //       color: blue, borderRadius: BorderRadius.circular(15)),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.center,
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Image.asset(
+                  //         "assets/logo-box.png",
+                  //         width: 30.w,
+                  //         height: 34.h,
+                  //       ),
+                  //       Text(
+                  //         itemProvider.totalIn.toString(),
+                  //         style: bigText.copyWith(color: Colors.white),
+                  //       ),
+                  //       Text(
+                  //         "Monthly Stock In",
+                  //         style: normalText.copyWith(color: Colors.white),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
+                  // SizedBox(
+                  //   width: 18.w,
+                  // ),
+                  // Container(
+                  //   width: 160.w,
+                  //   height: 150.w,
+                  //   decoration: BoxDecoration(
+                  //       color: red, borderRadius: BorderRadius.circular(15)),
+                  //   child: Column(
+                  //     crossAxisAlignment: CrossAxisAlignment.center,
+                  //     mainAxisAlignment: MainAxisAlignment.center,
+                  //     children: [
+                  //       Image.asset(
+                  //         "assets/logo-box.png",
+                  //         width: 30.w,
+                  //         height: 34.h,
+                  //       ),
+                  //       Text(
+                  //         itemProvider.totalOut.toString(),
+                  //         style: bigText.copyWith(color: Colors.white),
+                  //       ),
+                  //       Text(
+                  //         "Monthly Stock Out",
+                  //         style: normalText.copyWith(color: Colors.white),
+                  //       )
+                  //     ],
+                  //   ),
+                  // ),
+                ],
+              ),
+            ),
+            Expanded(
+                child: Container(
               margin: EdgeInsets.only(top: 10.h),
               padding: EdgeInsets.all(10.h),
               decoration: BoxDecoration(
+                  border: Border.all(color: "#DAE7F0".toColor()),
                   borderRadius: BorderRadius.circular(15),
-                  color: white
-              ),
+                  color: white),
               child: Column(
                 children: [
                   SizedBox(
@@ -171,39 +197,40 @@ class _HomePageState extends State<HomePage> {
                     margin: EdgeInsets.only(bottom: 10.h),
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black26, width: 1),
-                        borderRadius: BorderRadius.circular(8)
-                    ),
+                        borderRadius: BorderRadius.circular(8)),
                     child: Center(
                         child: Row(
-                          children: [
-                            SizedBox(
-                              width: 25.w,
-                            ),
-                            Container(
-                              width: 26.w,
-                              child: Icon(Icons.search, size: 25.w,),
-                            ),
-                            SizedBox(
-                              width: 25.w,
-                            ),
-                            Expanded(
-                              child: TextFormField(
-                                style: normalText,
-                                controller: search,
-                                onChanged: (data) => {
-                                setState(() {
+                      children: [
+                        SizedBox(
+                          width: 25.w,
+                        ),
+                        Container(
+                          width: 26.w,
+                          child: Icon(
+                            Icons.search,
+                            size: 25.w,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 25.w,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            style: normalText,
+                            controller: search,
+                            onChanged: (data) => {
+                              setState(() {
                                 searchResult = search.text;
-                                })
-                                },
-                                decoration: InputDecoration.collapsed(
-                                  hintText: "Search",
-                                  hintStyle: normalText,
-                                ),
-                              ),
+                              })
+                            },
+                            decoration: InputDecoration.collapsed(
+                              hintText: "Search",
+                              hintStyle: normalText,
                             ),
-                          ],
-                        )
-                    ),
+                          ),
+                        ),
+                      ],
+                    )),
                   ),
                   SizedBox(
                     height: 24.h,
@@ -211,8 +238,17 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: GridView.count(
                       shrinkWrap: true,
-                      childAspectRatio: 271.w/130.h,
-                      crossAxisCount: 3, children: itemProvider.item!.where((element) => element.name.toLowerCase().contains(searchResult.toLowerCase())).map((e) => ItemCard(itemModel: e)).toList(), crossAxisSpacing: 15.h, mainAxisSpacing: 15.w, ),
+                      childAspectRatio: 271.w / 130.h,
+                      crossAxisCount: 3,
+                      children: itemProvider.item!
+                          .where((element) => element.name
+                              .toLowerCase()
+                              .contains(searchResult.toLowerCase()))
+                          .map((e) => ItemCard(itemModel: e))
+                          .toList(),
+                      crossAxisSpacing: 15.h,
+                      mainAxisSpacing: 15.w,
+                    ),
                   ),
                 ],
               ),
@@ -223,4 +259,3 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 }
-

@@ -11,6 +11,7 @@ class _StockingPageState extends State<StockingPage> {
   var focusBarcode = FocusNode();
   final barcodeController = TextEditingController();
   var counter = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -31,7 +32,7 @@ class _StockingPageState extends State<StockingPage> {
         child: Column(
           children: [
             Container(
-              height: 150.h,
+              height: 155.h,
               width: 100.sw,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -219,6 +220,9 @@ class _StockingPageState extends State<StockingPage> {
                                   )
                                 ),
                                 onPressed: ()async{
+                                  setState(() {
+                                    isLoading = true;
+                                  });
                                   StockingProvider stockingProvider =
                                   Provider.of<StockingProvider>(context, listen: false);
                                   AuthProvider authProvider =
@@ -229,6 +233,9 @@ class _StockingPageState extends State<StockingPage> {
                                   String date = dateToday.toString().substring(0,10);
                                   var stockingModel = StockingModel(barcode: stockargumen.itemModel.barcode, inputBy: authProvider.user!.username, date: date, qty: counter, type: stockargumen.isStockIn ? "IN" : "OUT");
                                   if(await stockingProvider.sendStocking(authProvider.user!.accessToken, stockingModel)){
+                                    setState(() {
+                                      isLoading = true;
+                                    });
                                     await itemProvider.getProject(authProvider.user!.accessToken);
                                     await itemProvider.getTotalOut(authProvider.user!.accessToken);
                                     await itemProvider.getTotalIn(authProvider.user!.accessToken);
@@ -237,7 +244,7 @@ class _StockingPageState extends State<StockingPage> {
                                     });
                                     showModalBottomSheet(
                                         isDismissible: false,
-                                        shape: RoundedRectangleBorder(
+                                        shape: const RoundedRectangleBorder(
                                             borderRadius: BorderRadius.only(topRight: Radius.circular(15), topLeft:Radius.circular(15) )
                                         ),
                                         context: context, builder: (BuildContext context){
@@ -269,6 +276,9 @@ class _StockingPageState extends State<StockingPage> {
                                       );
                                     });
                                   } else {
+                                    setState(() {
+                                      isLoading = true;
+                                    });
                                     showModalBottomSheet(
                                         isDismissible: false,
                                         shape: RoundedRectangleBorder(
@@ -305,7 +315,25 @@ class _StockingPageState extends State<StockingPage> {
                                   }
 
                                 },
-                                child: Text("Simpan"),
+                                child: isLoading ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 13.w,
+                                      height: 13.w,
+                                      child: CircularProgressIndicator(backgroundColor: white,),
+                                    ),
+                                    SizedBox(
+                                      width: 15.w,
+                                    ),
+                                    Text("Loading..", style: normalText,)
+                                  ],
+                                ) : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("Simpan", style: normalText,)
+                                  ],
+                                ),
                               ),
                             ),
                           )

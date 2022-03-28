@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "689903734972",
+    "project_id": "nagawarehouse-de525",
+    "storage_bucket": "nagawarehouse-de525.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:689903734972:android:3c5d1cfbb09a97523a40b9",
+        "android_client_info": {
+          "package_name": "com.octatech.nagamanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "689903734972-tnvtfi5cpf2dmitq5691b0f47hr35ge9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBta1eRchveN6WXity2CWaxnjW1BJNa0l4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "689903734972-tnvtfi5cpf2dmitq5691b0f47hr35ge9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

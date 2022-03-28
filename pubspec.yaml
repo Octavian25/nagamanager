@@ -41,10 +41,19 @@ dependencies:
   animate_do: any
   fluttertoast: ^8.0.8
   flutter_launcher_icons: ^0.9.2
-  api_cache_manager: ^1.0.1
   equatable: ^2.0.3
   cached_network_image: ^3.2.0
-
+  fl_chart: ^0.46.0
+  iconsax: ^0.0.8
+  printing: any
+  syncfusion_flutter_datepicker: ^19.4.56
+  lottie: ^1.2.2
+  qr_flutter: any
+  image_picker: any
+  input_with_keyboard_control: ^1.0.8
+  firebase_storage: ^10.2.9
+  firebase_core: ^1.13.1
+  firebase_analytics: ^9.1.2
 
 dev_dependencies:
   flutter_test:

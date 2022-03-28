@@ -19,7 +19,7 @@ class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Expanded(child:SizedBox(
-          width: 271.w,
+          width: 275.w,
           height: 160.h,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,8 +38,7 @@ class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(widget.itemModel.name, style: normalText.copyWith(fontSize: 18.sp), maxLines: 2,),
-                    SizedBox(
-                      height: 52.h,
+                    Expanded(
                       child: Column(
                         children: [
                           Row(
