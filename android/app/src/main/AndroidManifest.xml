@@ -1,8 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.octatech.nagamanager">
     <uses-permission android:name="android.permission.INTERNET" />
-   <application
-        android:label="NagaManager"
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <application
+        android:label="GIA Smart Warehouse"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/launcher_icon">
         <activity

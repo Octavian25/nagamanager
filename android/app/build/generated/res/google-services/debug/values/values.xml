@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">689903734972-tnvtfi5cpf2dmitq5691b0f47hr35ge9.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">689903734972</string>
+    <string name="google_api_key" translatable="false">AIzaSyBta1eRchveN6WXity2CWaxnjW1BJNa0l4</string>
+    <string name="google_app_id" translatable="false">1:689903734972:android:3c5d1cfbb09a97523a40b9</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBta1eRchveN6WXity2CWaxnjW1BJNa0l4</string>
+    <string name="google_storage_bucket" translatable="false">nagawarehouse-de525.appspot.com</string>
+    <string name="project_id" translatable="false">nagawarehouse-de525</string>
+</resources>

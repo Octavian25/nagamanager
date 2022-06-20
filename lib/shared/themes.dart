@@ -17,6 +17,13 @@ TextStyle bigText =
 TextStyle normalText =
     GoogleFonts.poppins(fontSize: 14.sp, fontWeight: FontWeight.w500);
 
+TextStyle titleTextMobile =
+    GoogleFonts.poppins(fontSize: 50.sp, fontWeight: FontWeight.w600);
+TextStyle bigTextMobile =
+    GoogleFonts.poppins(fontSize: 67.sp, fontWeight: FontWeight.w600);
+TextStyle normalTextMobile =
+    GoogleFonts.poppins(fontSize: 35.sp, fontWeight: FontWeight.w500);
+
 List<Color> listColor = [
   "#ED383F".toColor(),
   "#F7A84C".toColor(),

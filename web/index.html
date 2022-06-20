@@ -33,6 +33,20 @@
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
        https://developers.google.com/web/fundamentals/primers/service-workers -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <script type="module">
+  const firebaseConfig = {
+    apiKey: "AIzaSyDQplAvEIFuF-lg1Ta4x9YRPlrWDwuIa5k",
+    authDomain: "nagawarehouse-de525.firebaseapp.com",
+    projectId: "nagawarehouse-de525",
+    storageBucket: "nagawarehouse-de525.appspot.com",
+    messagingSenderId: "689903734972",
+    appId: "1:689903734972:web:39a48936da6dac273a40b9",
+    measurementId: "G-19BV07ZRGP"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
   <script>
     var serviceWorkerVersion = null;
     var scriptLoaded = false;

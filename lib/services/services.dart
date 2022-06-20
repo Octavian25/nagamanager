@@ -1,28 +1,34 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:nagamanager/models/batch-item.repose.dart';
 import 'package:nagamanager/models/chart_annual_model.dart';
 import 'package:nagamanager/models/chart_barang_model.dart';
 import 'package:nagamanager/models/chart_detail_barang_model.dart';
+import 'package:nagamanager/models/detail_stock_model.dart';
 import 'package:nagamanager/models/item_info_model.dart';
 import 'package:nagamanager/models/item_model.dart';
+import 'package:nagamanager/models/location_model.dart';
+import 'package:nagamanager/models/params/get_annual_chart.dart';
+import 'package:nagamanager/models/params/get_detail.dart';
+import 'package:nagamanager/models/params/login.dart';
+import 'package:nagamanager/models/params/send_tracking.dart';
 import 'package:nagamanager/models/stocking_model.dart';
 import 'package:nagamanager/models/tracking_feedback_model.dart';
 import 'package:nagamanager/models/user_model.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 part 'client.dart';
-
-String baseURL = "http://147.139.193.169:3133/api/v1/";
 
 class EndPointProvider {
   final Dio _client;
 
   EndPointProvider(this._client);
 
-  Future<LoginFeedback> login(
-      {required String username, required String password}) async {
+  Future<LoginFeedback> login(loginParam data) async {
     var url = "auth/login";
-    var body = json.encode({"username": username, "password": password});
+    var body =
+        json.encode({"username": data.username, "password": data.password});
     try {
       var response = await _client.post(url, data: body);
       if (response.statusCode == 200) {
@@ -32,115 +38,184 @@ class EndPointProvider {
         throw Exception('Gagal Login');
       }
     } catch (e) {
-      throw Exception('Gagal Login, Periksa Username dan password anda');
+      throw Exception(e);
     }
   }
 
-  Future<List<ItemModel>> getAllItem() async {
+  Future<List<ItemModel>> getAllItem(String locationCode) async {
     var url = "items";
-    var response = await _client.get(url);
-    if (response.statusCode == 200) {
-      List<ItemModel> items = [];
-      for (var item in response.data) {
-        if (item != null) {
-          items.add(ItemModel.fromJson(item));
+    try {
+      var response = await _client
+          .get(url, queryParameters: {"location_code": locationCode});
+      if (response.statusCode == 200) {
+        List<ItemModel> items = [];
+        for (var item in response.data) {
+          if (item != null) {
+            items.add(ItemModel.fromJson(item));
+          }
         }
+        // print(items[0].toJson());
+        return items;
+      } else {
+        throw Exception('Gagal Ambil Project');
       }
-      // print(items[0].toJson());
-      return items;
-    } else {
-      throw Exception('Gagal Ambil Project');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<int> getTotal(String type) async {
+  Future<int> getTotal(Map<String, String> data) async {
     var url = "stockings/global";
-    var response = await _client.get(url, queryParameters: {"type": type});
-    if (response.statusCode == 200) {
-      return int.parse(response.data);
-    } else {
-      throw Exception('Gagal Ambil Project');
+    try {
+      var response = await _client.get(url, queryParameters: {
+        "type": data['type'],
+        "location_code": data['location_code']
+      });
+      if (response.statusCode == 200) {
+        return int.parse(response.data);
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<ChartBarangModel> getChartDashboard() async {
+  Future<ChartBarangModel> getChartDashboard(String location_code) async {
     var url = "chart/chart-barang";
-    var response = await _client.get(url);
-    if (response.statusCode == 200) {
-      ChartBarangModel chartBarangModel =
-          ChartBarangModel.fromJson(response.data);
-      return chartBarangModel;
-    } else {
-      throw Exception('Gagal Ambil Project');
+    try {
+      var response = await _client
+          .get(url, queryParameters: {"location_code": location_code});
+      if (response.statusCode == 200) {
+        ChartBarangModel chartBarangModel =
+            ChartBarangModel.fromJson(response.data);
+        return chartBarangModel;
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<ChartDetailBarangModel> getDetailChart(
-      String startDate, String endDate, String barcode) async {
+  Future<ChartDetailBarangModel> getDetailChart(GetDetailParam data) async {
     var url = "chart/chart-barang-detail";
-    var response = await _client.get(url, queryParameters: {
-      "startDate": startDate,
-      "endDate": endDate,
-      "barcode": barcode,
-    });
-    if (response.statusCode == 200) {
-      ChartDetailBarangModel chartDetailBarangModel =
-          ChartDetailBarangModel.fromJson(response.data);
-      return chartDetailBarangModel;
-    } else {
-      throw Exception('Gagal Ambil Project');
+    try {
+      var response = await _client.get(url, queryParameters: {
+        "startDate": data.startDate,
+        "endDate": data.endDate,
+        "barcode": data.barcode,
+        "location_code": data.locationCode
+      });
+      if (response.statusCode == 200) {
+        ChartDetailBarangModel chartDetailBarangModel =
+            ChartDetailBarangModel.fromJson(response.data);
+        return chartDetailBarangModel;
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<List<ChartAnnual>> getAnnualChart(String barcode, String type) async {
+  Future<List<ChartAnnual>> getAnnualChart(GetAnnualChartParam data) async {
     var url = "chart/chart-annual";
-    var response = await _client
-        .get(url, queryParameters: {"barcode": barcode, "type": type});
-    if (response.statusCode == 200) {
-      List<ChartAnnual> list = listChartAnnualFromJson(response.data);
-      return list;
-    } else {
-      throw Exception('Gagal Ambil Project');
+    try {
+      var response = await _client.get(url, queryParameters: data.toJson());
+      if (response.statusCode == 200) {
+        List<ChartAnnual> list = listChartAnnualFromJson(response.data);
+        return list;
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
   Future<String> sendStocking(StockingModel stockingModel) async {
     var url = "stockings";
-    var response = await _client.post(url, data: stockingModel);
-    if (response.statusCode == 201) {
-      return "Berhasil";
-    } else {
-      throw Exception('Gagal Ambil Project');
+    try {
+      var response = await _client.post(url, data: stockingModel);
+      if (response.statusCode == 201) {
+        return "Berhasil";
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<List<TrackingFeedback>> sendTracking(
-      List<ItemModel> stockingModel, String type) async {
+  Future<List<TrackingFeedback>> sendTracking(SendTracking param) async {
     var url = "trackings";
-    var response = await _client
-        .post(url, data: stockingModel, queryParameters: {"type": type});
-    if (response.statusCode == 201) {
-      return List<TrackingFeedback>.from(
-          response.data.map((x) => TrackingFeedback.fromJson(x)));
-    } else {
-      throw Exception('Gagal Ambil Project');
+    try {
+      var data = param.stockingModel.map((e) => e.toJson()).toList();
+      var response = await _client
+          .post(url, data: data, queryParameters: {"type": param.type});
+      if (response.statusCode == 201) {
+        return List<TrackingFeedback>.from(
+            response.data.map((x) => TrackingFeedback.fromJson(x)));
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
   Future<String> sendAddBarang(ItemModel item) async {
     var url = "items";
-    var response = await _client.post(url, data: item.toJson());
-    if (response.statusCode == 201) {
-      return "Berhasil";
-    } else {
-      throw Exception('Gagal Ambil Project');
+    try {
+      var response = await _client.post(url, data: item.toJson());
+      if (response.statusCode == 201) {
+        return "Berhasil";
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
-  Future<ItemInfoModel> getItemInfo() async {
+  Future<String> updateBarang(ItemModel item) async {
+    var url = "items";
+    try {
+      var response =
+          await _client.put("$url/${item.id}", data: item.updateJson());
+      if (response.statusCode == 200) {
+        return "Berhasil";
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<BatchItemResponse> batchSendAddBarang(List<ItemModel> items) async {
+    var url = "items/batch";
+    var data = items.map((e) => e.toJson()).toList();
+    try {
+      var response = await _client.post(url, data: {"items": data});
+      if (response.statusCode == 201) {
+        BatchItemResponse batchItemResponse =
+            BatchItemResponse.fromJson(response.data);
+        return batchItemResponse;
+      } else {
+        throw Exception('Gagal Ambil Project');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<ItemInfoModel> getItemInfo(String location_code) async {
     try {
       var url = "chart/item-info";
-      var response = await _client.get(url);
+      var response = await _client
+          .get(url, queryParameters: {"location_code": location_code});
       if (response.statusCode == 200) {
         ItemInfoModel infoModel = ItemInfoModel.fromJson(response.data);
         print(infoModel.totalBarang);
@@ -149,7 +224,85 @@ class EndPointProvider {
         throw Exception('Gagal Ambil Item Info');
       }
     } catch (e) {
-      throw Exception('Gagal Ambil Item Info');
+      throw Exception(e);
+    }
+  }
+
+  Future<List<DetailStockModel>> getDetailStocking(GetDetailParam data) async {
+    try {
+      var url = "chart/detail-stock";
+      var response = await _client.get(url, queryParameters: {
+        "startDate": data.startDate,
+        "endDate": data.endDate,
+        "type": data.barcode,
+        "location_code": data.locationCode
+      });
+      if (response.statusCode == 200) {
+        List<DetailStockModel> detailStock =
+            listDetailStockFromJson(response.data);
+        return detailStock;
+      } else {
+        throw Exception('Gagal Detail Stock In');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<List<LocationModel>> getAllLocation(void _) async {
+    try {
+      var url = "locations";
+      var response = await _client.get(url);
+      if (response.statusCode == 200) {
+        List<LocationModel> listLocation = listLocationFromJson(response.data);
+        return listLocation;
+      } else {
+        throw Exception('Gagal Ambil Data Lokasi');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<String> deleteLocation(String id) async {
+    try {
+      var url = "locations";
+      var response = await _client.delete("$url/$id");
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Hapus Lokasi');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<String> editLocation(EditLocationModel data) async {
+    try {
+      var url = "locations";
+      var response = await _client.put(url, data: data.toJson());
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Edit Lokasi');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<String> addLocation(LocationModel data) async {
+    try {
+      var url = "locations";
+      var response = await _client.post(url, data: data.toJson());
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Tambah Lokasi');
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

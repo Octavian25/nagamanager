@@ -1,11 +1,17 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nagamanager/models/chart_barang_model.dart';
 import 'package:nagamanager/models/chart_detail_barang_model.dart';
 import 'package:nagamanager/models/item_info_model.dart';
+import 'package:nagamanager/models/params/get_annual_chart.dart';
+import 'package:nagamanager/models/params/get_detail.dart';
 import 'package:nagamanager/providers/loading_provider.dart';
+import 'package:nagamanager/providers/location_provider.dart';
 import 'package:nagamanager/services/services.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/chart_annual_model.dart';
 
@@ -15,7 +21,7 @@ class ChartProvider extends ChangeNotifier {
   List<ChartAnnual> chartAnnualIn = [];
   List<ChartAnnual> chartAnnualOut = [];
   List<BarChartGroupData> listBarChartGroupData = [];
-  int longestName = 0;
+  int? longestName = 0;
   ItemInfoModel? itemInfoModel;
   String barangSelected = "";
   String startDate = "";
@@ -28,6 +34,12 @@ class ChartProvider extends ChangeNotifier {
 
   void update(LoadingProvider? loadingProvider) {
     this.loadingProvider = loadingProvider;
+  }
+
+  void updateDate({required String startDate, required String endDate}) {
+    this.startDate = startDate;
+    this.endDate = endDate;
+    notifyListeners();
   }
 
   void setInformation(
@@ -48,17 +60,24 @@ class ChartProvider extends ChangeNotifier {
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
-      ItemInfoModel response = await _endPoint.getItemInfo();
-      print(response.totalBarang);
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      String locationCode =
+          sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
+      ItemInfoModel response =
+          await compute(_endPoint.getItemInfo, locationCode);
       itemInfoModel = response;
       notifyListeners();
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       return true;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+      );
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
-      print(e);
       return false;
     }
   }
@@ -68,27 +87,34 @@ class ChartProvider extends ChangeNotifier {
     var _endPoint = EndPointProvider(_client.init());
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String locationCode =
+        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
-      ChartBarangModel response = await _endPoint.getChartDashboard();
+      ChartBarangModel response =
+          await compute(_endPoint.getChartDashboard, locationCode);
       chartBarangModel = response;
-      totalBarang = response.stock.reduce((value, element) => value + element);
       List<BarChartGroupData> items = [];
-      List<int> lengthName = [];
+      List<int>? lengthName = [];
       for (var i = 0; i < chartBarangModel!.stock.length; i++) {
         items.add(makeGroupData(chartBarangModel!.namaBarang[i],
             chartBarangModel!.stock[i].toDouble()));
       }
       listBarChartGroupData = items;
+      print(listBarChartGroupData);
       lengthName =
           List<int>.from(chartBarangModel!.listBarang.map((e) => e.length));
       lengthName.sort();
-      longestName = lengthName.last;
+      longestName = lengthName.isEmpty ? 10 : lengthName.last;
       notifyListeners();
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       return true;
-    } catch (e) {
-      print(e);
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+      );
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       return false;
@@ -101,15 +127,18 @@ class ChartProvider extends ChangeNotifier {
     var _endPoint = EndPointProvider(_client.init());
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String locationCode =
+        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
       RequestEnd ??= DateTime.now().add(Duration(seconds: 3));
       if (DateTime.now().isAfter(RequestEnd!)) {
-        print("UPDATE TIME BARU");
         RequestEnd = DateTime.now().add(Duration(milliseconds: 50));
       } else {
         if (DateTime.now().isBefore(RequestEnd!)) {
-          ChartDetailBarangModel response =
-              await _endPoint.getDetailChart(startDate, endDate, barcode);
+          ChartDetailBarangModel response = await compute(
+              _endPoint.getDetailChart,
+              GetDetailParam(startDate, endDate, barcode, locationCode));
           List<FlSpot> hasil = [];
           for (var i = 0; i < response.stock.length; i++) {
             hasil.add(FlSpot(
@@ -130,8 +159,11 @@ class ChartProvider extends ChangeNotifier {
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       return true;
-    } catch (e) {
-      print(e);
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+      );
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       return false;
@@ -143,6 +175,9 @@ class ChartProvider extends ChangeNotifier {
     var _endPoint = EndPointProvider(_client.init());
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String locationCode =
+        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
       RequestEnd ??= DateTime.now().add(Duration(seconds: 3));
       if (DateTime.now().isAfter(RequestEnd!)) {
@@ -151,10 +186,11 @@ class ChartProvider extends ChangeNotifier {
       } else {
         if (DateTime.now().isBefore(RequestEnd!)) {
           print("MASUK AFTER ANNUAL");
-          List<ChartAnnual> responseIn =
-              await _endPoint.getAnnualChart(barcode, "IN");
-          List<ChartAnnual> responseOut =
-              await _endPoint.getAnnualChart(barcode, "OUT");
+          List<ChartAnnual> responseIn = await compute(_endPoint.getAnnualChart,
+              GetAnnualChartParam(barcode, "IN", locationCode));
+          List<ChartAnnual> responseOut = await compute(
+              _endPoint.getAnnualChart,
+              GetAnnualChartParam(barcode, "OUT", locationCode));
           chartAnnualIn = responseIn;
           chartAnnualOut = responseOut;
           notifyListeners();
@@ -171,8 +207,11 @@ class ChartProvider extends ChangeNotifier {
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       return true;
-    } catch (e) {
-      print(e);
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+      );
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       return false;

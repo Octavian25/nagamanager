@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:nagamanager/models/params/send_tracking.dart';
 import 'package:nagamanager/models/tracking_feedback_model.dart';
 import 'package:nagamanager/providers/loading_provider.dart';
 import 'package:nagamanager/services/services.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class TrackingProvider extends ChangeNotifier {
   List<TrackingFeedback>? _feedback;
@@ -23,10 +26,14 @@ class TrackingProvider extends ChangeNotifier {
     var _endPoint = EndPointProvider(_client.init());
     try {
       List<TrackingFeedback> feedback =
-          await _endPoint.sendTracking(listBarang, type);
+          await compute(_endPoint.sendTracking, SendTracking(listBarang, type));
       _feedback = feedback;
       return feedback;
-    } catch (e) {
+    } catch (e, stackTrace) {
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+      );
       return [TrackingFeedback(barcode: "-", name: "EMPTY", qty: 0)];
     }
   }
