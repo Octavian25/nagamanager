@@ -1,3 +1,5 @@
+import 'package:encryptor_flutter_nagatech/main.dart';
+
 class UserModel {
   String password;
   String username;
@@ -6,8 +8,8 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "username" : username,
-      "password" : password
+      "username": Encryptor.doEncrypt(username),
+      "password": Encryptor.doEncrypt(password)
     };
   }
 }
@@ -18,5 +20,7 @@ class LoginFeedback {
 
   LoginFeedback({required this.accessToken, required this.username});
 
-  factory LoginFeedback.fromJson(Map<String, dynamic> json) => LoginFeedback(accessToken: json['accessToken'], username: json['username']);
+  factory LoginFeedback.fromJson(Map<String, dynamic> json) => LoginFeedback(
+      accessToken: json['accessToken'],
+      username: Encryptor.doDecrypt(json['username']));
 }

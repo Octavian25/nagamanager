@@ -1,3 +1,4 @@
+import 'package:encryptor_flutter_nagatech/main.dart';
 import 'package:equatable/equatable.dart';
 
 List<DetailStockModel> listDetailStockFromJson(List<dynamic> data) =>
@@ -71,7 +72,7 @@ class DetailStockModel extends Equatable {
     map['isDifference'] = isDifference;
     map['lastOpname'] = lastOpname;
     map['barcode'] = barcode;
-    map['name'] = name;
+    map['name'] = Encryptor.doEncrypt(name);
     map['price'] = price;
     map['imagePath'] = imagePath;
     map['type'] = type;

@@ -232,6 +232,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.2"
+  encryptor_flutter_nagatech:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: main
+      resolved-ref: "8d77b063d1c553fe2f49222f9ee02d3c265aac2a"
+      url: "https://github.com/nagatech-si/flutter_encryptor_nagatech.git"
+    source: git
+    version: "0.0.1"
   equatable:
     dependency: "direct main"
     description:

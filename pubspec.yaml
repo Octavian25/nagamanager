@@ -70,6 +70,10 @@ dependencies:
   hive_flutter: ^1.1.0
   shared_preferences: ^2.0.15
   dropdown_search: ^5.0.2
+  encryptor_flutter_nagatech:
+    git:
+      url: https://github.com/nagatech-si/flutter_encryptor_nagatech.git
+      ref: main
 
 dev_dependencies:
   flutter_test:

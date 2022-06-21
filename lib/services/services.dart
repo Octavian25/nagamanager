@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:encryptor_flutter_nagatech/main.dart';
 import 'package:nagamanager/models/batch-item.repose.dart';
 import 'package:nagamanager/models/chart_annual_model.dart';
 import 'package:nagamanager/models/chart_barang_model.dart';
@@ -27,10 +28,13 @@ class EndPointProvider {
 
   Future<LoginFeedback> login(loginParam data) async {
     var url = "auth/login";
-    var body =
-        json.encode({"username": data.username, "password": data.password});
+    var body = json.encode({
+      "username": Encryptor.doEncrypt(data.username),
+      "password": Encryptor.doEncrypt(data.password)
+    });
     try {
       var response = await _client.post(url, data: body);
+      print(response.statusCode);
       if (response.statusCode == 200) {
         LoginFeedback loginFeedback = LoginFeedback.fromJson(response.data);
         return loginFeedback;
@@ -38,6 +42,7 @@ class EndPointProvider {
         throw Exception('Gagal Login');
       }
     } catch (e) {
+      print(e);
       throw Exception(e);
     }
   }

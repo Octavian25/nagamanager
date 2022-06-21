@@ -1,3 +1,5 @@
+import 'package:encryptor_flutter_nagatech/main.dart';
+
 class StockingModel {
   String barcode;
   String date;
@@ -16,19 +18,20 @@ class StockingModel {
 
   factory StockingModel.fromJson(Map<String, dynamic> json) => StockingModel(
       barcode: json['barcode'],
-      inputBy: json['inputBy'],
+      inputBy: Encryptor.doDecrypt(json['inputBy']),
       date: json['date'],
       qty: json['qty'],
-      locationCode: json['location_code'],
+      locationCode: Encryptor.doDecrypt(json['location_code']),
       type: json['type']);
+
   Map<String, dynamic> toJson() {
     return {
       "barcode": barcode,
       "date": date,
       "qty": qty,
       "type": type,
-      "inputBy": inputBy,
-      "location_code": locationCode ?? "-"
+      "inputBy": Encryptor.doEncrypt(inputBy),
+      "location_code": Encryptor.doEncrypt(locationCode ?? "-")
     };
   }
 }

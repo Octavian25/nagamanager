@@ -11,6 +11,28 @@ class _HomePageState extends State<HomePage> {
   var searchResult = "";
   TextEditingController search = TextEditingController();
 
+  void updateData() async {
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
+    ItemProvider itemProvider =
+        Provider.of<ItemProvider>(context, listen: false);
+    ChartProvider chartProvider =
+        Provider.of<ChartProvider>(context, listen: false);
+    LocationProvider locationProvider =
+        Provider.of<LocationProvider>(context, listen: false);
+
+    await itemProvider.getProject(authProvider.user!.accessToken);
+    await itemProvider.getTotalIn(authProvider.user!.accessToken);
+    await itemProvider.getTotalOut(authProvider.user!.accessToken);
+    await locationProvider.getAllLocation(authProvider.user!.accessToken);
+    await chartProvider.getItemInfo(authProvider.user!.accessToken);
+    locationProvider.checkLastLocation();
+
+    if (await chartProvider.getDashboardChart(authProvider.user!.accessToken)) {
+      if (await chartProvider.getItemInfo(authProvider.user!.accessToken)) {}
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ItemProvider itemProvider = Provider.of<ItemProvider>(context);
@@ -48,6 +70,7 @@ class _HomePageState extends State<HomePage> {
                               context,
                               listen: false);
                           if (await chart.getDashboardChart(token)) {
+                            updateData();
                             Navigator.pushNamed(context, "/dashboard");
                           } else {
                             showToast("Ambil Data Terbaru Gagal", false);
@@ -274,6 +297,7 @@ class _HomePageState extends State<HomePage> {
                               context,
                               listen: false);
                           if (await chart.getDashboardChart(token)) {
+                            updateData();
                             Navigator.pushNamed(context, "/dashboard");
                           } else {
                             showToast("Ambil Data Terbaru Gagal", false);

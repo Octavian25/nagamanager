@@ -1,3 +1,4 @@
+import 'package:encryptor_flutter_nagatech/main.dart';
 import 'package:equatable/equatable.dart';
 
 class ItemModel extends Equatable {
@@ -61,18 +62,21 @@ class ItemModel extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      "name": name,
-      "type": type,
+      "name": Encryptor.doEncrypt(name),
+      "type": Encryptor.doEncrypt(type),
       "qty": qty,
-      "imagePath": imagePath,
-      "barcode": barcode,
+      "imagePath": Encryptor.doEncrypt(imagePath),
+      "barcode": Encryptor.doEncrypt(barcode),
       "price": price,
-      "location_code": locationCode ?? "-"
+      "location_code": Encryptor.doEncrypt(locationCode ?? "-")
     };
   }
 
   Map<String, dynamic> updateJson() {
-    return {"name": name, "location_code": locationCode ?? "-"};
+    return {
+      "name": Encryptor.doEncrypt(name),
+      "location_code": Encryptor.doEncrypt(locationCode ?? "-")
+    };
   }
 
   @override

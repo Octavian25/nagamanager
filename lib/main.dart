@@ -100,8 +100,10 @@ class MyApp extends StatelessWidget {
                       BasePage(child: const DetailChartPage()),
                   '/dashboard': (context) =>
                       BasePage(child: const DashboardPage()),
-                  '/detail-stock': (context) =>
-                      BasePage(child: const DetailStockPage()),
+                  '/detail-stock': (context) => BasePage(
+                          child: DetailStockPage(
+                        isStockIn: false,
+                      )),
                   "/create-pdf": (context) =>
                       const GeneratePDFWidget("GeneratePDF"),
                   "/location": (context) =>

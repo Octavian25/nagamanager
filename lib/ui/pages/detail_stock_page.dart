@@ -1,7 +1,8 @@
 part of 'pages.dart';
 
 class DetailStockPage extends StatefulWidget {
-  const DetailStockPage({Key? key}) : super(key: key);
+  bool isStockIn;
+  DetailStockPage({Key? key, this.isStockIn = true}) : super(key: key);
 
   @override
   _DetailStockPageState createState() => _DetailStockPageState();
@@ -18,6 +19,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
   ];
   String startDate = "";
   String endDate = "";
+  bool isStockIn = false;
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     PickerDateRange pickerDateRange = args.value;
     setState(() {
@@ -42,7 +44,11 @@ class _DetailStockPageState extends State<DetailStockPage> {
         Provider.of<LocationProvider>(context, listen: false);
     String token =
         Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
-    if (await chart.getDetailStock(token, startDate, endDate, "IN",
+    if (await chart.getDetailStock(
+        token,
+        startDate,
+        endDate,
+        isStockIn ? "IN" : "OUT",
         locationProvider.selectedLocation?.locationCode ?? "-")) {
       showToast("Data Berhasil Diperbarui", false);
     }
@@ -54,7 +60,11 @@ class _DetailStockPageState extends State<DetailStockPage> {
         Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
     LocationProvider locationProvider =
         Provider.of<LocationProvider>(context, listen: false);
-    if (await chart.getDetailStock(token, startDate, endDate, "IN",
+    if (await chart.getDetailStock(
+        token,
+        startDate,
+        endDate,
+        isStockIn ? "IN" : "OUT",
         locationProvider.selectedLocation?.locationCode ?? "-")) {
       showToast("Data Berhasil Diperbarui", false);
     }
@@ -63,12 +73,14 @@ class _DetailStockPageState extends State<DetailStockPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      isStockIn = widget.isStockIn;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     ItemProvider itemProvider = Provider.of<ItemProvider>(context);
-    bool? isStockIn = ModalRoute.of(context)!.settings.arguments as bool?;
     return LayoutBuilder(builder: (context, constrains) {
       if (constrains.maxWidth < 600) {
         return Scaffold(
@@ -136,10 +148,8 @@ class _DetailStockPageState extends State<DetailStockPage> {
                         Expanded(
                           flex: 3,
                           child: Text(
-                              isStockIn != null
-                                  ? !isStockIn
-                                      ? 'Detail Stock In'
-                                      : 'Detail Stock Out'
+                              isStockIn
+                                  ? 'Detail Stock In'
                                   : 'Detail Stock Out',
                               style: titleTextMobile),
                         ),
@@ -362,10 +372,8 @@ class _DetailStockPageState extends State<DetailStockPage> {
                         Expanded(
                           flex: 3,
                           child: Text(
-                              isStockIn != null
-                                  ? !isStockIn
-                                      ? 'Detail Stock In'
-                                      : 'Detail Stock Out'
+                              isStockIn
+                                  ? 'Detail Stock In'
                                   : 'Detail Stock Out',
                               style: titleText),
                         ),

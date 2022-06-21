@@ -7,9 +7,11 @@ class Client {
   Dio init() {
     Dio _dio = Dio();
     _dio.interceptors.add(ApiInterceptors());
-    _dio.options.baseUrl = "http://147.139.193.169:3133/api/v1/";
-    // _dio.options.baseUrl = "http://192.168.0.14:3133/api/v1/";
+    // _dio.options.baseUrl = "http://8.215.69.186:3309/api/v1/";
+    _dio.options.baseUrl = "https://2127-203-207-59-11.ap.ngrok.io/api/v1/";
     _dio.options.headers['Authorization'] = "Bearer ${token}";
+    _dio.options.headers['enc'] = "1";
+    _dio.options.headers['ignore'] = "[]";
     return _dio;
   }
 }

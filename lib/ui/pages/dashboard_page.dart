@@ -30,6 +30,7 @@ class _DashboardPageState extends State<DashboardPage> {
     await itemProvider.getTotalIn(authProvider.user!.accessToken);
     await itemProvider.getTotalOut(authProvider.user!.accessToken);
     await locationProvider.getAllLocation(authProvider.user!.accessToken);
+    await chartProvider.getItemInfo(authProvider.user!.accessToken);
     locationProvider.checkLastLocation();
 
     if (await chartProvider.getDashboardChart(authProvider.user!.accessToken)) {
@@ -82,8 +83,8 @@ class _DashboardPageState extends State<DashboardPage> {
                                       return AlertDialog(
                                         title: Text('Silahkan Pilih Gudang',
                                             style: titleTextMobile),
-                                        content:
-                                        LocationMobileWidget(locationProvider),
+                                        content: LocationMobileWidget(
+                                            locationProvider),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
@@ -144,7 +145,9 @@ class _DashboardPageState extends State<DashboardPage> {
                             ],
                           ),
                         ),
-                        Text('Gudang : ${locationProvider.selectedLocation?.locationName ?? "-"}', style: normalTextMobile),
+                        Text(
+                            'Gudang : ${locationProvider.selectedLocation?.locationName ?? "-"}',
+                            style: normalTextMobile),
                         10.verticalSpace,
                         Column(
                           children: [
@@ -655,8 +658,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           "IN",
                           locationProvider.selectedLocation?.locationCode ??
                               "-")) {
-                        Navigator.pushNamed(context, "/detail-stock",
-                            arguments: false);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailStockPage(
+                                      isStockIn: true,
+                                    )));
                       }
                     } else if (index == 1) {
                       var startDate = Helper.getToday.decrement(value: 7);
@@ -668,8 +675,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           "OUT",
                           locationProvider.selectedLocation?.locationCode ??
                               "-")) {
-                        Navigator.pushNamed(context, "/detail-stock",
-                            arguments: true);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailStockPage(
+                                      isStockIn: false,
+                                    )));
                       }
                     }
                   },
@@ -778,8 +789,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           "IN",
                           locationProvider.selectedLocation?.locationCode ??
                               "-")) {
-                        Navigator.pushNamed(context, "/detail-stock",
-                            arguments: false);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailStockPage(
+                                      isStockIn: true,
+                                    )));
                       }
                     } else if (index == 1) {
                       var startDate = Helper.getToday.decrement(value: 7);
@@ -791,8 +806,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           "OUT",
                           locationProvider.selectedLocation?.locationCode ??
                               "-")) {
-                        Navigator.pushNamed(context, "/detail-stock",
-                            arguments: true);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailStockPage(
+                                      isStockIn: false,
+                                    )));
                       }
                     }
                   },
