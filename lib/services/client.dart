@@ -6,9 +6,15 @@ class Client {
   Client(this.token);
   Dio init() {
     Dio _dio = Dio();
+    (_dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
     _dio.interceptors.add(ApiInterceptors());
-    // _dio.options.baseUrl = "http://8.215.69.186:3309/api/v1/";
-    _dio.options.baseUrl = "https://2127-203-207-59-11.ap.ngrok.io/api/v1/";
+    _dio.options.baseUrl = "https://8.215.69.186:3309/api/v1/";
+    // _dio.options.baseUrl = "https://2127-203-207-59-11.ap.ngrok.io/api/v1/";
     _dio.options.headers['Authorization'] = "Bearer ${token}";
     _dio.options.headers['enc'] = "1";
     _dio.options.headers['ignore'] = "[]";

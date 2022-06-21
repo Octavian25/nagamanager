@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:encryptor_flutter_nagatech/main.dart';
 import 'package:nagamanager/models/batch-item.repose.dart';

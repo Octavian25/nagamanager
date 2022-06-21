@@ -88,10 +88,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.pushNamed(
-                                                  context, "/location");
+                                              Navigator.pop(context);
                                             },
-                                            child: Text('Tambah Gudang'),
+                                            child: Text('Close'),
                                           )
                                         ],
                                       );

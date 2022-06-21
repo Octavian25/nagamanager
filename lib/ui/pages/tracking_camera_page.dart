@@ -289,8 +289,8 @@ class _TrackingPageCameraState extends State<TrackingPageCamera> {
                                     counter > 0
                                         ? "assets/progress-scan.png"
                                         : "assets/waiting-scan.png",
-                                    width: 303.h,
-                                    height: 300.h,
+                                    width: 270.h,
+                                    height: 270.h,
                                   ),
                                   Visibility(
                                     visible: counter > 0,

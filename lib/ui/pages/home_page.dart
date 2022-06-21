@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/tracking",
+                          Navigator.pushNamed(context, "/tracking-camera",
                               arguments: true);
                         },
                         child: Container(
@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/tracking",
+                          Navigator.pushNamed(context, "/tracking-camera",
                               arguments: false);
                         },
                         child: Container(
@@ -316,7 +316,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/tracking",
+                          Navigator.pushNamed(context, "/tracking-camera",
                               arguments: true);
                         },
                         child: Container(
@@ -350,7 +350,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/tracking",
+                          Navigator.pushNamed(context, "/tracking-camera",
                               arguments: false);
                         },
                         child: Container(

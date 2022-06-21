@@ -56,24 +56,15 @@ class ItemProvider with ChangeNotifier {
     var _endPoint = EndPointProvider(_client.init());
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
-    firebase_storage.UploadTask task = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child("demo")
-        .child(itemModel.barcode)
-        .putFile(File(itemModel.imagePath));
     try {
-      firebase_storage.TaskSnapshot snapshot = await task;
-      var downloadURL = await snapshot.ref.getDownloadURL();
-      print('Uploaded ${snapshot.bytesTransferred} bytes.');
-      print("Donwloaded URL : $downloadURL");
-      String project = await _endPoint
-          .sendAddBarang(itemModel.copyWith(imagePath: downloadURL));
+      String project =
+          await _endPoint.sendAddBarang(itemModel.copyWith(imagePath: "-"));
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       getProject(token);
       notifyListeners();
       return true;
-    } on firebase_storage.FirebaseException catch (e, stackTrace) {
+    } catch (e, stackTrace) {
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       await Sentry.captureException(
@@ -96,7 +87,7 @@ class ItemProvider with ChangeNotifier {
       getProject(token);
       notifyListeners();
       return true;
-    } on firebase_storage.FirebaseException catch (e, stackTrace) {
+    } catch (e, stackTrace) {
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       await Sentry.captureException(
