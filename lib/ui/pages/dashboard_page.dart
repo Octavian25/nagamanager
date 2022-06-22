@@ -548,7 +548,7 @@ class _DashboardPageState extends State<DashboardPage> {
       child: ListView.separated(
           separatorBuilder: (context, index) {
             return SizedBox(
-              width: 9.w,
+              height: 9.h,
             );
           },
           itemCount: locationProvider.listLocation.length,

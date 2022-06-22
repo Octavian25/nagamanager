@@ -22,7 +22,7 @@ TextStyle titleTextMobile =
 TextStyle bigTextMobile =
     GoogleFonts.poppins(fontSize: 67.sp, fontWeight: FontWeight.w600);
 TextStyle normalTextMobile =
-    GoogleFonts.poppins(fontSize: 28.sp, fontWeight: FontWeight.w500);
+    GoogleFonts.poppins(fontSize: 32.sp, fontWeight: FontWeight.w500);
 
 List<Color> listColor = [
   "#ED383F".toColor(),

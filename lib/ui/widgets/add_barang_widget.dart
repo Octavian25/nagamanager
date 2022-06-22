@@ -30,7 +30,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
   //   }
   // }
 
-  void pickFile() async {
+  void pickFile(String limiter) async {
     List<ItemModel> listItems = [];
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
@@ -42,8 +42,8 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
       final input = File(file.path!).openRead();
       final fields = await input
           .transform(utf8.decoder)
-          .transform(const CsvToListConverter(
-              fieldDelimiter: ";", shouldParseNumbers: false))
+          .transform(CsvToListConverter(
+              fieldDelimiter: limiter, shouldParseNumbers: false))
           .toList();
       for (var i = 0; i < fields.length; i++) {
         listItems.add(ItemModel(
@@ -149,12 +149,29 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                     ],
                   )
                 : Center(
-                    child: TextButton(
-                        onPressed: () {
-                          pickFile();
-                        },
-                        child: Text("Import CSV")),
-                  ),
+                    child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            pickFile(",");
+                          },
+                          child: Text(
+                            "Import CSV Comma Delimited",
+                            textAlign: TextAlign.center,
+                          )),
+                      20.verticalSpace,
+                      TextButton(
+                          onPressed: () {
+                            pickFile(";");
+                          },
+                          child: Text(
+                            "Import CSV Semicolon Delimiter",
+                            textAlign: TextAlign.center,
+                          )),
+                    ],
+                  )),
           )
         : Container(
             height: 420.h,
@@ -173,12 +190,29 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                     ],
                   )
                 : Center(
-                    child: TextButton(
-                        onPressed: () {
-                          pickFile();
-                        },
-                        child: Text("Import CSV")),
-                  ),
+                    child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            pickFile(",");
+                          },
+                          child: Text(
+                            "Import CSV Comma Delimited",
+                            textAlign: TextAlign.center,
+                          )),
+                      20.verticalSpace,
+                      TextButton(
+                          onPressed: () {
+                            pickFile(";");
+                          },
+                          child: Text(
+                            "Import CSV Semicolon Delimiter",
+                            textAlign: TextAlign.center,
+                          )),
+                    ],
+                  )),
             // : SingleChildScrollView(
             //     child: Column(
             //       children: [
