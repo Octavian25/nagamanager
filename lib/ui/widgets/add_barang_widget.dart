@@ -34,17 +34,29 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
     List<ItemModel> listItems = [];
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {
-      PlatformFile file = result.files.first;
+      var fields = [];
       SharedPreferences sharedPreferences =
           await SharedPreferences.getInstance();
       String locationCode =
           sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
-      final input = File(file.path!).openRead();
-      final fields = await input
-          .transform(utf8.decoder)
-          .transform(CsvToListConverter(
-              fieldDelimiter: limiter, shouldParseNumbers: false))
-          .toList();
+      if (!kIsWeb) {
+        PlatformFile file = result.files.first;
+        final input = File(file.path!).openRead();
+        fields = await input
+            .transform(utf8.decoder)
+            .transform(CsvToListConverter(
+                fieldDelimiter: limiter, shouldParseNumbers: false))
+            .toList();
+      } else {
+        Uint8List? file = result.files.first.bytes;
+        final input = Stream.value(List<int>.from(file!));
+        fields = await input
+            .transform(utf8.decoder)
+            .transform(CsvToListConverter(
+                fieldDelimiter: limiter, shouldParseNumbers: false))
+            .toList();
+      }
+
       for (var i = 0; i < fields.length; i++) {
         listItems.add(ItemModel(
             id: "-",
