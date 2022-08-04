@@ -95,7 +95,7 @@ class DropdownCustom extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15), color: grey),
             child: Center(
                 child: DropdownSearch<LocationModel>(
-              popupProps: PopupProps.menu(showSearchBox: true),
+              popupProps: const PopupProps.menu(showSearchBox: true),
               dropdownDecoratorProps: DropDownDecoratorProps(
                   baseStyle: normalText,
                   dropdownSearchDecoration: InputDecoration(

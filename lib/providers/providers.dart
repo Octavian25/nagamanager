@@ -1,7 +1,7 @@
 // ignore: unused_import
-import 'dart:io';
+import 'dart:convert';
+import 'dart:html' as html;
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nagamanager/models/batch-item.repose.dart';
 import 'package:nagamanager/models/detail_stock_model.dart';

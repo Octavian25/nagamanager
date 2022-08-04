@@ -2,7 +2,7 @@ part of 'widgets.dart';
 
 class BottomSheetTracking extends StatefulWidget {
   final List<TrackingFeedback> trackingFeedback;
-  BottomSheetTracking({Key? key, required this.trackingFeedback})
+  const BottomSheetTracking({Key? key, required this.trackingFeedback})
       : super(key: key);
 
   @override
@@ -16,7 +16,7 @@ class _BottomSheetTrackingState extends State<BottomSheetTracking> {
       height: 600.h,
       decoration: BoxDecoration(
           color: success,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topRight: Radius.circular(15), topLeft: Radius.circular(15))),
       child: Column(
         children: [
@@ -55,7 +55,7 @@ class _BottomSheetTrackingState extends State<BottomSheetTracking> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white,
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.black26,
                             offset: Offset(0, 5),
@@ -119,7 +119,7 @@ class _BottomSheetTrackingState extends State<BottomSheetTracking> {
 
 class BottomSheetTrackingMobile extends StatefulWidget {
   final List<TrackingFeedback> trackingFeedback;
-  BottomSheetTrackingMobile({Key? key, required this.trackingFeedback})
+  const BottomSheetTrackingMobile({Key? key, required this.trackingFeedback})
       : super(key: key);
 
   @override
@@ -134,7 +134,7 @@ class _BottomSheetTrackingMobileState extends State<BottomSheetTrackingMobile> {
       height: 600.h,
       decoration: BoxDecoration(
           color: success,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               topRight: Radius.circular(15), topLeft: Radius.circular(15))),
       child: Column(
         children: [
@@ -173,7 +173,7 @@ class _BottomSheetTrackingMobileState extends State<BottomSheetTrackingMobile> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.white,
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.black26,
                             offset: Offset(0, 5),

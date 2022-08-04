@@ -15,8 +15,8 @@ class Client {
       };
     }
     _dio.interceptors.add(ApiInterceptors());
-    _dio.options.baseUrl = "https://8.215.69.186:3309/api/v1/";
-    // _dio.options.baseUrl = "https://2127-203-207-59-11.ap.ngrok.io/api/v1/";
+    _dio.options.baseUrl = "http://localhost:3133/api/v1/";
+    // _dio.options.baseUrl = const String.fromEnvironment("URL");
     _dio.options.headers['Authorization'] = "Bearer ${token}";
     _dio.options.headers['enc'] = "1";
     _dio.options.headers['ignore'] = "[]";
@@ -27,7 +27,6 @@ class Client {
 class ApiInterceptors extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    print('REQUEST[${options.method}] => PATH: ${options.path}');
     return super.onRequest(options, handler);
   }
 
@@ -35,7 +34,6 @@ class ApiInterceptors extends Interceptor {
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     print(
         'RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
-    print("<----- DATA : ${response.data}");
     return super.onResponse(response, handler);
   }
 

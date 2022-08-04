@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Center(
                       child: Text(
-                    "GIA SMART WAREHOUSE",
+                    "NAGATECH SMART WAREHOUSE",
                     style: titleTextMobile,
                   )),
                   SizedBox(
@@ -320,7 +320,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Center(
                           child: Text(
-                        "GIA SMART WAREHOUSE",
+                        "NAGATECH SMART WAREHOUSE",
                         style: titleText,
                       )),
                       SizedBox(

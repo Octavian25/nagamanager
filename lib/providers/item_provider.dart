@@ -10,6 +10,7 @@ class ItemProvider with ChangeNotifier {
   LoadingProvider? loadingProvider;
   AuthProvider? authProvider;
   List<String> duplicatedBatchResult = [];
+  List<String> listGeneratedBarcode = [];
   int successfullyAdded = 0;
   List<DetailStockModel> _listDetailStock = [];
   List<DetailStockModel> _listDetailStockFilter = [];
@@ -110,6 +111,23 @@ class ItemProvider with ChangeNotifier {
       loadingProvider!.notifyListeners();
       duplicatedBatchResult =
           response.duplicated.map((e) => e.toString()).toList();
+      listGeneratedBarcode =
+          response.listGeneratedBarcode.map((e) => e.toString()).toList();
+      final text = listGeneratedBarcode.join(",");
+      print(text);
+      final bytes = utf8.encode(text);
+      final blob = html.Blob([bytes]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+      final anchor = html.document.createElement("a") as html.AnchorElement
+        ..href = url
+        ..style.display = 'none'
+        ..download = "autoprint_barcode.txt";
+      html.document.body?.children.add(anchor);
+
+      anchor.click();
+
+      html.document.body?.children.remove(anchor);
+      html.Url.revokeObjectUrl(url);
       successfullyAdded = response.successfullyAdded;
       getProject(token);
       notifyListeners();

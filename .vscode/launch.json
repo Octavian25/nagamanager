@@ -1,0 +1,66 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "nagamanager",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "URL=https://8.215.69.186:3309/api/v1/"
+            ]
+        },
+        {
+            "name": "nagamanager_local",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--dart-define",
+                "URL=http://localhost:3133/api/v1/"
+            ]
+        },
+        {
+            "name": "nagamanager (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define",
+                "URL=https://8.215.69.186:3309/api/v1/"
+            ]
+        },
+        {
+            "name": "nagamanager_local (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "args": [
+                "--dart-define",
+                "URL=http://localhost:3133/api/v1/"
+            ]
+        },
+        {
+            "name": "nagamanager (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "args": [
+                "--dart-define",
+                "URL=https://8.215.69.186:3309/api/v1/"
+            ]
+        },
+        {
+            "name": "nagamanager_local (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "args": [
+                "--dart-define",
+                "URL=http://localhost:3133/api/v1/"
+            ]
+        }
+    ]
+}

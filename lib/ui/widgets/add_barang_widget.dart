@@ -45,7 +45,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
         fields = await input
             .transform(utf8.decoder)
             .transform(CsvToListConverter(
-                fieldDelimiter: limiter, shouldParseNumbers: false))
+                fieldDelimiter: limiter, shouldParseNumbers: false, eol: "\n"))
             .toList();
       } else {
         Uint8List? file = result.files.first.bytes;
@@ -53,16 +53,15 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
         fields = await input
             .transform(utf8.decoder)
             .transform(CsvToListConverter(
-                fieldDelimiter: limiter, shouldParseNumbers: false))
+                fieldDelimiter: limiter, shouldParseNumbers: false, eol: "\n"))
             .toList();
       }
-
       for (var i = 0; i < fields.length; i++) {
         listItems.add(ItemModel(
             id: "-",
             locationCode: locationCode,
             name: fields[i][1],
-            barcode: fields[i][0],
+            barcode: "-",
             imagePath: fields[i][4],
             price: int.parse(fields[i][3]),
             qty: int.parse(fields[i][2]),
@@ -73,6 +72,16 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
       if (await Provider.of<ItemProvider>(context, listen: false).batchAddItems(
           Provider.of<AuthProvider>(context, listen: false).user!.accessToken,
           listItems)) {
+        var message = Provider.of<ItemProvider>(context, listen: false)
+            .listGeneratedBarcode
+            .join(",");
+        var directory = await getApplicationDocumentsDirectory();
+        var file = File('${directory.path}/autoprint-barcode.txt');
+        file.writeAsString(
+          message,
+          flush: true,
+        );
+        // OpenFile.open('${directory.path}/faktur-saldo-awal.txt', type: "txt");
         Navigator.pop(context);
         showDialog<void>(
           context: context,
@@ -85,7 +94,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                 'Report Duplicate Item : ',
                 style: titleText,
               ),
-              content: Container(
+              content: SizedBox(
                   height: 340.h,
                   width: 300.w,
                   child: Column(
@@ -115,7 +124,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                   )),
               actions: <Widget>[
                 TextButton(
-                  child: Text('Close'),
+                  child: const Text('Close'),
                   onPressed: () {
                     Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                   },
@@ -145,7 +154,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
     // String token = Provider.of<AuthProvider>(context).user!.accessToken;
     bool isLoading = Provider.of<LoadingProvider>(context).isLoading;
     return widget.isMobile
-        ? Container(
+        ? SizedBox(
             height: 420.h,
             width: 900.w,
             child: isLoading
@@ -169,7 +178,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                           onPressed: () {
                             pickFile(",");
                           },
-                          child: Text(
+                          child: const Text(
                             "Import CSV Comma Delimited",
                             textAlign: TextAlign.center,
                           )),
@@ -178,7 +187,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                           onPressed: () {
                             pickFile(";");
                           },
-                          child: Text(
+                          child: const Text(
                             "Import CSV Semicolon Delimiter",
                             textAlign: TextAlign.center,
                           )),
@@ -210,7 +219,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                           onPressed: () {
                             pickFile(",");
                           },
-                          child: Text(
+                          child: const Text(
                             "Import CSV Comma Delimited",
                             textAlign: TextAlign.center,
                           )),
@@ -219,7 +228,7 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                           onPressed: () {
                             pickFile(";");
                           },
-                          child: Text(
+                          child: const Text(
                             "Import CSV Semicolon Delimiter",
                             textAlign: TextAlign.center,
                           )),
