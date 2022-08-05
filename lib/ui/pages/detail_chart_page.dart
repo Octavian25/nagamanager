@@ -599,25 +599,34 @@ class _DetailChartPageState extends State<DetailChartPage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: "#E8ECF2".toColor(), elevation: 0),
-                            child: Row(
-                              children: [
-                                Icon(Iconsax.arrow_square_left,
-                                    color: text, size: 20),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Text(
-                                  'Back',
-                                  style: normalText.copyWith(color: text),
-                                )
-                              ],
-                            ),
-                            onPressed: () {
+                          InkWell(
+                            onTap: () async {
                               Navigator.pushNamed(context, "/dashboard");
                             },
+                            borderRadius: BorderRadius.circular(10.r),
+                            child: Ink(
+                              height: 45.h,
+                              width: 90.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  color: "#E8ECF2".toColor()),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 15.w,
+                                  ),
+                                  Icon(Iconsax.arrow_square_left,
+                                      color: text, size: 20),
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Text(
+                                    'Back',
+                                    style: normalText.copyWith(color: text),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                           Spacer(),
                           ElevatedButton(

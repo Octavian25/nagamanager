@@ -335,34 +335,35 @@ class _DetailStockPageState extends State<DetailStockPage> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    SizedBox(
-                        height: 50.h,
+                    InkWell(
+                      onTap: () async {
+                        Navigator.pushNamed(context, "/dashboard");
+                      },
+                      borderRadius: BorderRadius.circular(10.r),
+                      child: Ink(
+                        height: 45.h,
+                        width: 90.w,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            color: "#E8ECF2".toColor()),
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: "#E8ECF2".toColor(), elevation: 0),
-                              child: Row(
-                                children: [
-                                  Icon(Iconsax.arrow_square_left,
-                                      color: text, size: 20),
-                                  SizedBox(
-                                    width: 10.w,
-                                  ),
-                                  Text(
-                                    'Back',
-                                    style: normalText.copyWith(color: text),
-                                  )
-                                ],
-                              ),
-                              onPressed: () {
-                                Navigator.pushNamed(context, "/dashboard");
-                              },
+                            SizedBox(
+                              width: 15.w,
                             ),
+                            Icon(Iconsax.arrow_square_left,
+                                color: text, size: 20),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              'Back',
+                              style: normalText.copyWith(color: text),
+                            )
                           ],
-                        )),
+                        ),
+                      ),
+                    ),
                     SizedBox(
                       child: Row(children: [
                         const Icon(Iconsax.box),

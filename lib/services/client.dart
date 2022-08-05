@@ -15,8 +15,8 @@ class Client {
       };
     }
     _dio.interceptors.add(ApiInterceptors());
-    _dio.options.baseUrl = "http://localhost:3133/api/v1/";
-    // _dio.options.baseUrl = const String.fromEnvironment("URL");
+    // _dio.options.baseUrl = "http://localhost:3133/api/v1/";
+    _dio.options.baseUrl = const String.fromEnvironment("URL");
     _dio.options.headers['Authorization'] = "Bearer ${token}";
     _dio.options.headers['enc'] = "1";
     _dio.options.headers['ignore'] = "[]";

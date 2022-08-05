@@ -310,13 +310,10 @@ class _LoginPageState extends State<LoginPage> {
                       Center(
                         child: Image.asset(
                           "assets/login-logo.png",
-                          width: 40.w,
-                          height: 40.h,
-                          fit: BoxFit.contain,
+                          width: 110.w,
+                          height: 110.h,
+                          fit: BoxFit.cover,
                         ),
-                      ),
-                      SizedBox(
-                        height: 10.h,
                       ),
                       Center(
                           child: Text(
@@ -350,7 +347,7 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               height: 53.h,
                               width: 309.w,
-                              padding: EdgeInsets.only(left: 30.w),
+                              padding: EdgeInsets.only(left: 20.w),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   color: grey),
@@ -388,7 +385,7 @@ class _LoginPageState extends State<LoginPage> {
                             Container(
                               height: 53.h,
                               width: 309.w,
-                              padding: EdgeInsets.only(left: 30.w),
+                              padding: EdgeInsets.only(left: 20.w),
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   color: grey),

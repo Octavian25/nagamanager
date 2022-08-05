@@ -264,47 +264,45 @@ class _HomePageState extends State<HomePage> {
           body: Padding(
             padding: EdgeInsets.all(16.w),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 55.h,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 16.w,
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: "#E8ECF2".toColor(), elevation: 0),
-                        child: Row(
-                          children: [
-                            Icon(Iconsax.arrow_square_left,
-                                color: text, size: 20),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Text(
-                              'Back',
-                              style: normalText.copyWith(color: text),
-                            )
-                          ],
+                InkWell(
+                  onTap: () async {
+                    String token =
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .user!
+                            .accessToken;
+                    ChartProvider chart =
+                        Provider.of<ChartProvider>(context, listen: false);
+                    if (await chart.getDashboardChart(token)) {
+                      updateData();
+                      Navigator.pushNamed(context, "/dashboard");
+                    } else {
+                      showToast("Ambil Data Terbaru Gagal", false);
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(10.r),
+                  child: Ink(
+                    height: 45.h,
+                    width: 90.w,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.r),
+                        color: "#E8ECF2".toColor()),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 15.w,
                         ),
-                        onPressed: () async {
-                          String token =
-                              Provider.of<AuthProvider>(context, listen: false)
-                                  .user!
-                                  .accessToken;
-                          ChartProvider chart = Provider.of<ChartProvider>(
-                              context,
-                              listen: false);
-                          if (await chart.getDashboardChart(token)) {
-                            updateData();
-                            Navigator.pushNamed(context, "/dashboard");
-                          } else {
-                            showToast("Ambil Data Terbaru Gagal", false);
-                          }
-                        },
-                      ),
-                    ],
+                        Icon(Iconsax.arrow_square_left, color: text, size: 20),
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Text(
+                          'Back',
+                          style: normalText.copyWith(color: text),
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(
