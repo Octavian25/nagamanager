@@ -629,46 +629,34 @@ class _DetailChartPageState extends State<DetailChartPage> {
                             ),
                           ),
                           Spacer(),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: green, elevation: 0),
-                            child: Row(
-                              children: [
-                                const Icon(Iconsax.paperclip,
-                                    color: Colors.white, size: 20),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Text(
-                                  'Create Excel',
-                                  style:
-                                      normalText.copyWith(color: Colors.white),
-                                )
-                              ],
+                          InkWell(
+                            onTap: _generateExcel,
+                            borderRadius: BorderRadius.circular(10.r),
+                            child: Ink(
+                              height: 45.h,
+                              width: 120.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  color: green),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Text(
+                                    'Create Excel',
+                                    style: normalText.copyWith(
+                                        color: Colors.white),
+                                  )
+                                ],
+                              ),
                             ),
-                            onPressed: _generateExcel,
                           ),
                           SizedBox(
                             width: 10.w,
                           ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: red, elevation: 0),
-                            child: Row(
-                              children: [
-                                const Icon(Iconsax.paperclip,
-                                    color: Colors.white, size: 20),
-                                SizedBox(
-                                  width: 10.w,
-                                ),
-                                Text(
-                                  'Create PDF',
-                                  style:
-                                      normalText.copyWith(color: Colors.white),
-                                )
-                              ],
-                            ),
-                            onPressed: () {
+                          InkWell(
+                            onTap: () async {
                               if (stockLength < 2) {
                                 showToast(
                                     "History Barang Kosong, PDF Belum Tersedia",
@@ -677,6 +665,26 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                 Navigator.pushNamed(context, "/create-pdf");
                               }
                             },
+                            borderRadius: BorderRadius.circular(10.r),
+                            child: Ink(
+                              height: 45.h,
+                              width: 120.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  color: red),
+                              child: Row(
+                                children: [
+                                  SizedBox(
+                                    width: 10.w,
+                                  ),
+                                  Text(
+                                    'Create PDF',
+                                    style: normalText.copyWith(
+                                        color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       )),

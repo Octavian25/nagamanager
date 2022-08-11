@@ -59,7 +59,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
                                   100,
                               barTouchData: BarTouchData(touchCallback:
                                   (FlTouchEvent event, response) async {
-                                if (!event.isInterestedForInteractions) {
+                                if (event is FlTapDownEvent) {
                                   String startDate =
                                       Helper.getToday.decrement(value: 7);
                                   String endDate =

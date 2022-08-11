@@ -309,7 +309,7 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Center(
                         child: Image.asset(
-                          "assets/login-logo.png",
+                          "assets/logo.png",
                           width: 110.w,
                           height: 110.h,
                           fit: BoxFit.cover,

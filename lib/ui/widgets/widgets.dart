@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:nagamanager/models/item_model.dart';
 import 'package:nagamanager/models/stocking_argumen_model.dart';
@@ -23,6 +24,7 @@ import 'package:nagamanager/shared/shared.dart';
 import 'package:nagamanager/ui/pages/pages.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/location_model.dart';

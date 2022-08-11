@@ -15,20 +15,26 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
   TextEditingController price = TextEditingController(text: "0");
   TextEditingController type = TextEditingController(text: "Pcs");
   TextEditingController qty = TextEditingController(text: "0");
+  FocusNode nameFocus = FocusNode();
+  FocusNode priceFocus = FocusNode();
+  FocusNode typeFocus = FocusNode();
+  FocusNode qtyFocus = FocusNode();
   String barcodeString = '';
   ScrollController scrollController = ScrollController();
 
-  // void _pickImage() async {
-  //   final ImagePicker _picker = ImagePicker();
-  //   final XFile? image =
-  //       await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
-  //   if (image != null) {
-  //     var hasil = await image.path;
-  //     setState(() {
-  //       gambar = hasil;
-  //     });
-  //   }
-  // }
+  void _pickImage() async {
+    if (!kIsWeb) {
+      final ImagePicker _picker = ImagePicker();
+      final XFile? image = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 50);
+      if (image != null) {
+        var hasil = image.path;
+        setState(() {
+          gambar = hasil;
+        });
+      }
+    }
+  }
 
   void pickFile(String limiter) async {
     List<ItemModel> listItems = [];
@@ -210,235 +216,140 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
                               fontSize: 18.sp, fontWeight: FontWeight.w700)),
                     ],
                   )
-                : Center(
+                // : Center(
+                //     child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: [
+                //       TextButton(
+                //           onPressed: () {
+                //             pickFile(",");
+                //           },
+                //           child: const Text(
+                //             "Import CSV Comma Delimited",
+                //             textAlign: TextAlign.center,
+                //           )),
+                //       20.verticalSpace,
+                //       TextButton(
+                //           onPressed: () {
+                //             pickFile(";");
+                //           },
+                //           child: const Text(
+                //             "Import CSV Semicolon Delimiter",
+                //             textAlign: TextAlign.center,
+                //           )),
+                //     ],
+                //   )),
+                : SingleChildScrollView(
                     child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            pickFile(",");
-                          },
-                          child: const Text(
-                            "Import CSV Comma Delimited",
-                            textAlign: TextAlign.center,
-                          )),
-                      20.verticalSpace,
-                      TextButton(
-                          onPressed: () {
-                            pickFile(";");
-                          },
-                          child: const Text(
-                            "Import CSV Semicolon Delimiter",
-                            textAlign: TextAlign.center,
-                          )),
-                    ],
-                  )),
-            // : SingleChildScrollView(
-            //     child: Column(
-            //       children: [
-            //
-            //         // Row(
-            //         //   children: [
-            //         //     Flexible(
-            //         //       child: Column(
-            //         //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         //         children: [
-            //         //           SizedBox(
-            //         //             height: 85.h,
-            //         //             child: Column(
-            //         //               crossAxisAlignment: CrossAxisAlignment.start,
-            //         //               children: [
-            //         //                 Text(
-            //         //                   "Barcode",
-            //         //                   style: normalText,
-            //         //                 ),
-            //         //                 SizedBox(
-            //         //                   height: 5.h,
-            //         //                 ),
-            //         //                 Container(
-            //         //                   height: 53.h,
-            //         //                   width: 390.w,
-            //         //                   padding: EdgeInsets.only(left: 30.w),
-            //         //                   decoration: BoxDecoration(
-            //         //                       borderRadius: BorderRadius.circular(15),
-            //         //                       color: grey),
-            //         //                   child: Center(
-            //         //                     child: TextFormField(
-            //         //                       controller: barcode,
-            //         //                       style: normalText,
-            //         //                       textInputAction: TextInputAction.done,
-            //         //                       onChanged: (String value) {
-            //         //                         setState(() {
-            //         //                           barcodeString = value;
-            //         //                         });
-            //         //                       },
-            //         //                       decoration: InputDecoration(
-            //         //                         border: InputBorder.none,
-            //         //                         hintText: "Masukan Barcode",
-            //         //                         hintStyle: normalText,
-            //         //                       ),
-            //         //                     ),
-            //         //                   ),
-            //         //                 ),
-            //         //               ],
-            //         //             ),
-            //         //           ),
-            //         //           SizedBox(
-            //         //             height: 5.h,
-            //         //           ),
-            //         //           TextFieldCustom(
-            //         //               controller: name,
-            //         //               title: "Name",
-            //         //               width: double.infinity),
-            //         //           SizedBox(
-            //         //             height: 5.h,
-            //         //           ),
-            //         //           Row(
-            //         //             children: [
-            //         //               TextFieldCustom(
-            //         //                   controller: price,
-            //         //                   title: "Price",
-            //         //                   width: 300.w),
-            //         //               Spacer(),
-            //         //               TextFieldCustom(
-            //         //                   controller: qty,
-            //         //                   title: "Qty",
-            //         //                   width: 250.w),
-            //         //             ],
-            //         //           ),
-            //         //           SizedBox(
-            //         //             height: 5.h,
-            //         //           ),
-            //         //           TextFieldCustom(
-            //         //               controller: type,
-            //         //               title: "Type",
-            //         //               width: double.infinity),
-            //         //         ],
-            //         //       ),
-            //         //       flex: 3,
-            //         //     ),
-            //         //     SizedBox(
-            //         //       width: 20.w,
-            //         //     ),
-            //         //     Flexible(
-            //         //       child: Column(
-            //         //         crossAxisAlignment: CrossAxisAlignment.center,
-            //         //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //         //         children: [
-            //         //           Center(
-            //         //             child: SizedBox(
-            //         //               height: 150.h,
-            //         //               width: 150.h,
-            //         //               child: QrImage(
-            //         //                 data: barcodeString,
-            //         //                 version: QrVersions.auto,
-            //         //                 gapless: false,
-            //         //               ),
-            //         //             ),
-            //         //           ),
-            //         //           SizedBox(
-            //         //             height: 15.h,
-            //         //           ),
-            //         //           Center(
-            //         //             child: Container(
-            //         //               height: 150.h,
-            //         //               width: 150.w,
-            //         //               decoration: BoxDecoration(
-            //         //                   border: Border.all(
-            //         //                       color: Colors.black54, width: 1),
-            //         //                   color: background,
-            //         //                   borderRadius: BorderRadius.circular(10)),
-            //         //               child: gambar.isNotEmpty
-            //         //                   ? Image.file(
-            //         //                       File(gambar),
-            //         //                       fit: BoxFit.contain,
-            //         //                     )
-            //         //                   : TextButton(
-            //         //                       onPressed: _pickImage,
-            //         //                       child: Text('Select Photo'),
-            //         //                     ),
-            //         //             ),
-            //         //           )
-            //         //         ],
-            //         //       ),
-            //         //       flex: 1,
-            //         //     ),
-            //         //   ],
-            //         // ),
-            //         // SizedBox(
-            //         //   height: 55.h,
-            //         //   child: Row(
-            //         //     children: [
-            //         //       TextButton(
-            //         //           onPressed: () {
-            //         //             pickFile();
-            //         //           },
-            //         //           child: Text('Import CSV')),
-            //         //       SizedBox(
-            //         //         width: 30.w,
-            //         //       ),
-            //         //       Spacer(),
-            //         //       TextButton(
-            //         //           onPressed: () {
-            //         //             Navigator.pop(context);
-            //         //           },
-            //         //           child: Text('Cancel')),
-            //         //       SizedBox(
-            //         //         width: 30.w,
-            //         //       ),
-            //         //       ElevatedButton(
-            //         //         style: ElevatedButton.styleFrom(
-            //         //             primary: blue, onPrimary: white),
-            //         //         child: Row(
-            //         //           children: [
-            //         //             Icon(Iconsax.send_2, size: 20.sp),
-            //         //             SizedBox(
-            //         //               width: 10.w,
-            //         //             ),
-            //         //             const Text('Simpan')
-            //         //           ],
-            //         //         ),
-            //         //         onPressed: () async {
-            //         //           ItemModel item = ItemModel(
-            //         //               id: "",
-            //         //               locationCode: "-",
-            //         //               name: name.text,
-            //         //               barcode: barcode.text,
-            //         //               imagePath: gambar,
-            //         //               price: int.parse(price.text),
-            //         //               qty: int.parse(qty.text),
-            //         //               type: type.text,
-            //         //               isDifference: false,
-            //         //               lastOpname: "1");
-            //         //           if (await itemProvider.addItems(
-            //         //               token, item)) {
-            //         //             showToast(
-            //         //                 "Berhasil Menambahkan data", false);
-            //         //             name.text = "";
-            //         //             barcode.text = "";
-            //         //             gambar = "";
-            //         //             price.text = "0";
-            //         //             qty.text = "0";
-            //         //             type.text = "Pcs";
-            //         //             if (await chartProvider
-            //         //                 .getDashboardChart(token)) {
-            //         //               if (await chartProvider
-            //         //                   .getItemInfo(token)) {
-            //         //                 Navigator.pop(context);
-            //         //               }
-            //         //             }
-            //         //           } else {
-            //         //             showToast("Gagal Menambahkan data", true);
-            //         //           }
-            //         //         },
-            //         //       ),
-            //         //     ],
-            //         //   ),
-            //         // )
-            //       ],
-            //     ),
-            //   ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  TextFieldCustom(
+                                      controller: name,
+                                      focus: nameFocus,
+                                      title: "Name",
+                                      width: double.infinity),
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  Row(
+                                    children: [
+                                      TextFieldCustom(
+                                          controller: price,
+                                          focus: priceFocus,
+                                          title: "Price",
+                                          width: 300.w),
+                                      const Spacer(),
+                                      TextFieldCustom(
+                                          controller: qty,
+                                          focus: qtyFocus,
+                                          title: "Qty",
+                                          width: 250.w),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  TextFieldCustom(
+                                      controller: type,
+                                      focus: typeFocus,
+                                      title: "Type",
+                                      width: double.infinity),
+                                ],
+                              ),
+                              flex: 3,
+                            ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                          ],
+                        ),
+                        20.verticalSpacingRadius,
+                        SizedBox(
+                          height: 53.h,
+                          child: ElevatedButton.icon(
+                              onPressed: () async {
+                                SharedPreferences sharedPreferences =
+                                    await SharedPreferences.getInstance();
+                                String locationCode =
+                                    sharedPreferences.getString(
+                                            LocationProvider.KODE_LOKASI) ??
+                                        "-";
+                                ItemModel payload = ItemModel(
+                                    id: "-",
+                                    locationCode: locationCode,
+                                    name: name.text,
+                                    barcode: "-",
+                                    imagePath: "-",
+                                    price: int.parse(price.text),
+                                    qty: int.parse(qty.text),
+                                    type: type.text,
+                                    isDifference: false,
+                                    lastOpname: "-");
+                                if (await Provider.of<ItemProvider>(context,
+                                        listen: false)
+                                    .batchAddItems(
+                                        Provider.of<AuthProvider>(context,
+                                                listen: false)
+                                            .user!
+                                            .accessToken,
+                                        [payload])) {
+                                  var message = Provider.of<ItemProvider>(
+                                          context,
+                                          listen: false)
+                                      .listGeneratedBarcode
+                                      .join(",");
+                                  var directory =
+                                      await getApplicationDocumentsDirectory();
+                                  var file = File(
+                                      '${directory.path}/autoprint-barcode.txt');
+                                  file.writeAsString(
+                                    message,
+                                    flush: true,
+                                  );
+                                  name.clear();
+                                  price.text = "0";
+                                  qty.text = "0";
+                                  type.text = "PCS";
+                                  nameFocus.requestFocus();
+                                }
+                              },
+                              icon: const Icon(Icons.print_rounded,
+                                  color: Colors.white),
+                              label: const Text("Simpan Barang & Print")),
+                        )
+                      ],
+                    ),
+                  ),
           );
   }
 }

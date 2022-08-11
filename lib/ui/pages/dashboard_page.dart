@@ -186,7 +186,19 @@ class _DashboardPageState extends State<DashboardPage> {
                                 chartProvider.itemInfoModel?.totalBarang
                                         .toString() ??
                                     "0",
-                                "+ Tambah Barang Baru", () {
+                                "+ Tambah Barang Baru", () async {
+                              print(Provider.of<LocationProvider>(context,
+                                      listen: false)
+                                  .selectedLocation
+                                  ?.locationCode);
+                              if (Provider.of<LocationProvider>(context,
+                                          listen: false)
+                                      .selectedLocation
+                                      ?.locationCode ==
+                                  "-") {
+                                showToast("Gudang Belum Terpilih", true);
+                                return;
+                              }
                               showDialog<void>(
                                 context: context,
                                 barrierDismissible: true,
@@ -381,7 +393,19 @@ class _DashboardPageState extends State<DashboardPage> {
                                       chartProvider.itemInfoModel?.totalBarang
                                               .toString() ??
                                           "0",
-                                      "+ Tambah Barang Baru", () {
+                                      "+ Tambah Barang Baru", () async {
+                                    print(Provider.of<LocationProvider>(context,
+                                            listen: false)
+                                        .selectedLocation
+                                        ?.locationCode);
+                                    if (Provider.of<LocationProvider>(context,
+                                                listen: false)
+                                            .selectedLocation
+                                            ?.locationCode ==
+                                        null) {
+                                      showToast("Gudang Belum Terpilih", true);
+                                      return;
+                                    }
                                     showDialog<void>(
                                       context: context,
                                       barrierDismissible: true,

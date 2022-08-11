@@ -5,6 +5,7 @@ class TextFieldCustom extends StatelessWidget {
       {Key? key,
       required this.controller,
       required this.title,
+      this.focus,
       this.readOnly = false,
       required this.width})
       : super(key: key);
@@ -13,6 +14,7 @@ class TextFieldCustom extends StatelessWidget {
   final String title;
   final double width;
   final bool readOnly;
+  final FocusNode? focus;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +33,12 @@ class TextFieldCustom extends StatelessWidget {
           Container(
             height: 53.h,
             width: width,
-            padding: EdgeInsets.only(left: 30.w),
+            padding: EdgeInsets.only(left: 15.w),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15), color: grey),
             child: Center(
               child: TextFormField(
+                focusNode: focus,
                 controller: controller,
                 style: normalText,
                 enabled: !readOnly,
