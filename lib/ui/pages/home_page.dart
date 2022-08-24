@@ -20,7 +20,13 @@ class _HomePageState extends State<HomePage> {
         Provider.of<ChartProvider>(context, listen: false);
     LocationProvider locationProvider =
         Provider.of<LocationProvider>(context, listen: false);
+    CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    SubCategoryProvider subCategoryProvider =
+        Provider.of<SubCategoryProvider>(context, listen: false);
 
+    await categoryProvider.getAllCategory(authProvider.user!.accessToken);
+    await subCategoryProvider.getAllSubCategory(authProvider.user!.accessToken);
     await itemProvider.getProject(authProvider.user!.accessToken);
     await itemProvider.getTotalIn(authProvider.user!.accessToken);
     await itemProvider.getTotalOut(authProvider.user!.accessToken);
@@ -71,7 +77,8 @@ class _HomePageState extends State<HomePage> {
                               listen: false);
                           if (await chart.getDashboardChart(token)) {
                             updateData();
-                            Navigator.pushNamed(context, "/dashboard");
+                            Navigator.pushReplacementNamed(
+                                context, "/dashboard");
                           } else {
                             showToast("Ambil Data Terbaru Gagal", false);
                           }
@@ -89,7 +96,8 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/tracking-camera",
+                          Navigator.pushReplacementNamed(
+                              context, "/tracking-camera",
                               arguments: true);
                         },
                         child: Container(
@@ -124,7 +132,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/tracking-camera",
+                          Navigator.pushReplacementNamed(
+                              context, "/tracking-camera",
                               arguments: false);
                         },
                         child: Container(
@@ -276,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                         Provider.of<ChartProvider>(context, listen: false);
                     if (await chart.getDashboardChart(token)) {
                       updateData();
-                      Navigator.pushNamed(context, "/dashboard");
+                      Navigator.pop(context);
                     } else {
                       showToast("Ambil Data Terbaru Gagal", false);
                     }
@@ -314,7 +323,8 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/tracking-camera",
+                          Navigator.pushReplacementNamed(
+                              context, "/tracking-camera",
                               arguments: true);
                         },
                         child: Container(
@@ -348,7 +358,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushNamed(context, "/tracking-camera",
+                          Navigator.pushReplacementNamed(
+                              context, "/tracking-camera",
                               arguments: false);
                         },
                         child: Container(

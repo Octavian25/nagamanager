@@ -31,12 +31,20 @@ class _LoginPageState extends State<LoginPage> {
           Provider.of<ChartProvider>(context, listen: false);
       LocationProvider locationProvider =
           Provider.of<LocationProvider>(context, listen: false);
+      CategoryProvider categoryProvider =
+          Provider.of<CategoryProvider>(context, listen: false);
+      SubCategoryProvider subCategoryProvider =
+          Provider.of<SubCategoryProvider>(context, listen: false);
+
       setState(() {
         isLoading = true;
       });
       setState(() {
         isLoading = false;
       });
+      await categoryProvider.getAllCategory(authProvider.user!.accessToken);
+      await subCategoryProvider
+          .getAllSubCategory(authProvider.user!.accessToken);
       await itemProvider.getProject(authProvider.user!.accessToken);
       await itemProvider.getTotalIn(authProvider.user!.accessToken);
       await itemProvider.getTotalOut(authProvider.user!.accessToken);
@@ -46,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       if (await chartProvider
           .getDashboardChart(authProvider.user!.accessToken)) {
         if (await chartProvider.getItemInfo(authProvider.user!.accessToken)) {
-          Navigator.pushNamed(context, "/dashboard");
+          Navigator.pushReplacementNamed(context, "/dashboard");
         }
       }
     } else {}
@@ -95,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
       if (await chartProvider
           .getDashboardChart(authProvider.user!.accessToken)) {
         if (await chartProvider.getItemInfo(authProvider.user!.accessToken)) {
-          Navigator.pushNamed(context, "/dashboard");
+          Navigator.pushReplacementNamed(context, "/dashboard");
         }
       }
     } else {

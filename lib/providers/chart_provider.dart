@@ -101,7 +101,6 @@ class ChartProvider extends ChangeNotifier {
             chartBarangModel!.stock[i].toDouble()));
       }
       listBarChartGroupData = items;
-      print(listBarChartGroupData);
       lengthName =
           List<int>.from(chartBarangModel!.listBarang.map((e) => e.length));
       lengthName.sort();
@@ -131,9 +130,9 @@ class ChartProvider extends ChangeNotifier {
     String locationCode =
         sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
-      RequestEnd ??= DateTime.now().add(Duration(seconds: 3));
+      RequestEnd ??= DateTime.now().add(const Duration(seconds: 3));
       if (DateTime.now().isAfter(RequestEnd!)) {
-        RequestEnd = DateTime.now().add(Duration(milliseconds: 50));
+        RequestEnd = DateTime.now().add(const Duration(milliseconds: 50));
       } else {
         if (DateTime.now().isBefore(RequestEnd!)) {
           ChartDetailBarangModel response = await compute(
@@ -179,10 +178,10 @@ class ChartProvider extends ChangeNotifier {
     String locationCode =
         sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
-      RequestEnd ??= DateTime.now().add(Duration(seconds: 3));
+      RequestEnd ??= DateTime.now().add(const Duration(seconds: 3));
       if (DateTime.now().isAfter(RequestEnd!)) {
         print("UPDATE TIME BARU");
-        RequestEnd = DateTime.now().add(Duration(milliseconds: 50));
+        RequestEnd = DateTime.now().add(const Duration(milliseconds: 50));
       } else {
         if (DateTime.now().isBefore(RequestEnd!)) {
           print("MASUK AFTER ANNUAL");
@@ -220,11 +219,11 @@ class ChartProvider extends ChangeNotifier {
 }
 
 BarChartGroupData makeGroupData(int x, double y1) {
-  return BarChartGroupData(barsSpace: 2, x: x, barRods: [
+  return BarChartGroupData(barsSpace: 10, x: x, barRods: [
     BarChartRodData(
       toY: y1,
-      colors: [Color(0xff53fdd7)],
-      width: 20.w,
+      colors: [const Color(0xff53fdd7)],
+      width: 10.w,
     ),
   ]);
 }

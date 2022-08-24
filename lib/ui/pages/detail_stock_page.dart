@@ -93,7 +93,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                   builder: (BuildContext dialogContext) {
                     return AlertDialog(
                       title: Text('Filter Barang', style: normalTextMobile),
-                      content: FilterBarangWidget(),
+                      content: const FilterBarangWidget(),
                       actions: <Widget>[
                         TextButton(
                           child: Text('Close', style: normalTextMobile),
@@ -309,11 +309,11 @@ class _DetailStockPageState extends State<DetailStockPage> {
                   // false = user must tap button, true = tap outside dialog
                   builder: (BuildContext dialogContext) {
                     return AlertDialog(
-                      title: Text('Filter Barang'),
-                      content: FilterBarangWidget(),
+                      title: const Text('Filter Barang'),
+                      content: const FilterBarangWidget(),
                       actions: <Widget>[
                         TextButton(
-                          child: Text('Close'),
+                          child: const Text('Close'),
                           onPressed: () {
                             Navigator.of(dialogContext)
                                 .pop(); // Dismiss alert dialog

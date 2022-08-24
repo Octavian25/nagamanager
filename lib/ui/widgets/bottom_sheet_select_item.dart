@@ -29,11 +29,6 @@ class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
                   SizedBox(
                     width: 5.w,
                   ),
-                  Image.network(
-                    widget.itemModel.imagePath,
-                    width: 150.w,
-                    height: 150.h,
-                  ),
                   SizedBox(
                     width: 10.w,
                   ),

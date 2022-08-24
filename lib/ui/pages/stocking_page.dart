@@ -16,7 +16,7 @@ class _StockingPageState extends State<StockingPage> {
   @override
   void initState() {
     // focusBarcode.requestFocus();
-    Timer(Duration(seconds: 1),
+    Timer(const Duration(seconds: 1),
         () => {SystemChannels.textInput.invokeMethod('TextInput.hide')});
     // TODO: implement initState
     super.initState();
@@ -33,7 +33,7 @@ class _StockingPageState extends State<StockingPage> {
         padding: EdgeInsets.all(16.w),
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 155.h,
               width: 100.sw,
               child: Row(
@@ -60,7 +60,7 @@ class _StockingPageState extends State<StockingPage> {
                       SizedBox(
                         height: 5.h,
                       ),
-                      Container(
+                      SizedBox(
                         height: 45.h,
                         width: 150.w,
                         child: ElevatedButton(
@@ -119,8 +119,8 @@ class _StockingPageState extends State<StockingPage> {
                                 fontWeight: FontWeight.bold),
                           ),
                           infinite: true,
-                          delay: Duration(seconds: 1),
-                          duration: Duration(seconds: 3),
+                          delay: const Duration(seconds: 1),
+                          duration: const Duration(seconds: 3),
                         ),
                         SizedBox(
                           height: 7.h,
@@ -164,7 +164,7 @@ class _StockingPageState extends State<StockingPage> {
                           SizedBox(
                             width: 25.w,
                           ),
-                          Container(
+                          SizedBox(
                             width: 26.w,
                             child: Icon(
                               Icons.qr_code_scanner_rounded,
@@ -185,7 +185,7 @@ class _StockingPageState extends State<StockingPage> {
                               onFieldSubmitted: (String data) => {
                                 if (data == stockargumen.itemModel.barcode)
                                   {
-                                    this.setState(() {
+                                    setState(() {
                                       counter = counter + 1;
                                     }),
                                     focusBarcode.unfocus(),
@@ -227,7 +227,7 @@ class _StockingPageState extends State<StockingPage> {
                                   value: downloadProgress.progress),
                             ),
                             errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
+                                const Icon(Icons.error),
                             width: 493.w,
                             height: 350.h,
                           ),
@@ -252,7 +252,7 @@ class _StockingPageState extends State<StockingPage> {
                         ),
                         Visibility(
                           visible: counter > 0,
-                          child: Container(
+                          child: SizedBox(
                             height: 45.h,
                             width: 441.w,
                             child: ElevatedButton(
@@ -274,7 +274,7 @@ class _StockingPageState extends State<StockingPage> {
                                 ItemProvider itemProvider =
                                     Provider.of<ItemProvider>(context,
                                         listen: false);
-                                DateTime dateToday = new DateTime.now();
+                                DateTime dateToday = DateTime.now();
                                 String date =
                                     dateToday.toString().substring(0, 10);
                                 var stockingModel = StockingModel(
@@ -314,10 +314,12 @@ class _StockingPageState extends State<StockingPage> {
                                           height: 242.h,
                                           decoration: BoxDecoration(
                                               color: success,
-                                              borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(15),
-                                                  topLeft:
-                                                      Radius.circular(15))),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      topLeft:
+                                                          Radius.circular(15))),
                                           child: Row(
                                             children: [
                                               SizedBox(
@@ -362,7 +364,7 @@ class _StockingPageState extends State<StockingPage> {
                                   });
                                   showModalBottomSheet(
                                       isDismissible: false,
-                                      shape: RoundedRectangleBorder(
+                                      shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.only(
                                               topRight: Radius.circular(15),
                                               topLeft: Radius.circular(15))),
@@ -372,10 +374,12 @@ class _StockingPageState extends State<StockingPage> {
                                           height: 242.h,
                                           decoration: BoxDecoration(
                                               color: red,
-                                              borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(15),
-                                                  topLeft:
-                                                      Radius.circular(15))),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topRight:
+                                                          Radius.circular(15),
+                                                      topLeft:
+                                                          Radius.circular(15))),
                                           child: Row(
                                             children: [
                                               SizedBox(

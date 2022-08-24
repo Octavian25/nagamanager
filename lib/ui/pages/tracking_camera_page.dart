@@ -25,7 +25,6 @@ class _TrackingPageCameraState extends State<TrackingPageCamera> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     qtyController.dispose();
     barcodeController.dispose();
@@ -160,7 +159,7 @@ class _TrackingPageCameraState extends State<TrackingPageCamera> {
                                   Navigator.pushNamed(context, "/home");
                                 },
                                 color: blue,
-                                icon: Icon(Icons.keyboard_arrow_left)),
+                                icon: const Icon(Icons.keyboard_arrow_left)),
                           )
                         ],
                       ),
@@ -491,8 +490,9 @@ class _TrackingPageCameraState extends State<TrackingPageCamera> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: red, onPrimary: white),
-                              onPressed: () =>
-                                  {Navigator.pushNamed(context, "/home")},
+                              onPressed: () => {
+                                Navigator.pushReplacementNamed(context, "/home")
+                              },
                               child: Row(
                                 children: [
                                   Icon(

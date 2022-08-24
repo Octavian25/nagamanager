@@ -66,13 +66,15 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
         listItems.add(ItemModel(
             id: "-",
             locationCode: locationCode,
-            name: fields[i][1],
+            name: fields[i][0],
             barcode: "-",
-            imagePath: fields[i][4],
-            price: int.parse(fields[i][3]),
-            qty: int.parse(fields[i][2]),
-            type: fields[i][5],
+            imagePath: fields[i][3].toString().trim(),
+            price: int.parse(fields[i][2]),
+            qty: int.parse(fields[i][1]),
+            type: fields[i][4].toString().trim(),
             isDifference: false,
+            categoryCode: fields[i][5].toString().trim(),
+            subCategoryCode: fields[i][6].toString().trim(),
             lastOpname: "-"));
       }
       if (await Provider.of<ItemProvider>(context, listen: false).batchAddItems(
@@ -159,197 +161,204 @@ class _AddBarangWidgetState extends State<AddBarangWidget> {
     // ChartProvider chartProvider = Provider.of<ChartProvider>(context);
     // String token = Provider.of<AuthProvider>(context).user!.accessToken;
     bool isLoading = Provider.of<LoadingProvider>(context).isLoading;
-    return widget.isMobile
-        ? SizedBox(
-            height: 420.h,
-            width: 900.w,
-            child: isLoading
-                ? Column(
-                    children: [
-                      Expanded(
-                        child: Lottie.asset("assets/sending.json",
-                            fit: BoxFit.contain),
-                      ),
-                      Text('Sedang Mengirim Data . . ',
-                          style: TextStyle(
-                              fontSize: 18.sp, fontWeight: FontWeight.w700)),
-                    ],
-                  )
-                : Center(
-                    child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            pickFile(",");
-                          },
-                          child: const Text(
-                            "Import CSV Comma Delimited",
-                            textAlign: TextAlign.center,
-                          )),
-                      20.verticalSpace,
-                      TextButton(
-                          onPressed: () {
-                            pickFile(";");
-                          },
-                          child: const Text(
-                            "Import CSV Semicolon Delimiter",
-                            textAlign: TextAlign.center,
-                          )),
-                    ],
-                  )),
-          )
-        : Container(
-            height: 420.h,
-            width: 900.w,
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: isLoading
-                ? Column(
-                    children: [
-                      Expanded(
-                        child: Lottie.asset("assets/sending.json",
-                            fit: BoxFit.contain),
-                      ),
-                      Text('Sedang Mengirim Data . . ',
-                          style: TextStyle(
-                              fontSize: 18.sp, fontWeight: FontWeight.w700)),
-                    ],
-                  )
-                // : Center(
-                //     child: Column(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     crossAxisAlignment: CrossAxisAlignment.center,
-                //     children: [
-                //       TextButton(
-                //           onPressed: () {
-                //             pickFile(",");
-                //           },
-                //           child: const Text(
-                //             "Import CSV Comma Delimited",
-                //             textAlign: TextAlign.center,
-                //           )),
-                //       20.verticalSpace,
-                //       TextButton(
-                //           onPressed: () {
-                //             pickFile(";");
-                //           },
-                //           child: const Text(
-                //             "Import CSV Semicolon Delimiter",
-                //             textAlign: TextAlign.center,
-                //           )),
-                //     ],
-                //   )),
-                : SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+    if (widget.isMobile) {
+      return SizedBox(
+        height: 420.h,
+        width: 900.w,
+        child: isLoading
+            ? Column(
+                children: [
+                  Expanded(
+                    child: Lottie.asset("assets/sending.json",
+                        fit: BoxFit.contain),
+                  ),
+                  Text('Sedang Mengirim Data . . ',
+                      style: TextStyle(
+                          fontSize: 18.sp, fontWeight: FontWeight.w700)),
+                ],
+              )
+            : Center(
+                child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        pickFile(",");
+                      },
+                      child: const Text(
+                        "Import CSV Comma Delimited",
+                        textAlign: TextAlign.center,
+                      )),
+                  20.verticalSpace,
+                  TextButton(
+                      onPressed: () {
+                        pickFile(";");
+                      },
+                      child: const Text(
+                        "Import CSV Semicolon Delimiter",
+                        textAlign: TextAlign.center,
+                      )),
+                ],
+              )),
+      );
+    } else {
+      return Container(
+        height: 420.h,
+        width: 900.w,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: isLoading
+            ? Column(
+                children: [
+                  Expanded(
+                    child: Lottie.asset("assets/sending.json",
+                        fit: BoxFit.contain),
+                  ),
+                  Text('Sedang Mengirim Data . . ',
+                      style: TextStyle(
+                          fontSize: 18.sp, fontWeight: FontWeight.w700)),
+                ],
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              TextFieldCustom(
+                                  controller: name,
+                                  focus: nameFocus,
+                                  title: "Name",
+                                  width: double.infinity),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Row(
                                 children: [
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
                                   TextFieldCustom(
-                                      controller: name,
-                                      focus: nameFocus,
-                                      title: "Name",
-                                      width: double.infinity),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
-                                  Row(
-                                    children: [
-                                      TextFieldCustom(
-                                          controller: price,
-                                          focus: priceFocus,
-                                          title: "Price",
-                                          width: 300.w),
-                                      const Spacer(),
-                                      TextFieldCustom(
-                                          controller: qty,
-                                          focus: qtyFocus,
-                                          title: "Qty",
-                                          width: 250.w),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 5.h,
-                                  ),
+                                      controller: price,
+                                      focus: priceFocus,
+                                      title: "Price",
+                                      width: 300.w),
+                                  const Spacer(),
                                   TextFieldCustom(
-                                      controller: type,
-                                      focus: typeFocus,
-                                      title: "Type",
-                                      width: double.infinity),
+                                      controller: qty,
+                                      focus: qtyFocus,
+                                      title: "Qty",
+                                      width: 250.w),
                                 ],
                               ),
-                              flex: 3,
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                          ],
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              TextFieldCustom(
+                                  controller: type,
+                                  focus: typeFocus,
+                                  title: "Type",
+                                  width: double.infinity),
+                            ],
+                          ),
+                          flex: 3,
                         ),
-                        20.verticalSpacingRadius,
                         SizedBox(
-                          height: 53.h,
-                          child: ElevatedButton.icon(
-                              onPressed: () async {
-                                SharedPreferences sharedPreferences =
-                                    await SharedPreferences.getInstance();
-                                String locationCode =
-                                    sharedPreferences.getString(
-                                            LocationProvider.KODE_LOKASI) ??
-                                        "-";
-                                ItemModel payload = ItemModel(
-                                    id: "-",
-                                    locationCode: locationCode,
-                                    name: name.text,
-                                    barcode: "-",
-                                    imagePath: "-",
-                                    price: int.parse(price.text),
-                                    qty: int.parse(qty.text),
-                                    type: type.text,
-                                    isDifference: false,
-                                    lastOpname: "-");
-                                if (await Provider.of<ItemProvider>(context,
-                                        listen: false)
-                                    .batchAddItems(
-                                        Provider.of<AuthProvider>(context,
-                                                listen: false)
-                                            .user!
-                                            .accessToken,
-                                        [payload])) {
-                                  var message = Provider.of<ItemProvider>(
-                                          context,
-                                          listen: false)
-                                      .listGeneratedBarcode
-                                      .join(",");
-                                  var directory =
-                                      await getApplicationDocumentsDirectory();
-                                  var file = File(
-                                      '${directory.path}/autoprint-barcode.txt');
-                                  file.writeAsString(
-                                    message,
-                                    flush: true,
-                                  );
-                                  name.clear();
-                                  price.text = "0";
-                                  qty.text = "0";
-                                  type.text = "PCS";
-                                  nameFocus.requestFocus();
-                                }
-                              },
-                              icon: const Icon(Icons.print_rounded,
-                                  color: Colors.white),
-                              label: const Text("Simpan Barang & Print")),
-                        )
+                          width: 20.w,
+                        ),
                       ],
                     ),
-                  ),
-          );
+                    20.verticalSpacingRadius,
+                    SizedBox(
+                      height: 53.h,
+                      child: ElevatedButton.icon(
+                          onPressed: () async {
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
+                            String locationCode = sharedPreferences
+                                    .getString(LocationProvider.KODE_LOKASI) ??
+                                "-";
+                            ItemModel payload = ItemModel(
+                                id: "-",
+                                locationCode: locationCode,
+                                name: name.text,
+                                barcode: "-",
+                                imagePath: "-",
+                                price: int.parse(price.text),
+                                qty: int.parse(qty.text),
+                                type: type.text,
+                                isDifference: false,
+                                categoryCode: "-",
+                                subCategoryCode: "-",
+                                lastOpname: "-");
+                            if (await Provider.of<ItemProvider>(context,
+                                    listen: false)
+                                .batchAddItems(
+                                    Provider.of<AuthProvider>(context,
+                                            listen: false)
+                                        .user!
+                                        .accessToken,
+                                    [payload])) {
+                              var message = Provider.of<ItemProvider>(context,
+                                      listen: false)
+                                  .listGeneratedBarcode
+                                  .join(",");
+                              var directory =
+                                  await getApplicationDocumentsDirectory();
+                              var file = File(
+                                  '${directory.path}/autoprint-barcode.txt');
+                              file.writeAsString(
+                                message,
+                                flush: true,
+                              );
+                              name.clear();
+                              price.text = "0";
+                              qty.text = "0";
+                              type.text = "PCS";
+                              nameFocus.requestFocus();
+                            }
+                          },
+                          icon: const Icon(Icons.print_rounded,
+                              color: Colors.white),
+                          label: const Text("Simpan Barang & Print")),
+                    ),
+                    20.verticalSpacingRadius,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 50.r,
+                          child: TextButton(
+                              onPressed: () {
+                                pickFile(",");
+                              },
+                              child: const Text(
+                                "Import CSV Comma Delimited",
+                                textAlign: TextAlign.center,
+                              )),
+                        ),
+                        20.verticalSpace,
+                        SizedBox(
+                          height: 50.r,
+                          child: TextButton(
+                              onPressed: () {
+                                pickFile(";");
+                              },
+                              child: const Text(
+                                "Import CSV Semicolon Delimiter",
+                                textAlign: TextAlign.center,
+                              )),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+      );
+    }
   }
 }

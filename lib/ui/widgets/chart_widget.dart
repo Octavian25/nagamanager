@@ -18,8 +18,6 @@ class BarChartWidget extends StatefulWidget {
 
 class BarChartWidgetState extends State<BarChartWidget> {
   final Color leftBarColor = const Color(0xff53fdd7);
-  String dropdownValue = 'Bulanan';
-  int lengthY = 10;
   @override
   void initState() {
     super.initState();
@@ -48,8 +46,8 @@ class BarChartWidgetState extends State<BarChartWidget> {
                         physics: const BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         child: Container(
-                          width: 90.w * listChartGroup.length > 100.sw
-                              ? 90.w * listChartGroup.length
+                          width: 400.w * listChartGroup.length > 100.sw
+                              ? 400.w * listChartGroup.length
                               : MediaQuery.of(context).size.width - 100,
                           height: double.infinity,
                           padding: EdgeInsets.only(top: 10.h),
@@ -106,7 +104,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
                                     showTitles: true,
                                     getTextStyles: (context, value) =>
                                         normalText,
-                                    margin: 20.w,
+                                    margin: 10.w,
                                     getTitles: (double value) {
                                       if (chartBarangModel!
                                               .listBarang[value.toInt()]
@@ -128,8 +126,8 @@ class BarChartWidgetState extends State<BarChartWidget> {
                                             space;
                                       }
                                     },
-                                    interval: 1,
-                                    reservedSize: 50,
+                                    interval: 5,
+                                    reservedSize: 100,
                                     rotateAngle: 35),
                                 leftTitles: SideTitles(
                                   showTitles: true,

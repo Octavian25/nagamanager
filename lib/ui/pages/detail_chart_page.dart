@@ -61,6 +61,14 @@ class _DetailChartPageState extends State<DetailChartPage> {
     }
   }
 
+  void generatePDF(Uint8List pdfInBytes) {
+    html.AnchorElement(
+        href:
+            "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfInBytes)}")
+      ..setAttribute("download", "Laporan Stock.pdf")
+      ..click();
+  }
+
   @override
   Widget build(BuildContext context) {
     ChartProvider chartProvider = Provider.of<ChartProvider>(context);
@@ -81,6 +89,8 @@ class _DetailChartPageState extends State<DetailChartPage> {
             name: "0",
             price: 100,
             type: "-",
+            categoryCode: "-",
+            subCategoryCode: "-",
             id: '-'));
     return LayoutBuilder(builder: (context, constrains) {
       if (constrains.maxWidth < 600) {
@@ -261,8 +271,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                               SizedBox(
                                                 width: 10.w,
                                               ),
-                                              Text(
-                                                  "${itemModel.qty.toString()}",
+                                              Text(itemModel.qty.toString(),
                                                   style:
                                                       normalTextMobile.copyWith(
                                                           fontSize: 30.sp)),
@@ -276,7 +285,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                               SizedBox(
                                                 width: 10.w,
                                               ),
-                                              Text("${itemModel.barcode}",
+                                              Text(itemModel.barcode,
                                                   style:
                                                       normalTextMobile.copyWith(
                                                           fontSize: 30.sp)),
@@ -628,7 +637,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                               ),
                             ),
                           ),
-                          Spacer(),
+                          const Spacer(),
                           InkWell(
                             onTap: _generateExcel,
                             borderRadius: BorderRadius.circular(10.r),
@@ -662,7 +671,12 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                     "History Barang Kosong, PDF Belum Tersedia",
                                     true);
                               } else {
-                                Navigator.pushNamed(context, "/create-pdf");
+                                final GenerateLaporanStock res =
+                                    GenerateLaporanStock(
+                                        context, chartProvider);
+                                final result = await compute(
+                                    res.generateLaporanTracking, null);
+                                generatePDF(result);
                               }
                             },
                             borderRadius: BorderRadius.circular(10.r),
@@ -764,7 +778,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                           SizedBox(
                                             width: 10.w,
                                           ),
-                                          Text("${itemModel.qty.toString()}",
+                                          Text(itemModel.qty.toString(),
                                               style: normalText.copyWith(
                                                   fontSize: 14.sp)),
                                           SizedBox(
@@ -777,7 +791,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                           SizedBox(
                                             width: 10.w,
                                           ),
-                                          Text("${itemModel.barcode}",
+                                          Text(itemModel.barcode,
                                               style: normalText.copyWith(
                                                   fontSize: 14.sp)),
                                           SizedBox(
@@ -1091,7 +1105,6 @@ class _DetailChartPageState extends State<DetailChartPage> {
             .chartDetailBarangModel!;
     final excel.Workbook workbook = excel.Workbook();
     final excel.Worksheet worksheet = workbook.worksheets[0];
-    print(chartDetailBarangModel.historyDetail!.isNotEmpty);
     if (chartDetailBarangModel.historyDetail!.isNotEmpty) {
       worksheet.getRangeByName("A1").setText("TANGGAL");
       worksheet.getRangeByName("B1").setText("STOCK IN");
@@ -1126,10 +1139,17 @@ class _DetailChartPageState extends State<DetailChartPage> {
   }
 
   void saveFile(bytes, String name) async {
-    Directory appDocument = await getApplicationDocumentsDirectory();
-    File("${appDocument.path}/$name").writeAsBytes(bytes);
-    print(await File("${appDocument.path}/$name").exists());
-    openFile("${appDocument.path}/$name");
+    if (kIsWeb) {
+      html.AnchorElement(
+          href:
+              "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
+        ..setAttribute("download", "Laporan Stock.xlsx")
+        ..click();
+    } else {
+      Directory appDocument = await getApplicationDocumentsDirectory();
+      File("${appDocument.path}/$name").writeAsBytes(bytes);
+      openFile("${appDocument.path}/$name");
+    }
   }
 
   void openFile(String path) {

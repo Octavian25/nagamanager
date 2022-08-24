@@ -24,7 +24,6 @@ class _TrackingPageState extends State<TrackingPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     qtyController.dispose();
     barcodeController.dispose();
@@ -303,7 +302,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                     Visibility(
                                         visible: counter == 0,
                                         child: Text(
-                                          "Barang Masih Kosong, Jangan Khawatir ! Arahkan Scanner Ke Barang Untuk Melakukan Stock In",
+                                          "Barang Masih Kosong, Jangan Khawatir !Arahkan Scanner Ke Barang Untuk Melakukan Stock In",
                                           style: normalTextMobile,
                                           textAlign: TextAlign.center,
                                         )),
@@ -530,8 +529,9 @@ class _TrackingPageState extends State<TrackingPage> {
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   primary: red, onPrimary: white),
-                              onPressed: () =>
-                                  {Navigator.pushNamed(context, "/home")},
+                              onPressed: () => {
+                                Navigator.pushReplacementNamed(context, "/home")
+                              },
                               child: Row(
                                 children: [
                                   Icon(
@@ -802,7 +802,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                     Visibility(
                                         visible: counter == 0,
                                         child: Text(
-                                          "Barang Masih Kosong, Jangan Khawatir ! Arahkan Scanner Ke Barang Untuk Melakukan Stock In",
+                                          "Barang Masih Kosong, Jangan Khawatir !Arahkan Scanner Ke Barang Untuk Melakukan Stock In",
                                           style: normalText,
                                           textAlign: TextAlign.center,
                                         )),

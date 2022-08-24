@@ -12,6 +12,8 @@ class ItemModel extends Equatable {
   String? locationCode;
   String lastOpname;
   bool isDifference;
+  String categoryCode;
+  String subCategoryCode;
 
   ItemModel(
       {required this.name,
@@ -22,6 +24,8 @@ class ItemModel extends Equatable {
       required this.qty,
       this.locationCode,
       required this.type,
+      required this.subCategoryCode,
+      required this.categoryCode,
       required this.isDifference,
       required this.lastOpname});
 
@@ -35,6 +39,8 @@ class ItemModel extends Equatable {
           int? price,
           String? lastOpname,
           bool? isDifference,
+          String? subCategoryCode,
+          String? categoryCode,
           String? locationCode}) =>
       ItemModel(
           id: id ?? this.id,
@@ -44,6 +50,8 @@ class ItemModel extends Equatable {
           price: price ?? this.price,
           qty: qty ?? this.qty,
           type: type ?? this.type,
+          categoryCode: categoryCode ?? this.categoryCode,
+          subCategoryCode: subCategoryCode ?? this.subCategoryCode,
           locationCode: locationCode ?? this.locationCode,
           isDifference: isDifference ?? this.isDifference,
           lastOpname: lastOpname ?? this.lastOpname);
@@ -58,6 +66,8 @@ class ItemModel extends Equatable {
       type: json['type'],
       lastOpname: json['lastOpname'],
       locationCode: json['location_code'],
+      categoryCode: json['category_code'],
+      subCategoryCode: json['sub_category_code'],
       isDifference: json['isDifference']);
 
   Map<String, dynamic> toJson() {
@@ -68,14 +78,20 @@ class ItemModel extends Equatable {
       "imagePath": Encryptor.doEncrypt(imagePath),
       "barcode": Encryptor.doEncrypt(barcode),
       "price": price,
-      "location_code": Encryptor.doEncrypt(locationCode ?? "-")
+      "location_code": Encryptor.doEncrypt(locationCode ?? "-"),
+      "sub_category_code": Encryptor.doEncrypt(subCategoryCode),
+      "category_code": Encryptor.doEncrypt(categoryCode)
     };
   }
 
   Map<String, dynamic> updateJson() {
     return {
       "name": Encryptor.doEncrypt(name),
-      "location_code": Encryptor.doEncrypt(locationCode ?? "-")
+      "location_code": Encryptor.doEncrypt(locationCode ?? "-"),
+      "qty": qty,
+      "category_code": Encryptor.doEncrypt(categoryCode),
+      "sub_category_code": Encryptor.doEncrypt(subCategoryCode),
+      "price": price
     };
   }
 

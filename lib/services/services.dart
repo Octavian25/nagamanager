@@ -22,6 +22,8 @@ import 'package:nagamanager/models/tracking_feedback_model.dart';
 import 'package:nagamanager/models/user_model.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+import '../models/cateogry_model.dart';
+
 part 'client.dart';
 
 class EndPointProvider {
@@ -53,8 +55,10 @@ class EndPointProvider {
   Future<List<ItemModel>> getAllItem(String locationCode) async {
     var url = "items";
     try {
-      var response = await _client
-          .get(url, queryParameters: {"location_code": locationCode});
+      var response = await _client.get(url, queryParameters: {
+        "location_code":
+            Encryptor.doEncrypt(locationCode).toString().toUpperCase()
+      });
       if (response.statusCode == 200) {
         List<ItemModel> items = [];
         for (var item in response.data) {
@@ -89,11 +93,11 @@ class EndPointProvider {
     }
   }
 
-  Future<ChartBarangModel> getChartDashboard(String location_code) async {
+  Future<ChartBarangModel> getChartDashboard(String locationCode) async {
     var url = "chart/chart-barang";
     try {
       var response = await _client
-          .get(url, queryParameters: {"location_code": location_code});
+          .get(url, queryParameters: {"location_code": locationCode});
       if (response.statusCode == 200) {
         ChartBarangModel chartBarangModel =
             ChartBarangModel.fromJson(response.data);
@@ -219,11 +223,11 @@ class EndPointProvider {
     }
   }
 
-  Future<ItemInfoModel> getItemInfo(String location_code) async {
+  Future<ItemInfoModel> getItemInfo(String locationCode) async {
     try {
       var url = "chart/item-info";
       var response = await _client
-          .get(url, queryParameters: {"location_code": location_code});
+          .get(url, queryParameters: {"location_code": locationCode});
       if (response.statusCode == 200) {
         ItemInfoModel infoModel = ItemInfoModel.fromJson(response.data);
         print(infoModel.totalBarang);
@@ -310,6 +314,129 @@ class EndPointProvider {
         throw Exception('Gagal Tambah Lokasi');
       }
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<String> addCategories(CategoryModel categoryModel) async {
+    try {
+      var url = "Categories";
+      var response = await _client.post(url, data: categoryModel.toJson());
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Tambah Category');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<List<CategoryModel>> getAllCategory(void _) async {
+    try {
+      var url = "Categories";
+      var response = await _client.get(url);
+      if (response.statusCode == 200) {
+        List<CategoryModel> listLocation = listCategoryFromJson(response.data);
+        return listLocation;
+      } else {
+        throw Exception('Gagal Ambil Data Category');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  Future<String> deleteCategory(String id) async {
+    try {
+      var url = "Categories";
+      var response = await _client.delete("$url/$id");
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Hapus Category');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<String> editCategory(CategoryModel data) async {
+    try {
+      var url = "Categories";
+      print(data.toJsonEdit());
+      print(data.id);
+      var response =
+          await _client.put("$url/${data.id}", data: data.toJsonEdit());
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Edit Category');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  Future<String> addSubCategories(SubCategoryModel subCategoryModel) async {
+    try {
+      var url = "sub-categories";
+      var response = await _client.post(url, data: subCategoryModel.toJson());
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Tambah Category');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<List<SubCategoryModel>> getAllSubCategory(void _) async {
+    try {
+      var url = "sub-categories";
+      var response = await _client.get(url);
+      if (response.statusCode == 200) {
+        List<SubCategoryModel> listLocation =
+            listSubCategoryFromJson(response.data);
+        return listLocation;
+      } else {
+        throw Exception('Gagal Ambil Data Category');
+      }
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  Future<String> deleteSubCategory(String id) async {
+    try {
+      var url = "sub-categories";
+      var response = await _client.delete("$url/$id");
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Hapus Sub Category');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<String> editSubCategory(SubCategoryModel data) async {
+    try {
+      var url = "sub-categories";
+      var response =
+          await _client.put("$url/${data.id}", data: data.toJsonEdit());
+      if (response.statusCode == 200) {
+        return response.data['message'];
+      } else {
+        throw Exception('Gagal Edit Category');
+      }
+    } catch (e) {
+      print(e);
       throw Exception(e);
     }
   }

@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nagamanager/providers/category_provider.dart';
 import 'package:nagamanager/providers/chart_provider.dart';
 import 'package:nagamanager/providers/loading_provider.dart';
 import 'package:nagamanager/providers/location_provider.dart';
 import 'package:nagamanager/providers/providers.dart';
+import 'package:nagamanager/providers/sub_category_provider.dart';
 import 'package:nagamanager/providers/tracking_provider.dart';
 import 'package:nagamanager/ui/pages/pages.dart';
 import 'package:nagamanager/ui/widgets/pdf_creator.dart';
@@ -63,6 +65,12 @@ class MyApp extends StatelessWidget {
             update: (context, loading, chart) => chart!..update(loading)),
         ChangeNotifierProxyProvider<LoadingProvider, LocationProvider?>(
             create: (context) => LocationProvider(),
+            update: (context, loading, location) => location!..update(loading)),
+        ChangeNotifierProxyProvider<LoadingProvider, CategoryProvider?>(
+            create: (context) => CategoryProvider(),
+            update: (context, loading, location) => location!..update(loading)),
+        ChangeNotifierProxyProvider<LoadingProvider, SubCategoryProvider?>(
+            create: (context) => SubCategoryProvider(),
             update: (context, loading, location) => location!..update(loading))
       ],
       child: ScreenUtilInit(
@@ -88,6 +96,10 @@ class MyApp extends StatelessWidget {
                   '/': (context) => BasePage(child: const SplashPage()),
                   '/login': (context) => BasePage(child: const LoginPage()),
                   '/home': (context) => BasePage(child: const HomePage()),
+                  '/category': (context) =>
+                      BasePage(child: const CategoryPage()),
+                  '/sub-category': (context) =>
+                      BasePage(child: const SubCategoryPage()),
                   '/stocking': (context) =>
                       BasePage(child: const StockingPage()),
                   '/tracking': (context) =>

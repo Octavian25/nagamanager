@@ -15,9 +15,9 @@ class Client {
       };
     }
     _dio.interceptors.add(ApiInterceptors());
-    // _dio.options.baseUrl = "http://147.139.193.169:3133/api/v1/";
-    _dio.options.baseUrl = const String.fromEnvironment("URL");
-    _dio.options.headers['Authorization'] = "Bearer ${token}";
+    _dio.options.baseUrl = "http://localhost:3133/api/v1/";
+    // _dio.options.baseUrl = const String.fromEnvironment("URL");
+    _dio.options.headers['Authorization'] = "Bearer $token";
     _dio.options.headers['enc'] = "1";
     _dio.options.headers['ignore'] = "[]";
     return _dio;
@@ -25,11 +25,6 @@ class Client {
 }
 
 class ApiInterceptors extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    return super.onRequest(options, handler);
-  }
-
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     print(

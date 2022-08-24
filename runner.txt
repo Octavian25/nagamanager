@@ -1,2 +1,6 @@
 
-BUILD DEMO : flutter build web --web-renderer html --dart-define=URL=http://147.139.193.169:3133/api/v1/
+BUILD DEMO : flutter build web --web-renderer canvaskit --dart-define=URL=http://147.139.193.169:3133/api/v1/
+BUILD PA DIAN : flutter build web --web-renderer canvaskit --dart-define=URL=https://8.215.69.186:3309/api/v1/
+
+flutter run --web-renderer canvaskit --dart-define=URL=http://147.139.193.169:3133/api/v1/
+flutter run --web-renderer canvaskit --dart-define=URL=http://localhost:3133/api/v1/

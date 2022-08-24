@@ -44,6 +44,7 @@ class TextFieldCustom extends StatelessWidget {
                 enabled: !readOnly,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(10),
                   border: InputBorder.none,
                   hintText: title,
                   hintStyle: normalText,
@@ -94,6 +95,7 @@ class DropdownCustom extends StatelessWidget {
           Container(
             height: 53.h,
             width: width,
+            padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15), color: grey),
             child: Center(

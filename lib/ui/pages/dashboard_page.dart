@@ -19,23 +19,38 @@ class _DashboardPageState extends State<DashboardPage> {
     Navigator.pop(context);
     AuthProvider authProvider =
         Provider.of<AuthProvider>(context, listen: false);
+    String token = authProvider.user!.accessToken;
     ItemProvider itemProvider =
         Provider.of<ItemProvider>(context, listen: false);
     ChartProvider chartProvider =
         Provider.of<ChartProvider>(context, listen: false);
     LocationProvider locationProvider =
         Provider.of<LocationProvider>(context, listen: false);
+    CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    SubCategoryProvider subCategoryProvider =
+        Provider.of<SubCategoryProvider>(context, listen: false);
 
-    await itemProvider.getProject(authProvider.user!.accessToken);
-    await itemProvider.getTotalIn(authProvider.user!.accessToken);
-    await itemProvider.getTotalOut(authProvider.user!.accessToken);
-    await locationProvider.getAllLocation(authProvider.user!.accessToken);
-    await chartProvider.getItemInfo(authProvider.user!.accessToken);
+    await categoryProvider.getAllCategory(token);
+    await subCategoryProvider.getAllSubCategory(token);
+    await itemProvider.getProject(token);
+    await itemProvider.getTotalIn(token);
+    await itemProvider.getTotalOut(token);
+    await locationProvider.getAllLocation(token);
+    await chartProvider.getItemInfo(token);
     locationProvider.checkLastLocation();
 
-    if (await chartProvider.getDashboardChart(authProvider.user!.accessToken)) {
-      if (await chartProvider.getItemInfo(authProvider.user!.accessToken)) {}
+    if (await chartProvider.getDashboardChart(token)) {
+      if (await chartProvider.getItemInfo(token)) {}
     }
+  }
+
+  void generatePDF(Uint8List pdfInBytes) {
+    html.AnchorElement(
+        href:
+            "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfInBytes)}")
+      ..setAttribute("download", "Laporan Persediaan Stock.pdf")
+      ..click();
   }
 
   @override
@@ -55,7 +70,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   Navigator.pushNamed(context, "/home");
                 }
               },
-              child: Icon(Icons.qr_code_scanner),
+              child: const Icon(Icons.qr_code_scanner),
             ),
             body: SafeArea(
                 child: SingleChildScrollView(
@@ -90,7 +105,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: Text('Close'),
+                                            child: const Text('Close'),
                                           )
                                         ],
                                       );
@@ -215,7 +230,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        child: Text('Close'),
+                                        child: const Text('Close'),
                                       )
                                     ],
                                   );
@@ -285,6 +300,44 @@ class _DashboardPageState extends State<DashboardPage> {
                                   style: normalText),
                               const Spacer(),
                               IconButton(
+                                onPressed: () async {
+                                  Uint8List result = await compute(
+                                      generateLaporanPersediaan,
+                                      itemProvider.item);
+                                  generatePDF(result);
+                                },
+                                tooltip: "Print Stock Persediaan",
+                                icon: const Icon(Iconsax.printer),
+                              ),
+                              10.horizontalSpaceRadius,
+                              IconButton(
+                                onPressed: () async {
+                                  await Provider.of<SubCategoryProvider>(
+                                          context,
+                                          listen: false)
+                                      .getAllSubCategory(token);
+                                  await Provider.of<CategoryProvider>(context,
+                                          listen: false)
+                                      .getAllCategory(token);
+                                  Navigator.pushNamed(context, "/sub-category");
+                                },
+                                tooltip: " Menu Sub Kategori",
+                                icon: const Icon(Iconsax.setting_2),
+                              ),
+                              10.horizontalSpace,
+                              IconButton(
+                                onPressed: () async {
+                                  await Provider.of<CategoryProvider>(context,
+                                          listen: false)
+                                      .getAllCategory(token);
+                                  Navigator.pushNamed(context, "/category");
+                                },
+                                tooltip: "Menu Kategori",
+                                icon: const Icon(Iconsax.setting),
+                              ),
+                              10.horizontalSpace,
+                              IconButton(
+                                tooltip: "Pilih Lokasi",
                                 onPressed: () {
                                   showDialog<void>(
                                     context: context,
@@ -301,7 +354,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                               Navigator.pushNamed(
                                                   context, "/location");
                                             },
-                                            child: Text('Tambah Gudang'),
+                                            child: const Text('Tambah Gudang'),
                                           )
                                         ],
                                       );
@@ -310,6 +363,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 },
                                 icon: const Icon(Iconsax.building),
                               ),
+                              10.horizontalSpace,
                               IconButton(
                                 onPressed: () {
                                   showDialog<void>(
@@ -417,7 +471,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   fontSize: 20.sp,
                                                   fontWeight: FontWeight.w700)),
                                           content: AddBarangWidget(),
-                                          actions: <Widget>[],
+                                          actions: const <Widget>[],
                                         );
                                       },
                                     );
@@ -668,7 +722,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     borderRadius: BorderRadius.circular(5)),
                 child: Icon(iconData, color: textColor),
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
                   onTap: () async {
                     if (index == 0) {
@@ -799,7 +853,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     borderRadius: BorderRadius.circular(5)),
                 child: Icon(iconData, color: textColor),
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
                   onTap: () async {
                     if (index == 0) {

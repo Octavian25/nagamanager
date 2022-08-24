@@ -1,17 +1,18 @@
 part of 'pages.dart';
 
-class LocationPage extends StatefulWidget {
-  const LocationPage({Key? key}) : super(key: key);
+class CategoryPage extends StatefulWidget {
+  const CategoryPage({Key? key}) : super(key: key);
 
   @override
-  State<LocationPage> createState() => _LocationPageState();
+  State<CategoryPage> createState() => CategoryPageState();
 }
 
-class _LocationPageState extends State<LocationPage> {
-  TextEditingController locationCodeController = TextEditingController();
-  TextEditingController locationNameController = TextEditingController();
+class CategoryPageState extends State<CategoryPage> {
+  TextEditingController categoryCodeController = TextEditingController();
+  TextEditingController categoryNameController = TextEditingController();
   bool isEdited = false;
-  String id = "";
+  String id = "-";
+
   void updateData() async {
     Navigator.pop(context);
     AuthProvider authProvider =
@@ -20,16 +21,14 @@ class _LocationPageState extends State<LocationPage> {
         Provider.of<ItemProvider>(context, listen: false);
     ChartProvider chartProvider =
         Provider.of<ChartProvider>(context, listen: false);
-    LocationProvider locationProvider =
-        Provider.of<LocationProvider>(context, listen: false);
+    CategoryProvider categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
 
     await itemProvider.getProject(authProvider.user!.accessToken);
     await itemProvider.getTotalIn(authProvider.user!.accessToken);
     await itemProvider.getTotalOut(authProvider.user!.accessToken);
-    await locationProvider.getAllLocation(authProvider.user!.accessToken);
+    await categoryProvider.getAllCategory(authProvider.user!.accessToken);
     await chartProvider.getItemInfo(authProvider.user!.accessToken);
-    locationProvider.checkLastLocation();
-
     if (await chartProvider.getDashboardChart(authProvider.user!.accessToken)) {
       if (await chartProvider.getItemInfo(authProvider.user!.accessToken)) {}
     }
@@ -37,8 +36,9 @@ class _LocationPageState extends State<LocationPage> {
 
   @override
   Widget build(BuildContext context) {
-    LocationProvider locationProvider = Provider.of<LocationProvider>(context);
+    CategoryProvider cateogryProvider = Provider.of<CategoryProvider>(context);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding:
@@ -46,44 +46,53 @@ class _LocationPageState extends State<LocationPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                onTap: () async {
-                  String token =
-                      Provider.of<AuthProvider>(context, listen: false)
-                          .user!
-                          .accessToken;
-                  ChartProvider chart =
-                      Provider.of<ChartProvider>(context, listen: false);
-                  if (await chart.getDashboardChart(token)) {
-                    updateData();
-                    Navigator.pop(context);
-                  } else {
-                    showToast("Ambil Data Terbaru Gagal", false);
-                  }
-                },
-                borderRadius: BorderRadius.circular(10.r),
-                child: Ink(
-                  height: 45.h,
-                  width: 90.w,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      color: "#E8ECF2".toColor()),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 15.w,
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      String token =
+                          Provider.of<AuthProvider>(context, listen: false)
+                              .user!
+                              .accessToken;
+                      ChartProvider chart =
+                          Provider.of<ChartProvider>(context, listen: false);
+                      if (await chart.getDashboardChart(token)) {
+                        updateData();
+                        Navigator.pushNamed(context, "/dashboard");
+                      } else {
+                        showToast("Ambil Data Terbaru Gagal", false);
+                      }
+                    },
+                    borderRadius: BorderRadius.circular(10.r),
+                    child: Ink(
+                      height: 45.h,
+                      width: 90.w,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.r),
+                          color: "#E8ECF2".toColor()),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 15.w,
+                          ),
+                          Icon(Iconsax.arrow_square_left,
+                              color: text, size: 20),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          Text(
+                            'Back',
+                            style: normalText.copyWith(color: text),
+                          )
+                        ],
                       ),
-                      Icon(Iconsax.arrow_square_left, color: text, size: 20),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      Text(
-                        'Back',
-                        style: normalText.copyWith(color: text),
-                      )
-                    ],
+                    ),
                   ),
-                ),
+                  20.horizontalSpaceRadius,
+                  Text("Master Category",
+                      style: normalText.copyWith(
+                          fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                ],
               ),
               Align(
                   alignment: Alignment.centerRight,
@@ -91,8 +100,8 @@ class _LocationPageState extends State<LocationPage> {
                     onPressed: () {
                       setState(() {
                         isEdited = false;
-                        locationCodeController.clear();
-                        locationNameController.clear();
+                        categoryCodeController.clear();
+                        categoryNameController.clear();
                       });
                     },
                     icon: const Icon(Icons.refresh),
@@ -105,13 +114,13 @@ class _LocationPageState extends State<LocationPage> {
                     children: [
                       TextFieldCustom(
                           readOnly: isEdited,
-                          controller: locationCodeController,
-                          title: "Kode Lokasi",
+                          controller: categoryCodeController,
+                          title: "Kode Categori",
                           width: 200.w),
                       20.horizontalSpace,
                       TextFieldCustom(
-                          controller: locationNameController,
-                          title: "Nama Lokasi",
+                          controller: categoryNameController,
+                          title: "Nama Categori",
                           width: 300.w),
                     ],
                   ),
@@ -123,19 +132,17 @@ class _LocationPageState extends State<LocationPage> {
                             Provider.of<AuthProvider>(context, listen: false)
                                 .user!
                                 .accessToken;
-                        LocationModel payload = LocationModel(
-                            locationCode: locationCodeController.text,
-                            locationName: locationNameController.text,
-                            id: "-");
-                        EditLocationModel payloadEdit = EditLocationModel(
-                            locationName: locationNameController.text, id: id);
+                        CategoryModel payload = CategoryModel(
+                            id: id,
+                            categoryCode: categoryCodeController.text,
+                            description: "-",
+                            name: categoryNameController.text);
                         if (isEdited) {
-                          await locationProvider.editLocation(
-                              token, payloadEdit);
-                          await locationProvider.getAllLocation(token);
+                          await cateogryProvider.editCategory(token, payload);
+                          await cateogryProvider.getAllCategory(token);
                         } else {
-                          await locationProvider.addLocation(token, payload);
-                          await locationProvider.getAllLocation(token);
+                          await cateogryProvider.addCategory(token, payload);
+                          await cateogryProvider.getAllCategory(token);
                         }
                       },
                       child: Ink(
@@ -153,28 +160,25 @@ class _LocationPageState extends State<LocationPage> {
                     ),
                   ),
                   20.verticalSpace,
-                  Container(
-                    child: Row(
-                      children: [
-                        10.horizontalSpace,
-                        Expanded(
-                          child: Text("Kode Lokasi",
-                              style: normalText.copyWith(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                        Expanded(
-                          child: Text("Nama Lokasi",
-                              style: normalText.copyWith(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ],
-                    ),
+                  Row(
+                    children: [
+                      10.horizontalSpace,
+                      Expanded(
+                        child: Text("Kode Kategori",
+                            style: normalText.copyWith(
+                                fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                      ),
+                      Expanded(
+                        child: Text("Nama Kategori",
+                            style: normalText.copyWith(
+                                fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                      ),
+                    ],
                   ),
                   10.verticalSpace,
                   Expanded(
-                      child: ListView.builder(
+                      child: ListView.separated(
+                    separatorBuilder: (context, index) => const Divider(),
                     itemBuilder: (context, index) {
                       return InkWell(
                         onLongPress: () {
@@ -202,10 +206,10 @@ class _LocationPageState extends State<LocationPage> {
                                               listen: false)
                                           .user!
                                           .accessToken;
-                                      if (await locationProvider.deleteLocation(
+                                      if (await cateogryProvider.deleteCategory(
                                           token,
-                                          locationProvider
-                                              .listLocation[index].id)) {
+                                          cateogryProvider
+                                              .listCategory[index].id)) {
                                         Navigator.pop(context);
                                       }
                                     },
@@ -216,12 +220,12 @@ class _LocationPageState extends State<LocationPage> {
                           );
                         },
                         onTap: () {
-                          locationCodeController.text =
-                              locationProvider.listLocation[index].locationCode;
-                          locationNameController.text =
-                              locationProvider.listLocation[index].locationName;
+                          categoryCodeController.text =
+                              cateogryProvider.listCategory[index].categoryCode;
+                          categoryNameController.text =
+                              cateogryProvider.listCategory[index].name;
                           setState(() {
-                            id = locationProvider.listLocation[index].id;
+                            id = cateogryProvider.listCategory[index].id;
                             isEdited = true;
                           });
                         },
@@ -231,19 +235,22 @@ class _LocationPageState extends State<LocationPage> {
                             children: [
                               10.horizontalSpace,
                               Expanded(
-                                child: Text(locationProvider
-                                    .listLocation[index].locationCode),
+                                child: Text(
+                                    cateogryProvider
+                                        .listCategory[index].categoryCode,
+                                    style: normalText),
                               ),
                               Expanded(
-                                child: Text(locationProvider
-                                    .listLocation[index].locationName),
+                                child: Text(
+                                    cateogryProvider.listCategory[index].name,
+                                    style: normalText),
                               ),
                             ],
                           ),
                         ),
                       );
                     },
-                    itemCount: locationProvider.listLocation.length,
+                    itemCount: cateogryProvider.listCategory.length,
                   ))
                 ],
               ))
