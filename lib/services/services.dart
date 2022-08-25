@@ -184,7 +184,7 @@ class EndPointProvider {
       if (response.statusCode == 201) {
         return "Berhasil";
       } else {
-        throw Exception('Gagal Ambil Project');
+        throw Exception('Gagal Ambil Barang');
       }
     } catch (e) {
       throw Exception(e);
@@ -199,7 +199,21 @@ class EndPointProvider {
       if (response.statusCode == 200) {
         return "Berhasil";
       } else {
-        throw Exception('Gagal Ambil Project');
+        throw Exception('Gagal Ambil Barang');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<String> deleteBarang(ItemModel item) async {
+    var url = "items";
+    try {
+      var response = await _client.delete("$url/${item.id}");
+      if (response.statusCode == 200) {
+        return "Berhasil";
+      } else {
+        throw Exception('Gagal Hapus Barang');
       }
     } catch (e) {
       throw Exception(e);
@@ -230,7 +244,6 @@ class EndPointProvider {
           .get(url, queryParameters: {"location_code": locationCode});
       if (response.statusCode == 200) {
         ItemInfoModel infoModel = ItemInfoModel.fromJson(response.data);
-        print(infoModel.totalBarang);
         return infoModel;
       } else {
         throw Exception('Gagal Ambil Item Info');
@@ -365,8 +378,6 @@ class EndPointProvider {
   Future<String> editCategory(CategoryModel data) async {
     try {
       var url = "Categories";
-      print(data.toJsonEdit());
-      print(data.id);
       var response =
           await _client.put("$url/${data.id}", data: data.toJsonEdit());
       if (response.statusCode == 200) {
@@ -436,7 +447,6 @@ class EndPointProvider {
         throw Exception('Gagal Edit Category');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }

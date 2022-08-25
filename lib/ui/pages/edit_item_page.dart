@@ -216,9 +216,43 @@ class _EditItemPageState extends State<EditItemPage> {
                             controller: typeController,
                             title: "Type Barang",
                             width: 400.w),
+                        20.verticalSpacingRadius,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
+                            InkWell(
+                              onTap: () async {
+                                String token = Provider.of<AuthProvider>(
+                                        context,
+                                        listen: false)
+                                    .user!
+                                    .accessToken;
+                                if (await Provider.of<ItemProvider>(context,
+                                        listen: false)
+                                    .deleteItems(token, widget.itemModel)) {
+                                  showToast("Barang berhasil DIhapus", false);
+                                  Navigator.pop(context);
+                                } else {
+                                  showToast(
+                                      "Barang Gagal Dirubah, Coba Beberapa saat lagi..",
+                                      true);
+                                }
+                              },
+                              child: Ink(
+                                width: 100.w,
+                                height: 45.h,
+                                child: Center(
+                                    child: Text(
+                                  'Delete Barang',
+                                  style:
+                                      normalText.copyWith(color: Colors.white),
+                                )),
+                                decoration: BoxDecoration(
+                                    color: red,
+                                    borderRadius: BorderRadius.circular(5)),
+                              ),
+                            ),
+                            10.horizontalSpaceRadius,
                             InkWell(
                               onTap: () => {
                                 printBarcode(barcodeController.text,

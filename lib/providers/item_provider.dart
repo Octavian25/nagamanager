@@ -99,6 +99,29 @@ class ItemProvider with ChangeNotifier {
     }
   }
 
+  Future<bool> deleteItems(String token, ItemModel itemModel) async {
+    Client _client = Client(token);
+    var _endPoint = EndPointProvider(_client.init());
+    loadingProvider!.setLoading();
+    loadingProvider!.notifyListeners();
+    try {
+      await _endPoint.deleteBarang(itemModel);
+      loadingProvider!.stopLoading();
+      loadingProvider!.notifyListeners();
+      getProject(token);
+      notifyListeners();
+      return true;
+    } catch (e, stackTrace) {
+      loadingProvider!.stopLoading();
+      loadingProvider!.notifyListeners();
+      await Sentry.captureException(
+        e,
+        stackTrace: stackTrace,
+      );
+      return false;
+    }
+  }
+
   Future<bool> batchAddItems(String token, List<ItemModel> data) async {
     Client _client = Client(token);
     var _endPoint = EndPointProvider(_client.init());
