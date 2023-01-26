@@ -11,6 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:supercharged/supercharged.dart';
+import 'package:go_router/go_router.dart';
 
 class GeneratePDFWidget extends StatelessWidget {
   const GeneratePDFWidget(this.title, {Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class GeneratePDFWidget extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
+            SizedBox(
               height: 55.h,
               child: Row(
                 children: [
@@ -30,8 +31,7 @@ class GeneratePDFWidget extends StatelessWidget {
                     width: 16.w,
                   ),
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: "#E8ECF2".toColor(), elevation: 0),
+                    style: ElevatedButton.styleFrom(primary: "#E8ECF2".toColor(), elevation: 0),
                     child: Row(
                       children: [
                         Icon(Iconsax.arrow_square_left, color: text, size: 20),
@@ -45,7 +45,7 @@ class GeneratePDFWidget extends StatelessWidget {
                       ],
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, "/detail-chart");
+                      context.go("/dashboard/detail-chart");
                     },
                   ),
                 ],
@@ -63,10 +63,8 @@ class GeneratePDFWidget extends StatelessWidget {
     );
   }
 
-  Future<Uint8List> _generatePdf(
-      PdfPageFormat format, String title, context) async {
-    ChartProvider chartProvider =
-        Provider.of<ChartProvider>(context, listen: false);
+  Future<Uint8List> _generatePdf(PdfPageFormat format, String title, context) async {
+    ChartProvider chartProvider = Provider.of<ChartProvider>(context, listen: false);
     final pdf = pw.Document(
       version: PdfVersion.pdf_1_5,
       compress: true,
@@ -76,9 +74,8 @@ class GeneratePDFWidget extends StatelessWidget {
     );
     final font = await PdfGoogleFonts.poppinsMedium();
     final fontLight = await PdfGoogleFonts.poppinsLight();
-    List<BodyTable> listBodyTable = List<BodyTable>.from(chartProvider
-        .chartDetailBarangModel!.historyDetail!
-        .map((e) => BodyTable(
+    List<BodyTable> listBodyTable = List<BodyTable>.from(
+        chartProvider.chartDetailBarangModel!.historyDetail!.map((e) => BodyTable(
             tanggal: e.tanggal,
             stock_out: e.stockOut,
             stock_in: e.stockIn,
@@ -91,54 +88,40 @@ class GeneratePDFWidget extends StatelessWidget {
           build: (context) {
             return pw.Column(
               children: [
-                pw.Column(
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Text("Laporan Stock Barang",
-                          style: pw.TextStyle(font: font)),
-                      pw.Text(
-                          "Periode ${chartProvider.startDate} - ${chartProvider.endDate}",
-                          style: pw.TextStyle(font: fontLight, fontSize: 9.sp)),
-                      pw.SizedBox(height: 20),
-                      pw.Text("Nama Barang : ${chartProvider.barangSelected}",
-                          style: pw.TextStyle(font: font, fontSize: 11.sp)),
-                      pw.SizedBox(height: 10),
-                      pw.Table(
-                          columnWidths: {
-                            0: pw.FixedColumnWidth(50),
-                            1: pw.FixedColumnWidth(50),
-                            2: pw.FixedColumnWidth(50),
-                            3: pw.FixedColumnWidth(50),
-                          },
-                          children: [
-                            headerTable()
-                          ],
-                          border: pw.TableBorder.all(
-                              color: PdfColor.fromHex("000"))),
-                      pw.ListView.builder(
-                          itemBuilder: (context, index) {
-                            return pw.Container(
-                                child: pw.Table(
-                                    columnWidths: {
-                                  0: pw.FixedColumnWidth(50),
-                                  1: pw.FixedColumnWidth(50),
-                                  2: pw.FixedColumnWidth(50),
-                                  3: pw.FixedColumnWidth(50),
-                                },
-                                    children: [
-                                  bodyTable(
-                                      tanggal: Helper.formatDate(
-                                          listData[i][index].tanggal),
-                                      stock_out: listData[i][index].stock_out,
-                                      available_stock:
-                                          listData[i][index].available_stock,
-                                      stock_in: listData[i][index].stock_in)
-                                ],
-                                    border: pw.TableBorder.all(
-                                        color: PdfColor.fromHex("000"))));
-                          },
-                          itemCount: listData[i].length)
-                    ])
+                pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.start, children: [
+                  pw.Text("Laporan Stock Barang", style: pw.TextStyle(font: font)),
+                  pw.Text("Periode ${chartProvider.startDate} - ${chartProvider.endDate}",
+                      style: pw.TextStyle(font: fontLight, fontSize: 9.sp)),
+                  pw.SizedBox(height: 20),
+                  pw.Text("Nama Barang : ${chartProvider.barangSelected}",
+                      style: pw.TextStyle(font: font, fontSize: 11.sp)),
+                  pw.SizedBox(height: 10),
+                  pw.Table(columnWidths: {
+                    0: const pw.FixedColumnWidth(50),
+                    1: const pw.FixedColumnWidth(50),
+                    2: const pw.FixedColumnWidth(50),
+                    3: const pw.FixedColumnWidth(50),
+                  }, children: [
+                    headerTable()
+                  ], border: pw.TableBorder.all(color: PdfColor.fromHex("000"))),
+                  pw.ListView.builder(
+                      itemBuilder: (context, index) {
+                        return pw.Container(
+                            child: pw.Table(columnWidths: {
+                          0: const pw.FixedColumnWidth(50),
+                          1: const pw.FixedColumnWidth(50),
+                          2: const pw.FixedColumnWidth(50),
+                          3: const pw.FixedColumnWidth(50),
+                        }, children: [
+                          bodyTable(
+                              tanggal: Helper.formatDate(listData[i][index].tanggal),
+                              stock_out: listData[i][index].stock_out,
+                              available_stock: listData[i][index].available_stock,
+                              stock_in: listData[i][index].stock_in)
+                        ], border: pw.TableBorder.all(color: PdfColor.fromHex("000"))));
+                      },
+                      itemCount: listData[i].length)
+                ])
               ],
             );
           },
@@ -152,21 +135,14 @@ class GeneratePDFWidget extends StatelessWidget {
   pw.TableRow headerTable() {
     return pw.TableRow(children: [
       pw.Container(
-          height: 20,
-          child:
-              pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text("Tanggal")])),
+          height: 20, child: pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text("Tanggal")])),
+      pw.Container(
+          height: 20, child: pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text("Stock In")])),
+      pw.Container(
+          height: 20, child: pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text("Stock Out")])),
       pw.Container(
           height: 20,
-          child:
-              pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text("Stock In")])),
-      pw.Container(
-          height: 20,
-          child: pw.Row(
-              children: [pw.SizedBox(width: 3.w), pw.Text("Stock Out")])),
-      pw.Container(
-          height: 20,
-          child: pw.Row(
-              children: [pw.SizedBox(width: 3.w), pw.Text("Available Stock")])),
+          child: pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text("Available Stock")])),
     ]);
   }
 
@@ -174,28 +150,16 @@ class GeneratePDFWidget extends StatelessWidget {
     return pw.TableRow(children: [
       pw.Container(
           height: 20,
-          child: pw.Row(children: [
-            pw.SizedBox(width: 3.w),
-            pw.Text(tanggal.toString())
-          ])),
+          child: pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text(tanggal.toString())])),
       pw.Container(
           height: 20,
-          child: pw.Row(children: [
-            pw.SizedBox(width: 3.w),
-            pw.Text(stock_in.toString())
-          ])),
+          child: pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text(stock_in.toString())])),
       pw.Container(
           height: 20,
-          child: pw.Row(children: [
-            pw.SizedBox(width: 3.w),
-            pw.Text(stock_out.toString())
-          ])),
+          child: pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text(stock_out.toString())])),
       pw.Container(
           height: 20,
-          child: pw.Row(children: [
-            pw.SizedBox(width: 3.w),
-            pw.Text(available_stock.toString())
-          ])),
+          child: pw.Row(children: [pw.SizedBox(width: 3.w), pw.Text(available_stock.toString())])),
     ]);
   }
 }
@@ -217,8 +181,7 @@ List<dynamic> chunkLength(int length, dynamic array) {
   var chunks = [];
   int chunkSize = length;
   for (var i = 0; i < array.length; i += chunkSize) {
-    chunks.add(array.sublist(
-        i, i + chunkSize > array.length ? array.length : i + chunkSize));
+    chunks.add(array.sublist(i, i + chunkSize > array.length ? array.length : i + chunkSize));
   }
   return chunks;
 }

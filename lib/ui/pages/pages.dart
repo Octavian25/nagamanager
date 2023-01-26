@@ -40,6 +40,7 @@ import 'package:collection/collection.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../models/chart_detail_barang_model.dart';
 import '../../models/location_model.dart';

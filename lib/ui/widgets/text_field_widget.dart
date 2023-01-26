@@ -34,8 +34,7 @@ class TextFieldCustom extends StatelessWidget {
             height: 53.h,
             width: width,
             padding: EdgeInsets.only(left: 15.w),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: grey),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: grey),
             child: Center(
               child: TextFormField(
                 focusNode: focus,
@@ -44,7 +43,7 @@ class TextFieldCustom extends StatelessWidget {
                 enabled: !readOnly,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(10),
+                  contentPadding: const EdgeInsets.all(10),
                   border: InputBorder.none,
                   hintText: title,
                   hintStyle: normalText,
@@ -96,8 +95,7 @@ class DropdownCustom extends StatelessWidget {
             height: 53.h,
             width: width,
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: grey),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: grey),
             child: Center(
                 child: DropdownSearch<LocationModel>(
               popupProps: const PopupProps.menu(showSearchBox: true),

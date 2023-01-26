@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nagamanager/models/item_model.dart';
+import 'package:nagamanager/models/stocking_argumen_model.dart';
 import 'package:nagamanager/providers/category_provider.dart';
 import 'package:nagamanager/providers/chart_provider.dart';
 import 'package:nagamanager/providers/loading_provider.dart';
@@ -19,8 +22,7 @@ class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
 
@@ -29,8 +31,7 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   await SentryFlutter.init(
     (options) {
-      options.dsn =
-          'https://8e8149eb0b784b98a9cc96332a2ef76d@o922577.ingest.sentry.io/6413966';
+      options.dsn = 'https://8e8149eb0b784b98a9cc96332a2ef76d@o922577.ingest.sentry.io/6413966';
       // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
       // We recommend adjusting this value in production.
       options.tracesSampleRate = 1.0;
@@ -45,10 +46,74 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.landscapeLeft,
-    //   DeviceOrientation.landscapeRight,
-    // ]);
+    var goroutes = GoRouter(initialLocation: '/', urlPathStrategy: UrlPathStrategy.path, routes: [
+      GoRoute(path: "/", builder: (context, state) => BasePage(child: const SplashPage()), routes: [
+        GoRoute(
+          path: 'login',
+          builder: (context, state) => BasePage(child: const LoginPage()),
+        ),
+        GoRoute(
+            path: 'dashboard',
+            builder: (context, state) => BasePage(child: const DashboardPage()),
+            routes: [
+              GoRoute(
+                path: 'detail-chart',
+                builder: (context, state) => BasePage(child: const DetailChartPage()),
+              ),
+              GoRoute(
+                path: 'detail-stock',
+                builder: (context, state) =>
+                    BasePage(child: DetailStockPage(isStockIn: state.extra as bool)),
+              ),
+              GoRoute(
+                  path: 'home',
+                  builder: (context, state) => BasePage(child: const HomePage()),
+                  routes: [
+                    GoRoute(
+                      path: 'tracking-camera',
+                      builder: (context, state) => BasePage(
+                          child: TrackingPageCamera(
+                        trackingIn: state.extra as bool,
+                      )),
+                    ),
+                    GoRoute(
+                      path: 'tracking',
+                      builder: (context, state) => BasePage(child: const TrackingPage()),
+                    ),
+                    GoRoute(
+                      path: 'edit-item',
+                      builder: (context, state) => BasePage(
+                          child: EditItemPage(
+                        itemModel: state.extra as ItemModel,
+                      )),
+                    ),
+                    GoRoute(
+                      path: 'stocking',
+                      builder: (context, state) => BasePage(
+                          child: StockingPage(
+                        stockargumen: state.extra as StockingArgumenModel,
+                      )),
+                    ),
+                  ]),
+              GoRoute(
+                path: 'category',
+                builder: (context, state) => BasePage(child: const CategoryPage()),
+              ),
+              GoRoute(
+                path: 'sub-category',
+                builder: (context, state) => BasePage(child: const SubCategoryPage()),
+              ),
+              GoRoute(
+                path: 'location',
+                builder: (context, state) => BasePage(child: const LocationPage()),
+              ),
+              GoRoute(
+                path: 'create-pdf',
+                builder: (context, state) => const GeneratePDFWidget("GeneratePDF"),
+              ),
+            ])
+      ])
+    ]);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => StockingProvider(null)),
@@ -77,12 +142,14 @@ class MyApp extends StatelessWidget {
           designSize: const Size(1024, 768),
           minTextAdapt: true,
           splitScreenMode: true,
-          builder: () => MaterialApp(
+          builder: () => MaterialApp.router(
+                routeInformationParser: goroutes.routeInformationParser,
+                routerDelegate: goroutes.routerDelegate,
+                routeInformationProvider: goroutes.routeInformationProvider,
                 debugShowCheckedModeBanner: false,
                 title: 'NagaManager',
                 theme: ThemeData(
-                    primarySwatch: Colors.blue,
-                    textTheme: GoogleFonts.poppinsTextTheme()),
+                    primarySwatch: Colors.blue, textTheme: GoogleFonts.poppinsTextTheme()),
                 builder: (context, widget) {
                   //add this line
                   ScreenUtil.setContext(context);
@@ -91,33 +158,6 @@ class MyApp extends StatelessWidget {
                     data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
                     child: widget!,
                   );
-                },
-                routes: {
-                  '/': (context) => BasePage(child: const SplashPage()),
-                  '/login': (context) => BasePage(child: const LoginPage()),
-                  '/home': (context) => BasePage(child: const HomePage()),
-                  '/category': (context) =>
-                      BasePage(child: const CategoryPage()),
-                  '/sub-category': (context) =>
-                      BasePage(child: const SubCategoryPage()),
-                  '/stocking': (context) =>
-                      BasePage(child: const StockingPage()),
-                  '/tracking': (context) =>
-                      BasePage(child: const TrackingPage()),
-                  '/tracking-camera': (context) =>
-                      BasePage(child: const TrackingPageCamera()),
-                  '/detail-chart': (context) =>
-                      BasePage(child: const DetailChartPage()),
-                  '/dashboard': (context) =>
-                      BasePage(child: const DashboardPage()),
-                  '/detail-stock': (context) => BasePage(
-                          child: DetailStockPage(
-                        isStockIn: false,
-                      )),
-                  "/create-pdf": (context) =>
-                      const GeneratePDFWidget("GeneratePDF"),
-                  "/location": (context) =>
-                      BasePage(child: const LocationPage())
                 },
               )),
     );

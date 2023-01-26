@@ -2,8 +2,7 @@ part of 'widgets.dart';
 
 class BottomSheetTracking extends StatefulWidget {
   final List<TrackingFeedback> trackingFeedback;
-  const BottomSheetTracking({Key? key, required this.trackingFeedback})
-      : super(key: key);
+  const BottomSheetTracking({Key? key, required this.trackingFeedback}) : super(key: key);
 
   @override
   _BottomSheetTrackingState createState() => _BottomSheetTrackingState();
@@ -16,8 +15,8 @@ class _BottomSheetTrackingState extends State<BottomSheetTracking> {
       height: 600.h,
       decoration: BoxDecoration(
           color: success,
-          borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(15), topLeft: Radius.circular(15))),
+          borderRadius:
+              const BorderRadius.only(topRight: Radius.circular(15), topLeft: Radius.circular(15))),
       child: Column(
         children: [
           SizedBox(
@@ -74,8 +73,7 @@ class _BottomSheetTrackingState extends State<BottomSheetTracking> {
                         textAlign: TextAlign.center,
                       ),
                       Text(widget.trackingFeedback[index].name,
-                          style: normalText.copyWith(fontSize: 14.sp),
-                          textAlign: TextAlign.center),
+                          style: normalText.copyWith(fontSize: 14.sp), textAlign: TextAlign.center),
                       Expanded(
                         child: Center(
                           child: Text(
@@ -98,10 +96,9 @@ class _BottomSheetTrackingState extends State<BottomSheetTracking> {
             child: ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.pushNamed(context, "/home");
+                context.go('/dashboard/home');
               },
-              style: ElevatedButton.styleFrom(
-                  primary: blue, onPrimary: Colors.white),
+              style: ElevatedButton.styleFrom(primary: blue, onPrimary: Colors.white),
               child: Text(
                 "Selesai",
                 style: normalText.copyWith(color: Colors.white),
@@ -119,12 +116,10 @@ class _BottomSheetTrackingState extends State<BottomSheetTracking> {
 
 class BottomSheetTrackingMobile extends StatefulWidget {
   final List<TrackingFeedback> trackingFeedback;
-  const BottomSheetTrackingMobile({Key? key, required this.trackingFeedback})
-      : super(key: key);
+  const BottomSheetTrackingMobile({Key? key, required this.trackingFeedback}) : super(key: key);
 
   @override
-  _BottomSheetTrackingMobileState createState() =>
-      _BottomSheetTrackingMobileState();
+  _BottomSheetTrackingMobileState createState() => _BottomSheetTrackingMobileState();
 }
 
 class _BottomSheetTrackingMobileState extends State<BottomSheetTrackingMobile> {
@@ -134,8 +129,8 @@ class _BottomSheetTrackingMobileState extends State<BottomSheetTrackingMobile> {
       height: 600.h,
       decoration: BoxDecoration(
           color: success,
-          borderRadius: const BorderRadius.only(
-              topRight: Radius.circular(15), topLeft: Radius.circular(15))),
+          borderRadius:
+              const BorderRadius.only(topRight: Radius.circular(15), topLeft: Radius.circular(15))),
       child: Column(
         children: [
           SizedBox(
@@ -192,8 +187,7 @@ class _BottomSheetTrackingMobileState extends State<BottomSheetTrackingMobile> {
                         textAlign: TextAlign.center,
                       ),
                       Text(widget.trackingFeedback[index].name,
-                          style: normalText.copyWith(fontSize: 30.sp),
-                          textAlign: TextAlign.center),
+                          style: normalText.copyWith(fontSize: 30.sp), textAlign: TextAlign.center),
                       Expanded(
                         child: Center(
                           child: Text(
@@ -216,10 +210,9 @@ class _BottomSheetTrackingMobileState extends State<BottomSheetTrackingMobile> {
             child: ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                Navigator.pushNamed(context, "/home");
+                context.go('/dashboard/home');
               },
-              style: ElevatedButton.styleFrom(
-                  primary: blue, onPrimary: Colors.white),
+              style: ElevatedButton.styleFrom(primary: blue, onPrimary: Colors.white),
               child: Text(
                 "Selesai",
                 style: normalTextMobile.copyWith(color: Colors.white),

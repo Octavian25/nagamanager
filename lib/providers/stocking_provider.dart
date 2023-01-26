@@ -13,8 +13,8 @@ class StockingProvider with ChangeNotifier {
   }
 
   Future<bool> sendStocking(String token, StockingModel stockingModel) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     try {
       String user = await compute(_endPoint.sendStocking, stockingModel);
       _stocking = user;
@@ -31,16 +31,15 @@ class StockingProvider with ChangeNotifier {
 
   Future<bool> getDetailStocking(
       String token, String startDate, String endDate, String type) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String locationCode = sharedPreferences.getString("kode_lokasi") ?? "-";
     try {
       List<DetailStockModel> response = await compute(
-          _endPoint.getDetailStocking,
-          GetDetailParam(startDate, endDate, type, locationCode));
+          _endPoint.getDetailStocking, GetDetailParam(startDate, endDate, type, locationCode));
       listDetailStockModel = response;
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();

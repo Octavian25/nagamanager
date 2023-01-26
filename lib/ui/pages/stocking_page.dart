@@ -1,7 +1,8 @@
 part of 'pages.dart';
 
 class StockingPage extends StatefulWidget {
-  const StockingPage({Key? key}) : super(key: key);
+  final StockingArgumenModel stockargumen;
+  const StockingPage({Key? key, required this.stockargumen}) : super(key: key);
 
   @override
   _StockingPageState createState() => _StockingPageState();
@@ -18,14 +19,12 @@ class _StockingPageState extends State<StockingPage> {
     // focusBarcode.requestFocus();
     Timer(const Duration(seconds: 1),
         () => {SystemChannels.textInput.invokeMethod('TextInput.hide')});
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final stockargumen =
-        ModalRoute.of(context)!.settings.arguments as StockingArgumenModel;
+    final stockargumen = widget.stockargumen;
     return SafeArea(
         child: Scaffold(
       backgroundColor: background,
@@ -44,9 +43,7 @@ class _StockingPageState extends State<StockingPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        stockargumen.isStockIn
-                            ? "Melakukan Stock In,"
-                            : "Melakukan Stock Out,",
+                        stockargumen.isStockIn ? "Melakukan Stock In," : "Melakukan Stock Out,",
                         style: normalText.copyWith(fontSize: 14.sp),
                       ),
                       Text(
@@ -64,10 +61,8 @@ class _StockingPageState extends State<StockingPage> {
                         height: 45.h,
                         width: 150.w,
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: red, onPrimary: white),
-                          onPressed: () =>
-                              {Navigator.pushNamed(context, "/home")},
+                          style: ElevatedButton.styleFrom(primary: red, onPrimary: white),
+                          onPressed: () => {context.go("/dashboard/home")},
                           child: Row(
                             children: [
                               Icon(
@@ -114,9 +109,7 @@ class _StockingPageState extends State<StockingPage> {
                           child: Text(
                             counter.toString(),
                             style: bigText.copyWith(
-                                color: white,
-                                fontSize: 60.sp,
-                                fontWeight: FontWeight.bold),
+                                color: white, fontSize: 60.sp, fontWeight: FontWeight.bold),
                           ),
                           infinite: true,
                           delay: const Duration(seconds: 1),
@@ -145,8 +138,7 @@ class _StockingPageState extends State<StockingPage> {
                 padding: EdgeInsets.all(10.h),
                 height: 532.h,
                 width: 100.sw,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15), color: white),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: white),
                 child: Column(
                   children: [
                     SizedBox(
@@ -191,8 +183,7 @@ class _StockingPageState extends State<StockingPage> {
                                     focusBarcode.unfocus(),
                                     barcodeController.clear(),
                                     focusBarcode.requestFocus(),
-                                    SystemChannels.textInput
-                                        .invokeMethod('TextInput.hide')
+                                    SystemChannels.textInput.invokeMethod('TextInput.hide')
                                   }
                                 else
                                   {print("BARANG BERBEDA")}
@@ -221,13 +212,10 @@ class _StockingPageState extends State<StockingPage> {
                           visible: counter > 0,
                           child: CachedNetworkImage(
                             imageUrl: stockargumen.itemModel.imagePath,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: CircularProgressIndicator(
-                                  value: downloadProgress.progress),
+                            progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(value: downloadProgress.progress),
                             ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
                             width: 493.w,
                             height: 350.h,
                           ),
@@ -266,42 +254,29 @@ class _StockingPageState extends State<StockingPage> {
                                   isLoading = true;
                                 });
                                 StockingProvider stockingProvider =
-                                    Provider.of<StockingProvider>(context,
-                                        listen: false);
+                                    Provider.of<StockingProvider>(context, listen: false);
                                 AuthProvider authProvider =
-                                    Provider.of<AuthProvider>(context,
-                                        listen: false);
+                                    Provider.of<AuthProvider>(context, listen: false);
                                 ItemProvider itemProvider =
-                                    Provider.of<ItemProvider>(context,
-                                        listen: false);
+                                    Provider.of<ItemProvider>(context, listen: false);
                                 DateTime dateToday = DateTime.now();
-                                String date =
-                                    dateToday.toString().substring(0, 10);
+                                String date = dateToday.toString().substring(0, 10);
                                 var stockingModel = StockingModel(
                                     barcode: stockargumen.itemModel.barcode,
                                     inputBy: authProvider.user!.username,
                                     date: date,
                                     qty: counter,
-                                    type:
-                                        stockargumen.isStockIn ? "IN" : "OUT");
+                                    type: stockargumen.isStockIn ? "IN" : "OUT");
                                 if (await stockingProvider.sendStocking(
-                                    authProvider.user!.accessToken,
-                                    stockingModel)) {
+                                    authProvider.user!.accessToken, stockingModel)) {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                  await itemProvider.getProject(
-                                      authProvider.user!.accessToken);
-                                  await itemProvider.getTotalOut(
-                                      authProvider.user!.accessToken);
-                                  await itemProvider.getTotalIn(
-                                      authProvider.user!.accessToken);
-                                  Timer(
-                                      const Duration(seconds: 3),
-                                      () => {
-                                            Navigator.pushNamed(
-                                                context, "/home")
-                                          });
+                                  await itemProvider.getProject(authProvider.user!.accessToken);
+                                  await itemProvider.getTotalOut(authProvider.user!.accessToken);
+                                  await itemProvider.getTotalIn(authProvider.user!.accessToken);
+                                  Timer(const Duration(seconds: 3),
+                                      () => {context.go("/dashboard/home")});
                                   showModalBottomSheet(
                                       isDismissible: false,
                                       shape: const RoundedRectangleBorder(
@@ -314,12 +289,9 @@ class _StockingPageState extends State<StockingPage> {
                                           height: 242.h,
                                           decoration: BoxDecoration(
                                               color: success,
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                      topRight:
-                                                          Radius.circular(15),
-                                                      topLeft:
-                                                          Radius.circular(15))),
+                                              borderRadius: const BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15))),
                                           child: Row(
                                             children: [
                                               SizedBox(
@@ -335,22 +307,18 @@ class _StockingPageState extends State<StockingPage> {
                                               ),
                                               Expanded(
                                                   child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     stockargumen.isStockIn
                                                         ? "Tambah Stock In Berhasil"
                                                         : "Tambah Stock Out Berhasil",
-                                                    style: titleText.copyWith(
-                                                        color: white),
+                                                    style: titleText.copyWith(color: white),
                                                   ),
                                                   Text(
                                                     "Silahkan Check Kembali Stock di halaman Berikutnya",
-                                                    style: normalText.copyWith(
-                                                        color: white),
+                                                    style: normalText.copyWith(color: white),
                                                   )
                                                 ],
                                               ))
@@ -374,12 +342,9 @@ class _StockingPageState extends State<StockingPage> {
                                           height: 242.h,
                                           decoration: BoxDecoration(
                                               color: red,
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                      topRight:
-                                                          Radius.circular(15),
-                                                      topLeft:
-                                                          Radius.circular(15))),
+                                              borderRadius: const BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15))),
                                           child: Row(
                                             children: [
                                               SizedBox(
@@ -395,22 +360,18 @@ class _StockingPageState extends State<StockingPage> {
                                               ),
                                               Expanded(
                                                   child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     stockargumen.isStockIn
                                                         ? "Tambah Stock In Gagal"
                                                         : "Tambah Stock Out Gagal",
-                                                    style: titleText.copyWith(
-                                                        color: white),
+                                                    style: titleText.copyWith(color: white),
                                                   ),
                                                   Text(
                                                     "Silahkan Check Kembali Stock di halaman Berikutnya",
-                                                    style: normalText.copyWith(
-                                                        color: white),
+                                                    style: normalText.copyWith(color: white),
                                                   )
                                                 ],
                                               ))
@@ -422,8 +383,7 @@ class _StockingPageState extends State<StockingPage> {
                               },
                               child: isLoading
                                   ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         SizedBox(
                                           width: 13.w,
@@ -442,8 +402,7 @@ class _StockingPageState extends State<StockingPage> {
                                       ],
                                     )
                                   : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "Simpan",

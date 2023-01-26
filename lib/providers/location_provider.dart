@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:nagamanager/models/location_model.dart';
 import 'package:nagamanager/providers/loading_provider.dart';
 import 'package:nagamanager/services/services.dart';
@@ -25,10 +24,8 @@ class LocationProvider extends ChangeNotifier {
     String locationName = sharedPreferences.getString(NAMA_LOKASI) ?? "-";
     String locationID = sharedPreferences.getString(ID_LOKASI) ?? "-";
     if (locationCode != "-" && locationName != "-" && locationID != "-") {
-      LocationModel locationModel = LocationModel(
-          locationCode: locationCode,
-          locationName: locationName,
-          id: locationID);
+      LocationModel locationModel =
+          LocationModel(locationCode: locationCode, locationName: locationName, id: locationID);
       selectedLocation = locationModel;
       notifyListeners();
     }
@@ -44,13 +41,12 @@ class LocationProvider extends ChangeNotifier {
   }
 
   Future<bool> getAllLocation(String token) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
-      List<LocationModel> project =
-          await compute(_endPoint.getAllLocation, null);
+      List<LocationModel> project = await compute(_endPoint.getAllLocation, null);
       listLocation = project;
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
@@ -68,8 +64,8 @@ class LocationProvider extends ChangeNotifier {
   }
 
   Future<bool> addLocation(String token, LocationModel locationModel) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
@@ -89,10 +85,9 @@ class LocationProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> editLocation(
-      String token, EditLocationModel locationModel) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+  Future<bool> editLocation(String token, EditLocationModel locationModel) async {
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
@@ -114,8 +109,8 @@ class LocationProvider extends ChangeNotifier {
   }
 
   Future<bool> deleteLocation(String token, String id) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {

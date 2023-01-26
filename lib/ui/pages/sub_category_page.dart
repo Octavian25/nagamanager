@@ -16,14 +16,10 @@ class SubCategoryPageState extends State<SubCategoryPage> {
 
   void updateData() async {
     Navigator.pop(context);
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-    ItemProvider itemProvider =
-        Provider.of<ItemProvider>(context, listen: false);
-    ChartProvider chartProvider =
-        Provider.of<ChartProvider>(context, listen: false);
-    CategoryProvider categoryProvider =
-        Provider.of<CategoryProvider>(context, listen: false);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    ItemProvider itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    ChartProvider chartProvider = Provider.of<ChartProvider>(context, listen: false);
+    CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
 
     await itemProvider.getProject(authProvider.user!.accessToken);
     await itemProvider.getTotalIn(authProvider.user!.accessToken);
@@ -37,14 +33,12 @@ class SubCategoryPageState extends State<SubCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    SubCategoryProvider subCategoryProvider =
-        Provider.of<SubCategoryProvider>(context);
+    SubCategoryProvider subCategoryProvider = Provider.of<SubCategoryProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding:
-              EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 10.w),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 10.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -53,14 +47,11 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                   InkWell(
                     onTap: () async {
                       String token =
-                          Provider.of<AuthProvider>(context, listen: false)
-                              .user!
-                              .accessToken;
-                      ChartProvider chart =
-                          Provider.of<ChartProvider>(context, listen: false);
+                          Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+                      ChartProvider chart = Provider.of<ChartProvider>(context, listen: false);
                       if (await chart.getDashboardChart(token)) {
                         updateData();
-                        Navigator.pushNamed(context, "/dashboard");
+                        context.go("/dashboard");
                       } else {
                         showToast("Ambil Data Terbaru Gagal", false);
                       }
@@ -70,15 +61,13 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                       height: 45.h,
                       width: 90.w,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.r),
-                          color: "#E8ECF2".toColor()),
+                          borderRadius: BorderRadius.circular(10.r), color: "#E8ECF2".toColor()),
                       child: Row(
                         children: [
                           SizedBox(
                             width: 15.w,
                           ),
-                          Icon(Iconsax.arrow_square_left,
-                              color: text, size: 20),
+                          Icon(Iconsax.arrow_square_left, color: text, size: 20),
                           SizedBox(
                             width: 10.w,
                           ),
@@ -92,8 +81,7 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                   ),
                   20.horizontalSpaceRadius,
                   Text("Master Sub Category",
-                      style: normalText.copyWith(
-                          fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                      style: normalText.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold)),
                 ],
               ),
               Align(
@@ -117,8 +105,7 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                     children: [
                       CustomDropdown<CategoryModel>(
                           title: "Kode Kategori",
-                          listData: Provider.of<CategoryProvider>(context,
-                                  listen: false)
+                          listData: Provider.of<CategoryProvider>(context, listen: false)
                               .listCategory
                               .map((e) => DropdownMenuItem(
                                     child: Text(e.name),
@@ -150,9 +137,7 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                     child: InkWell(
                       onTap: () async {
                         String token =
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .user!
-                                .accessToken;
+                            Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
                         SubCategoryModel payload = SubCategoryModel(
                             categoryCode: selectedCategory?.categoryCode ?? "-",
                             id: id,
@@ -160,12 +145,10 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                             description: "-",
                             name: subCategoryNameController.text);
                         if (isEdited) {
-                          await subCategoryProvider.editSubCategory(
-                              token, payload);
+                          await subCategoryProvider.editSubCategory(token, payload);
                           await subCategoryProvider.getAllSubCategory(token);
                         } else {
-                          await subCategoryProvider.addSubCategory(
-                              token, payload);
+                          await subCategoryProvider.addSubCategory(token, payload);
                           await subCategoryProvider.getAllSubCategory(token);
                         }
                       },
@@ -177,9 +160,8 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                           isEdited ? "Rubah" : 'Simpan',
                           style: normalText.copyWith(color: Colors.white),
                         )),
-                        decoration: BoxDecoration(
-                            color: green,
-                            borderRadius: BorderRadius.circular(5)),
+                        decoration:
+                            BoxDecoration(color: green, borderRadius: BorderRadius.circular(5)),
                       ),
                     ),
                   ),
@@ -189,13 +171,13 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                       10.horizontalSpace,
                       Expanded(
                         child: Text("Kode Sub Kategori",
-                            style: normalText.copyWith(
-                                fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                            style:
+                                normalText.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold)),
                       ),
                       Expanded(
                         child: Text("Nama Sub Kategori",
-                            style: normalText.copyWith(
-                                fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                            style:
+                                normalText.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -220,23 +202,18 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                                   TextButton(
                                     child: const Text('Batal'),
                                     onPressed: () {
-                                      Navigator.of(dialogContext)
-                                          .pop(); // Dismiss alert dialog
+                                      Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                                     },
                                   ),
                                   TextButton(
                                     child: const Text('Hapus'),
                                     onPressed: () async {
-                                      String token = Provider.of<AuthProvider>(
-                                              context,
-                                              listen: false)
-                                          .user!
-                                          .accessToken;
-                                      if (await subCategoryProvider
-                                          .deleteSubCategory(
-                                              token,
-                                              subCategoryProvider
-                                                  .listSubCategory[index].id)) {
+                                      String token =
+                                          Provider.of<AuthProvider>(context, listen: false)
+                                              .user!
+                                              .accessToken;
+                                      if (await subCategoryProvider.deleteSubCategory(
+                                          token, subCategoryProvider.listSubCategory[index].id)) {
                                         Navigator.pop(context);
                                       }
                                     },
@@ -248,17 +225,13 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                         },
                         onTap: () {
                           List<CategoryModel> listCategory =
-                              Provider.of<CategoryProvider>(context,
-                                      listen: false)
-                                  .listCategory;
-                          CategoryModel? result =
-                              listCategory.firstWhereOrNull((element) {
+                              Provider.of<CategoryProvider>(context, listen: false).listCategory;
+                          CategoryModel? result = listCategory.firstWhereOrNull((element) {
                             return element.categoryCode ==
-                                subCategoryProvider
-                                    .listSubCategory[index].categoryCode;
+                                subCategoryProvider.listSubCategory[index].categoryCode;
                           });
-                          subCategoryCodeController.text = subCategoryProvider
-                              .listSubCategory[index].subCategoryCode;
+                          subCategoryCodeController.text =
+                              subCategoryProvider.listSubCategory[index].subCategoryCode;
                           subCategoryNameController.text =
                               subCategoryProvider.listSubCategory[index].name;
                           setState(() {
@@ -274,15 +247,12 @@ class SubCategoryPageState extends State<SubCategoryPage> {
                               10.horizontalSpace,
                               Expanded(
                                 child: Text(
-                                  subCategoryProvider
-                                      .listSubCategory[index].subCategoryCode,
+                                  subCategoryProvider.listSubCategory[index].subCategoryCode,
                                   style: normalText,
                                 ),
                               ),
                               Expanded(
-                                child: Text(
-                                    subCategoryProvider
-                                        .listSubCategory[index].name,
+                                child: Text(subCategoryProvider.listSubCategory[index].name,
                                     style: normalText),
                               ),
                             ],

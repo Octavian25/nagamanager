@@ -15,14 +15,10 @@ class CategoryPageState extends State<CategoryPage> {
 
   void updateData() async {
     Navigator.pop(context);
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-    ItemProvider itemProvider =
-        Provider.of<ItemProvider>(context, listen: false);
-    ChartProvider chartProvider =
-        Provider.of<ChartProvider>(context, listen: false);
-    CategoryProvider categoryProvider =
-        Provider.of<CategoryProvider>(context, listen: false);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    ItemProvider itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    ChartProvider chartProvider = Provider.of<ChartProvider>(context, listen: false);
+    CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
 
     await itemProvider.getProject(authProvider.user!.accessToken);
     await itemProvider.getTotalIn(authProvider.user!.accessToken);
@@ -41,8 +37,7 @@ class CategoryPageState extends State<CategoryPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding:
-              EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 10.w),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 10.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -51,14 +46,11 @@ class CategoryPageState extends State<CategoryPage> {
                   InkWell(
                     onTap: () async {
                       String token =
-                          Provider.of<AuthProvider>(context, listen: false)
-                              .user!
-                              .accessToken;
-                      ChartProvider chart =
-                          Provider.of<ChartProvider>(context, listen: false);
+                          Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+                      ChartProvider chart = Provider.of<ChartProvider>(context, listen: false);
                       if (await chart.getDashboardChart(token)) {
                         updateData();
-                        Navigator.pushNamed(context, "/dashboard");
+                        context.go("/dashboard");
                       } else {
                         showToast("Ambil Data Terbaru Gagal", false);
                       }
@@ -68,15 +60,13 @@ class CategoryPageState extends State<CategoryPage> {
                       height: 45.h,
                       width: 90.w,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.r),
-                          color: "#E8ECF2".toColor()),
+                          borderRadius: BorderRadius.circular(10.r), color: "#E8ECF2".toColor()),
                       child: Row(
                         children: [
                           SizedBox(
                             width: 15.w,
                           ),
-                          Icon(Iconsax.arrow_square_left,
-                              color: text, size: 20),
+                          Icon(Iconsax.arrow_square_left, color: text, size: 20),
                           SizedBox(
                             width: 10.w,
                           ),
@@ -90,8 +80,7 @@ class CategoryPageState extends State<CategoryPage> {
                   ),
                   20.horizontalSpaceRadius,
                   Text("Master Category",
-                      style: normalText.copyWith(
-                          fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                      style: normalText.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold)),
                 ],
               ),
               Align(
@@ -119,9 +108,7 @@ class CategoryPageState extends State<CategoryPage> {
                           width: 200.w),
                       20.horizontalSpace,
                       TextFieldCustom(
-                          controller: categoryNameController,
-                          title: "Nama Categori",
-                          width: 300.w),
+                          controller: categoryNameController, title: "Nama Categori", width: 300.w),
                     ],
                   ),
                   Align(
@@ -129,9 +116,7 @@ class CategoryPageState extends State<CategoryPage> {
                     child: InkWell(
                       onTap: () async {
                         String token =
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .user!
-                                .accessToken;
+                            Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
                         CategoryModel payload = CategoryModel(
                             id: id,
                             categoryCode: categoryCodeController.text,
@@ -153,9 +138,8 @@ class CategoryPageState extends State<CategoryPage> {
                           isEdited ? "Rubah" : 'Simpan',
                           style: normalText.copyWith(color: Colors.white),
                         )),
-                        decoration: BoxDecoration(
-                            color: green,
-                            borderRadius: BorderRadius.circular(5)),
+                        decoration:
+                            BoxDecoration(color: green, borderRadius: BorderRadius.circular(5)),
                       ),
                     ),
                   ),
@@ -165,13 +149,13 @@ class CategoryPageState extends State<CategoryPage> {
                       10.horizontalSpace,
                       Expanded(
                         child: Text("Kode Kategori",
-                            style: normalText.copyWith(
-                                fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                            style:
+                                normalText.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold)),
                       ),
                       Expanded(
                         child: Text("Nama Kategori",
-                            style: normalText.copyWith(
-                                fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                            style:
+                                normalText.copyWith(fontSize: 18.sp, fontWeight: FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -194,22 +178,18 @@ class CategoryPageState extends State<CategoryPage> {
                                   TextButton(
                                     child: const Text('Batal'),
                                     onPressed: () {
-                                      Navigator.of(dialogContext)
-                                          .pop(); // Dismiss alert dialog
+                                      Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                                     },
                                   ),
                                   TextButton(
                                     child: const Text('Hapus'),
                                     onPressed: () async {
-                                      String token = Provider.of<AuthProvider>(
-                                              context,
-                                              listen: false)
-                                          .user!
-                                          .accessToken;
+                                      String token =
+                                          Provider.of<AuthProvider>(context, listen: false)
+                                              .user!
+                                              .accessToken;
                                       if (await cateogryProvider.deleteCategory(
-                                          token,
-                                          cateogryProvider
-                                              .listCategory[index].id)) {
+                                          token, cateogryProvider.listCategory[index].id)) {
                                         Navigator.pop(context);
                                       }
                                     },
@@ -222,8 +202,7 @@ class CategoryPageState extends State<CategoryPage> {
                         onTap: () {
                           categoryCodeController.text =
                               cateogryProvider.listCategory[index].categoryCode;
-                          categoryNameController.text =
-                              cateogryProvider.listCategory[index].name;
+                          categoryNameController.text = cateogryProvider.listCategory[index].name;
                           setState(() {
                             id = cateogryProvider.listCategory[index].id;
                             isEdited = true;
@@ -235,14 +214,11 @@ class CategoryPageState extends State<CategoryPage> {
                             children: [
                               10.horizontalSpace,
                               Expanded(
-                                child: Text(
-                                    cateogryProvider
-                                        .listCategory[index].categoryCode,
+                                child: Text(cateogryProvider.listCategory[index].categoryCode,
                                     style: normalText),
                               ),
                               Expanded(
-                                child: Text(
-                                    cateogryProvider.listCategory[index].name,
+                                child: Text(cateogryProvider.listCategory[index].name,
                                     style: normalText),
                               ),
                             ],

@@ -16,7 +16,6 @@ class PieChartOutWidgetState extends State {
   List<PieChartSectionData> data = [];
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     List<PieChartSectionData> listData = [];
   }
@@ -26,8 +25,7 @@ class PieChartOutWidgetState extends State {
     ChartProvider chartProvider = Provider.of<ChartProvider>(context);
     return PieChart(
       PieChartData(
-          pieTouchData: PieTouchData(
-              touchCallback: (FlTouchEvent event, pieTouchResponse) {
+          pieTouchData: PieTouchData(touchCallback: (FlTouchEvent event, pieTouchResponse) {
             setState(() {
               if (!event.isInterestedForInteractions ||
                   pieTouchResponse == null ||
@@ -35,8 +33,7 @@ class PieChartOutWidgetState extends State {
                 touchedIndex = -1;
                 return;
               }
-              touchedIndex =
-                  pieTouchResponse.touchedSection!.touchedSectionIndex;
+              touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
             });
           }),
           startDegreeOffset: 180,
@@ -57,9 +54,7 @@ class PieChartOutWidgetState extends State {
                             ? 90
                             : e.value * 3,
                     titleStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff0c7f55)),
+                        fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xff0c7f55)),
                     titlePositionPercentageOffset: 0.55,
                   ))
               .toList()),
@@ -88,8 +83,7 @@ class PieChartOutWidgetMobileState extends State {
     ChartProvider chartProvider = Provider.of<ChartProvider>(context);
     return PieChart(
       PieChartData(
-          pieTouchData: PieTouchData(
-              touchCallback: (FlTouchEvent event, pieTouchResponse) {
+          pieTouchData: PieTouchData(touchCallback: (FlTouchEvent event, pieTouchResponse) {
             setState(() {
               if (!event.isInterestedForInteractions ||
                   pieTouchResponse == null ||
@@ -97,8 +91,7 @@ class PieChartOutWidgetMobileState extends State {
                 touchedIndex = -1;
                 return;
               }
-              touchedIndex =
-                  pieTouchResponse.touchedSection!.touchedSectionIndex;
+              touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
             });
           }),
           startDegreeOffset: 180,
@@ -119,9 +112,7 @@ class PieChartOutWidgetMobileState extends State {
                             ? 70
                             : e.value * 1,
                     titleStyle: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff0c7f55)),
+                        fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xff0c7f55)),
                     titlePositionPercentageOffset: 0.55,
                   ))
               .toList()),

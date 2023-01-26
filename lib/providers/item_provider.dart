@@ -53,13 +53,12 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<bool> addItems(String token, ItemModel itemModel) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
-      String project =
-          await _endPoint.sendAddBarang(itemModel.copyWith(imagePath: "-"));
+      String project = await _endPoint.sendAddBarang(itemModel.copyWith(imagePath: "-"));
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
       getProject(token);
@@ -77,8 +76,8 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<bool> updateItems(String token, ItemModel itemModel) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
@@ -100,8 +99,8 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<bool> deleteItems(String token, ItemModel itemModel) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
@@ -123,19 +122,16 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<bool> batchAddItems(String token, List<ItemModel> data) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
-      BatchItemResponse response =
-          await compute(_endPoint.batchSendAddBarang, data);
+      BatchItemResponse response = await compute(_endPoint.batchSendAddBarang, data);
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
-      duplicatedBatchResult =
-          response.duplicated.map((e) => e.toString()).toList();
-      listGeneratedBarcode =
-          response.listGeneratedBarcode.map((e) => e.toString()).toList();
+      duplicatedBatchResult = response.duplicated.map((e) => e.toString()).toList();
+      listGeneratedBarcode = response.listGeneratedBarcode.map((e) => e.toString()).toList();
       final text = listGeneratedBarcode.join(",");
       print(text);
       final bytes = utf8.encode(text);
@@ -168,16 +164,14 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<bool> getProject(String token) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String locationCode =
-        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
+    String locationCode = sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
-      List<ItemModel> project =
-          await compute(_endPoint.getAllItem, locationCode);
+      List<ItemModel> project = await compute(_endPoint.getAllItem, locationCode);
       _itemModel = project;
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
@@ -195,17 +189,16 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> getTotalIn(String token) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String locationCode =
-        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
+    String locationCode = sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     print(locationCode);
     try {
-      int project = await compute(
-          _endPoint.getTotal, {"type": "IN", "location_code": locationCode});
+      int project =
+          await compute(_endPoint.getTotal, {"type": "IN", "location_code": locationCode});
       _totalIn = project;
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
@@ -221,16 +214,15 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> getTotalOut(String token) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String locationCode =
-        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
+    String locationCode = sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
-      int project = await compute(
-          _endPoint.getTotal, {"type": "OUT", "location_code": locationCode});
+      int project =
+          await compute(_endPoint.getTotal, {"type": "OUT", "location_code": locationCode});
       _totalOut = project;
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
@@ -245,16 +237,15 @@ class ItemProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> getDetailStock(String token, String startDate, String endDate,
-      String type, String locationCode) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+  Future<bool> getDetailStock(
+      String token, String startDate, String endDate, String type, String locationCode) async {
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
       List<DetailStockModel> project = await compute(
-          _endPoint.getDetailStocking,
-          GetDetailParam(startDate, endDate, type, locationCode));
+          _endPoint.getDetailStocking, GetDetailParam(startDate, endDate, type, locationCode));
       _listDetailStock = project;
       _listDetailStockFilter = project;
       loadingProvider!.stopLoading();
@@ -273,8 +264,7 @@ class ItemProvider with ChangeNotifier {
   }
 
   Future<void> changeShow(int index) async {
-    var selected = _listDetailStock[index]
-        .copyWith(isShow: !_listDetailStock[index].isShow);
+    var selected = _listDetailStock[index].copyWith(isShow: !_listDetailStock[index].isShow);
     _listDetailStock[index] = selected;
     notifyListeners();
   }

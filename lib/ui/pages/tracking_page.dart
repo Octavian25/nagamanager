@@ -56,10 +56,8 @@ class _TrackingPageState extends State<TrackingPage> {
                             height: 45.h,
                             width: 150.w,
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: red, onPrimary: white),
-                              onPressed: () =>
-                                  {Navigator.pushNamed(context, "/home")},
+                              style: ElevatedButton.styleFrom(primary: red, onPrimary: white),
+                              onPressed: () => {context.go("/dashboard/home")},
                               child: Row(
                                 children: [
                                   Icon(
@@ -88,9 +86,7 @@ class _TrackingPageState extends State<TrackingPage> {
                               child: Text(
                                 counter.toString(),
                                 style: bigText.copyWith(
-                                    color: white,
-                                    fontSize: 80.sp,
-                                    fontWeight: FontWeight.bold),
+                                    color: white, fontSize: 80.sp, fontWeight: FontWeight.bold),
                               ),
                               infinite: true,
                               delay: const Duration(seconds: 1),
@@ -101,8 +97,7 @@ class _TrackingPageState extends State<TrackingPage> {
                             ),
                             Text(
                               trackingIn ? "Track In" : "Track Out",
-                              style: normalTextMobile.copyWith(
-                                  color: Colors.white),
+                              style: normalTextMobile.copyWith(color: Colors.white),
                             )
                           ],
                         ),
@@ -120,8 +115,8 @@ class _TrackingPageState extends State<TrackingPage> {
                     padding: EdgeInsets.all(30.h),
                     height: 502.h,
                     width: 100.sw,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15), color: white),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(15), color: white),
                     child: Column(
                       children: [
                         SizedBox(
@@ -131,8 +126,7 @@ class _TrackingPageState extends State<TrackingPage> {
                           height: 45.h,
                           width: 873.w,
                           decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: Colors.black26, width: 1),
+                              border: Border.all(color: Colors.black26, width: 1),
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Row(
@@ -153,8 +147,7 @@ class _TrackingPageState extends State<TrackingPage> {
                               Expanded(
                                 child: InputWithKeyboardControl(
                                   focusNode: focusBarcode,
-                                  style: normalTextMobile.copyWith(
-                                      color: Colors.black),
+                                  style: normalTextMobile.copyWith(color: Colors.black),
                                   autofocus: true,
                                   controller: barcodeController,
                                   onSubmitted: (String barcode) {
@@ -167,9 +160,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                           return AlertDialog(
                                             title: Text('Enter Quantity',
                                                 style: TextStyle(
-                                                    fontSize: 40.sp,
-                                                    fontWeight:
-                                                        FontWeight.w700)),
+                                                    fontSize: 40.sp, fontWeight: FontWeight.w700)),
                                             content: SizedBox(
                                               height: 45.h,
                                               width: 80.w,
@@ -177,68 +168,44 @@ class _TrackingPageState extends State<TrackingPage> {
                                                 height: 45.h,
                                                 width: 80.w,
                                                 decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black54),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
+                                                    border: Border.all(color: Colors.black54),
+                                                    borderRadius: BorderRadius.circular(5)),
                                                 child: Center(
                                                   child: TextField(
                                                     controller: qtyController,
-                                                    textAlignVertical:
-                                                        TextAlignVertical
-                                                            .center,
+                                                    textAlignVertical: TextAlignVertical.center,
                                                     textAlign: TextAlign.center,
                                                     style: normalTextMobile,
                                                     autofocus: true,
-                                                    keyboardType:
-                                                        TextInputType.number,
+                                                    keyboardType: TextInputType.number,
                                                     onSubmitted: (data) {
-                                                      if (data != "" ||
-                                                          data != "0") {
+                                                      if (data != "" || data != "0") {
                                                         try {
-                                                          var ItemModel = itemProvider
-                                                              .item!
-                                                              .firstWhere(
-                                                                  (element) =>
-                                                                      element
-                                                                          .barcode ==
-                                                                      barcode);
-                                                          for (var i = 0;
-                                                              i < data.toInt()!;
-                                                              i++) {
-                                                            listTracking
-                                                                .add(ItemModel);
+                                                          var ItemModel = itemProvider.item!
+                                                              .firstWhere((element) =>
+                                                                  element.barcode == barcode);
+                                                          for (var i = 0; i < data.toInt()!; i++) {
+                                                            listTracking.add(ItemModel);
                                                           }
-                                                          imageSelected =
-                                                              ItemModel
-                                                                  .imagePath;
+                                                          imageSelected = ItemModel.imagePath;
                                                           setState(() {
-                                                            counter = counter +
-                                                                data.toInt()!;
+                                                            counter = counter + data.toInt()!;
                                                           });
-                                                          barcodeController
-                                                              .clear();
+                                                          barcodeController.clear();
                                                           qtyController.clear();
-                                                          Navigator.pop(
-                                                              context);
+                                                          Navigator.pop(context);
                                                         } catch (e) {
                                                           showToast(
-                                                              "Barcode Tidak Ditemukan",
-                                                              true);
+                                                              "Barcode Tidak Ditemukan", true);
                                                         }
                                                       } else {
-                                                        showToast(
-                                                            "Masukan Quantity",
-                                                            true);
+                                                        showToast("Masukan Quantity", true);
                                                       }
                                                     },
                                                     decoration: InputDecoration(
                                                         hintText: "Enter Here",
-                                                        hintStyle:
-                                                            normalTextMobile,
-                                                        border:
-                                                            InputBorder.none),
+                                                        hintStyle: normalTextMobile,
+                                                        border: InputBorder.none),
                                                   ),
                                                 ),
                                               ),
@@ -255,8 +222,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                         },
                                       );
                                     } catch (e) {
-                                      showToast(
-                                          "Barcode Tidak Ditemukan", true);
+                                      showToast("Barcode Tidak Ditemukan", true);
                                       Navigator.pop(context);
                                     }
                                   },
@@ -319,26 +285,17 @@ class _TrackingPageState extends State<TrackingPage> {
                                               primary: blue,
                                               onPrimary: white,
                                               shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15))),
+                                                  borderRadius: BorderRadius.circular(15))),
                                           onPressed: () async {
                                             StockingProvider stockingProvider =
-                                                Provider.of<StockingProvider>(
-                                                    context,
+                                                Provider.of<StockingProvider>(context,
                                                     listen: false);
                                             AuthProvider authProvider =
-                                                Provider.of<AuthProvider>(
-                                                    context,
-                                                    listen: false);
+                                                Provider.of<AuthProvider>(context, listen: false);
                                             ItemProvider itemProvider =
-                                                Provider.of<ItemProvider>(
-                                                    context,
-                                                    listen: false);
+                                                Provider.of<ItemProvider>(context, listen: false);
                                             DateTime dateToday = DateTime.now();
-                                            String date = dateToday
-                                                .toString()
-                                                .substring(0, 10);
+                                            String date = dateToday.toString().substring(0, 10);
                                           },
                                           child: const Text("Simpan"),
                                         ),
@@ -348,25 +305,20 @@ class _TrackingPageState extends State<TrackingPage> {
                                 )
                               : ListView.builder(
                                   itemCount: listTracking.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return Container(
                                       width: 873.w,
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 16.h),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 35.w),
+                                      margin: EdgeInsets.symmetric(vertical: 16.h),
+                                      padding: EdgeInsets.symmetric(horizontal: 35.w),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           SizedBox(
                                             width: 150.w,
                                             child: Text(
                                               listTracking[index].barcode,
                                               style: normalText.copyWith(
-                                                  fontSize: 30.sp,
-                                                  fontWeight: FontWeight.w700),
+                                                  fontSize: 30.sp, fontWeight: FontWeight.w700),
                                             ),
                                           ),
                                           SizedBox(
@@ -378,8 +330,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
                                             style: normalText.copyWith(
-                                                fontSize: 30.sp,
-                                                fontWeight: FontWeight.w700),
+                                                fontSize: 30.sp, fontWeight: FontWeight.w700),
                                           )),
                                           SizedBox(
                                             width: 30.w,
@@ -390,9 +341,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                               child: Text(
                                                 "1",
                                                 style: normalText.copyWith(
-                                                    fontSize: 30.sp,
-                                                    fontWeight:
-                                                        FontWeight.w700),
+                                                    fontSize: 30.sp, fontWeight: FontWeight.w700),
                                               ),
                                             ),
                                           )
@@ -417,30 +366,21 @@ class _TrackingPageState extends State<TrackingPage> {
                                   isLoading = true;
                                 });
                                 AuthProvider authProvider =
-                                    Provider.of<AuthProvider>(context,
-                                        listen: false);
+                                    Provider.of<AuthProvider>(context, listen: false);
                                 TrackingProvider trackingProvider =
-                                    Provider.of<TrackingProvider>(context,
-                                        listen: false);
+                                    Provider.of<TrackingProvider>(context, listen: false);
                                 ItemProvider itemProvider =
-                                    Provider.of<ItemProvider>(context,
-                                        listen: false);
-                                var result =
-                                    await trackingProvider.sendTracking(
-                                        token: authProvider.user!.accessToken,
-                                        listBarang: listTracking,
-                                        type: trackingIn
-                                            ? "TRACK IN"
-                                            : "TRACK OUT");
+                                    Provider.of<ItemProvider>(context, listen: false);
+                                var result = await trackingProvider.sendTracking(
+                                    token: authProvider.user!.accessToken,
+                                    listBarang: listTracking,
+                                    type: trackingIn ? "TRACK IN" : "TRACK OUT");
                                 setState(() {
                                   isLoading = false;
                                 });
-                                await itemProvider
-                                    .getProject(authProvider.user!.accessToken);
-                                await itemProvider.getTotalOut(
-                                    authProvider.user!.accessToken);
-                                await itemProvider
-                                    .getTotalIn(authProvider.user!.accessToken);
+                                await itemProvider.getProject(authProvider.user!.accessToken);
+                                await itemProvider.getTotalOut(authProvider.user!.accessToken);
+                                await itemProvider.getTotalIn(authProvider.user!.accessToken);
                                 showModalBottomSheet(
                                   isDismissible: false,
                                   shape: const RoundedRectangleBorder(
@@ -449,15 +389,13 @@ class _TrackingPageState extends State<TrackingPage> {
                                           topLeft: Radius.circular(15))),
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return BottomSheetTrackingMobile(
-                                        trackingFeedback: result);
+                                    return BottomSheetTrackingMobile(trackingFeedback: result);
                                   },
                                 );
                               },
                               child: isLoading
                                   ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         SizedBox(
                                           width: 13.w,
@@ -476,8 +414,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                       ],
                                     )
                                   : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "Simpan",
@@ -515,9 +452,7 @@ class _TrackingPageState extends State<TrackingPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            trackingIn
-                                ? "Melakukan Track In,"
-                                : "Melakukan Track Out,",
+                            trackingIn ? "Melakukan Track In," : "Melakukan Track Out,",
                             style: normalText.copyWith(fontSize: 14.sp),
                           ),
                           SizedBox(
@@ -527,11 +462,8 @@ class _TrackingPageState extends State<TrackingPage> {
                             height: 45.h,
                             width: 150.w,
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: red, onPrimary: white),
-                              onPressed: () => {
-                                Navigator.pushReplacementNamed(context, "/home")
-                              },
+                              style: ElevatedButton.styleFrom(primary: red, onPrimary: white),
+                              onPressed: () => {context.go("/dashboard/home")},
                               child: Row(
                                 children: [
                                   Icon(
@@ -554,17 +486,13 @@ class _TrackingPageState extends State<TrackingPage> {
                       Container(
                         width: 160.w,
                         height: 150.w,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
                         child: CachedNetworkImage(
                           imageUrl: imageSelected,
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                                value: downloadProgress.progress),
+                          progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(value: downloadProgress.progress),
                           ),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
+                          errorWidget: (context, url, error) => const Icon(Icons.error),
                           width: 100.w,
                           height: 100.h,
                         ),
@@ -588,9 +516,7 @@ class _TrackingPageState extends State<TrackingPage> {
                               child: Text(
                                 counter.toString(),
                                 style: bigText.copyWith(
-                                    color: white,
-                                    fontSize: 60.sp,
-                                    fontWeight: FontWeight.bold),
+                                    color: white, fontSize: 60.sp, fontWeight: FontWeight.bold),
                               ),
                               infinite: true,
                               delay: const Duration(seconds: 1),
@@ -619,8 +545,8 @@ class _TrackingPageState extends State<TrackingPage> {
                     padding: EdgeInsets.all(10.h),
                     height: 532.h,
                     width: 100.sw,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15), color: white),
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(15), color: white),
                     child: Column(
                       children: [
                         SizedBox(
@@ -630,8 +556,7 @@ class _TrackingPageState extends State<TrackingPage> {
                           height: 45.h,
                           width: 873.w,
                           decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: Colors.black26, width: 1),
+                              border: Border.all(color: Colors.black26, width: 1),
                               borderRadius: BorderRadius.circular(8)),
                           child: Center(
                               child: Row(
@@ -652,8 +577,7 @@ class _TrackingPageState extends State<TrackingPage> {
                               Expanded(
                                 child: InputWithKeyboardControl(
                                   focusNode: focusBarcode,
-                                  style:
-                                      normalText.copyWith(color: Colors.black),
+                                  style: normalText.copyWith(color: Colors.black),
                                   autofocus: true,
                                   controller: barcodeController,
                                   onSubmitted: (String barcode) {
@@ -666,9 +590,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                           return AlertDialog(
                                             title: Text('Enter Quantity',
                                                 style: TextStyle(
-                                                    fontSize: 20.sp,
-                                                    fontWeight:
-                                                        FontWeight.w700)),
+                                                    fontSize: 20.sp, fontWeight: FontWeight.w700)),
                                             content: SizedBox(
                                               height: 45.h,
                                               width: 80.w,
@@ -676,69 +598,43 @@ class _TrackingPageState extends State<TrackingPage> {
                                                 height: 45.h,
                                                 width: 80.w,
                                                 decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.black54),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)),
+                                                    border: Border.all(color: Colors.black54),
+                                                    borderRadius: BorderRadius.circular(5)),
                                                 child: Center(
                                                   child: TextField(
                                                     controller: qtyController,
                                                     autofocus: true,
-                                                    textAlignVertical:
-                                                        TextAlignVertical
-                                                            .center,
+                                                    textAlignVertical: TextAlignVertical.center,
                                                     textAlign: TextAlign.center,
-                                                    keyboardType:
-                                                        TextInputType.number,
-                                                    style: TextStyle(
-                                                        fontSize: 15.sp),
+                                                    keyboardType: TextInputType.number,
+                                                    style: TextStyle(fontSize: 15.sp),
                                                     onSubmitted: (data) {
-                                                      if (data != "" ||
-                                                          data != "0") {
+                                                      if (data != "" || data != "0") {
                                                         try {
-                                                          var ItemModel = itemProvider
-                                                              .item!
-                                                              .firstWhere(
-                                                                  (element) =>
-                                                                      element
-                                                                          .barcode ==
-                                                                      barcode);
-                                                          for (var i = 0;
-                                                              i < data.toInt()!;
-                                                              i++) {
-                                                            listTracking
-                                                                .add(ItemModel);
+                                                          var ItemModel = itemProvider.item!
+                                                              .firstWhere((element) =>
+                                                                  element.barcode == barcode);
+                                                          for (var i = 0; i < data.toInt()!; i++) {
+                                                            listTracking.add(ItemModel);
                                                           }
-                                                          imageSelected =
-                                                              ItemModel
-                                                                  .imagePath;
+                                                          imageSelected = ItemModel.imagePath;
                                                           setState(() {
-                                                            counter = counter +
-                                                                data.toInt()!;
+                                                            counter = counter + data.toInt()!;
                                                           });
-                                                          barcodeController
-                                                              .clear();
+                                                          barcodeController.clear();
                                                           qtyController.clear();
-                                                          Navigator.pop(
-                                                              context);
+                                                          Navigator.pop(context);
                                                         } catch (e) {
                                                           showToast(
-                                                              "Barcode Tidak Ditemukan",
-                                                              true);
+                                                              "Barcode Tidak Ditemukan", true);
                                                         }
                                                       } else {
-                                                        showToast(
-                                                            "Masukan Quantity",
-                                                            true);
+                                                        showToast("Masukan Quantity", true);
                                                       }
                                                     },
-                                                    decoration:
-                                                        const InputDecoration(
-                                                            hintText:
-                                                                "Enter Here",
-                                                            border: InputBorder
-                                                                .none),
+                                                    decoration: const InputDecoration(
+                                                        hintText: "Enter Here",
+                                                        border: InputBorder.none),
                                                   ),
                                                 ),
                                               ),
@@ -755,8 +651,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                         },
                                       );
                                     } catch (e) {
-                                      showToast(
-                                          "Barcode Tidak Ditemukan", true);
+                                      showToast("Barcode Tidak Ditemukan", true);
                                       Navigator.pop(context);
                                     }
                                   },
@@ -819,26 +714,17 @@ class _TrackingPageState extends State<TrackingPage> {
                                               primary: blue,
                                               onPrimary: white,
                                               shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15))),
+                                                  borderRadius: BorderRadius.circular(15))),
                                           onPressed: () async {
                                             StockingProvider stockingProvider =
-                                                Provider.of<StockingProvider>(
-                                                    context,
+                                                Provider.of<StockingProvider>(context,
                                                     listen: false);
                                             AuthProvider authProvider =
-                                                Provider.of<AuthProvider>(
-                                                    context,
-                                                    listen: false);
+                                                Provider.of<AuthProvider>(context, listen: false);
                                             ItemProvider itemProvider =
-                                                Provider.of<ItemProvider>(
-                                                    context,
-                                                    listen: false);
+                                                Provider.of<ItemProvider>(context, listen: false);
                                             DateTime dateToday = DateTime.now();
-                                            String date = dateToday
-                                                .toString()
-                                                .substring(0, 10);
+                                            String date = dateToday.toString().substring(0, 10);
                                           },
                                           child: const Text("Simpan"),
                                         ),
@@ -848,35 +734,28 @@ class _TrackingPageState extends State<TrackingPage> {
                                 )
                               : ListView.builder(
                                   itemCount: listTracking.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return Container(
                                       width: 873.w,
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 16.h),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 35.w),
+                                      margin: EdgeInsets.symmetric(vertical: 16.h),
+                                      padding: EdgeInsets.symmetric(horizontal: 35.w),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             listTracking[index].barcode,
                                             style: normalText.copyWith(
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w700),
+                                                fontSize: 18.sp, fontWeight: FontWeight.w700),
                                           ),
                                           Text(
                                             listTracking[index].name,
                                             style: normalText.copyWith(
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w700),
+                                                fontSize: 18.sp, fontWeight: FontWeight.w700),
                                           ),
                                           Text(
                                             "1",
                                             style: normalText.copyWith(
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w700),
+                                                fontSize: 18.sp, fontWeight: FontWeight.w700),
                                           )
                                         ],
                                       ),
@@ -899,30 +778,21 @@ class _TrackingPageState extends State<TrackingPage> {
                                   isLoading = true;
                                 });
                                 AuthProvider authProvider =
-                                    Provider.of<AuthProvider>(context,
-                                        listen: false);
+                                    Provider.of<AuthProvider>(context, listen: false);
                                 TrackingProvider trackingProvider =
-                                    Provider.of<TrackingProvider>(context,
-                                        listen: false);
+                                    Provider.of<TrackingProvider>(context, listen: false);
                                 ItemProvider itemProvider =
-                                    Provider.of<ItemProvider>(context,
-                                        listen: false);
-                                var result =
-                                    await trackingProvider.sendTracking(
-                                        token: authProvider.user!.accessToken,
-                                        listBarang: listTracking,
-                                        type: trackingIn
-                                            ? "TRACK IN"
-                                            : "TRACK OUT");
+                                    Provider.of<ItemProvider>(context, listen: false);
+                                var result = await trackingProvider.sendTracking(
+                                    token: authProvider.user!.accessToken,
+                                    listBarang: listTracking,
+                                    type: trackingIn ? "TRACK IN" : "TRACK OUT");
                                 setState(() {
                                   isLoading = false;
                                 });
-                                await itemProvider
-                                    .getProject(authProvider.user!.accessToken);
-                                await itemProvider.getTotalOut(
-                                    authProvider.user!.accessToken);
-                                await itemProvider
-                                    .getTotalIn(authProvider.user!.accessToken);
+                                await itemProvider.getProject(authProvider.user!.accessToken);
+                                await itemProvider.getTotalOut(authProvider.user!.accessToken);
+                                await itemProvider.getTotalIn(authProvider.user!.accessToken);
                                 showModalBottomSheet(
                                   isDismissible: false,
                                   shape: const RoundedRectangleBorder(
@@ -931,15 +801,13 @@ class _TrackingPageState extends State<TrackingPage> {
                                           topLeft: Radius.circular(15))),
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return BottomSheetTracking(
-                                        trackingFeedback: result);
+                                    return BottomSheetTracking(trackingFeedback: result);
                                   },
                                 );
                               },
                               child: isLoading
                                   ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         SizedBox(
                                           width: 13.w,
@@ -958,8 +826,7 @@ class _TrackingPageState extends State<TrackingPage> {
                                       ],
                                     )
                                   : Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Text(
                                           "Simpan",

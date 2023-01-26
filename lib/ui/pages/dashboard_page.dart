@@ -17,17 +17,12 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void updateData() async {
     Navigator.pop(context);
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
     String token = authProvider.user!.accessToken;
-    ItemProvider itemProvider =
-        Provider.of<ItemProvider>(context, listen: false);
-    ChartProvider chartProvider =
-        Provider.of<ChartProvider>(context, listen: false);
-    LocationProvider locationProvider =
-        Provider.of<LocationProvider>(context, listen: false);
-    CategoryProvider categoryProvider =
-        Provider.of<CategoryProvider>(context, listen: false);
+    ItemProvider itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    ChartProvider chartProvider = Provider.of<ChartProvider>(context, listen: false);
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     SubCategoryProvider subCategoryProvider =
         Provider.of<SubCategoryProvider>(context, listen: false);
 
@@ -47,8 +42,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   void generatePDF(Uint8List pdfInBytes) {
     html.AnchorElement(
-        href:
-            "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfInBytes)}")
+        href: "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfInBytes)}")
       ..setAttribute("download", "Laporan Persediaan Stock.pdf")
       ..click();
   }
@@ -67,7 +61,7 @@ class _DashboardPageState extends State<DashboardPage> {
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
                 if (await itemProvider.getProject(token)) {
-                  Navigator.pushNamed(context, "/home");
+                  context.go('dashboard/home');
                 }
               },
               child: const Icon(Icons.qr_code_scanner),
@@ -96,10 +90,9 @@ class _DashboardPageState extends State<DashboardPage> {
                                     // false = user must tap button, true = tap outside dialog
                                     builder: (BuildContext dialogContext) {
                                       return AlertDialog(
-                                        title: Text('Silahkan Pilih Gudang',
-                                            style: titleTextMobile),
-                                        content: LocationMobileWidget(
-                                            locationProvider),
+                                        title:
+                                            Text('Silahkan Pilih Gudang', style: titleTextMobile),
+                                        content: LocationMobileWidget(locationProvider),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
@@ -122,30 +115,25 @@ class _DashboardPageState extends State<DashboardPage> {
                                     // false = user must tap button, true = tap outside dialog
                                     builder: (BuildContext dialogContext) {
                                       return AlertDialog(
-                                        title: Text('Apakah Anda Yakin ?',
-                                            style: normalTextMobile),
+                                        title: Text('Apakah Anda Yakin ?', style: normalTextMobile),
                                         content: Text(
                                             'Anda akan keluar dari akun ini dan diarahkan kehalaman login kembali',
                                             style: normalTextMobile),
                                         actions: <Widget>[
                                           TextButton(
-                                            child: Text('Tidak',
-                                                style: normalTextMobile),
+                                            child: Text('Tidak', style: normalTextMobile),
                                             onPressed: () {
                                               Navigator.of(dialogContext)
                                                   .pop(); // Dismiss alert dialog
                                             },
                                           ),
                                           TextButton(
-                                            child: Text('Ya',
-                                                style: normalTextMobile),
+                                            child: Text('Ya', style: normalTextMobile),
                                             onPressed: () async {
-                                              if (await Provider.of<
-                                                          AuthProvider>(context,
+                                              if (await Provider.of<AuthProvider>(context,
                                                       listen: false)
                                                   .logout()) {
-                                                Navigator.pushNamed(
-                                                    context, "/login");
+                                                context.go('/login');
                                               }
                                             },
                                           ),
@@ -159,8 +147,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             ],
                           ),
                         ),
-                        Text(
-                            'Gudang : ${locationProvider.selectedLocation?.locationName ?? "-"}',
+                        Text('Gudang : ${locationProvider.selectedLocation?.locationName ?? "-"}',
                             style: normalTextMobile),
                         10.verticalSpace,
                         Column(
@@ -168,9 +155,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             headerContentMobile(
                                 0,
                                 "Total Stock In",
-                                chartProvider.itemInfoModel?.totalStockIn
-                                        .toString() ??
-                                    "0",
+                                chartProvider.itemInfoModel?.totalStockIn.toString() ?? "0",
                                 "Start From 1 Jan 2022",
                                 null,
                                 stockingProvider,
@@ -183,9 +168,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             headerContentMobile(
                                 1,
                                 "Total Stock Out",
-                                chartProvider.itemInfoModel?.totalStockOut
-                                        .toString() ??
-                                    "0",
+                                chartProvider.itemInfoModel?.totalStockOut.toString() ?? "0",
                                 "Start From 1 Jan 2022",
                                 null,
                                 stockingProvider,
@@ -198,16 +181,12 @@ class _DashboardPageState extends State<DashboardPage> {
                             headerContentMobile(
                                 2,
                                 "Total Barang",
-                                chartProvider.itemInfoModel?.totalBarang
-                                        .toString() ??
-                                    "0",
+                                chartProvider.itemInfoModel?.totalBarang.toString() ?? "0",
                                 "+ Tambah Barang Baru", () async {
-                              print(Provider.of<LocationProvider>(context,
-                                      listen: false)
+                              print(Provider.of<LocationProvider>(context, listen: false)
                                   .selectedLocation
                                   ?.locationCode);
-                              if (Provider.of<LocationProvider>(context,
-                                          listen: false)
+                              if (Provider.of<LocationProvider>(context, listen: false)
                                       .selectedLocation
                                       ?.locationCode ==
                                   "-") {
@@ -222,8 +201,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   return AlertDialog(
                                     title: Text('Tambah Barang',
                                         style: TextStyle(
-                                            fontSize: 45.sp,
-                                            fontWeight: FontWeight.w700)),
+                                            fontSize: 45.sp, fontWeight: FontWeight.w700)),
                                     content: AddBarangWidget(isMobile: true),
                                     actions: <Widget>[
                                       TextButton(
@@ -236,8 +214,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   );
                                 },
                               );
-                            }, stockingProvider, itemProvider, locationProvider,
-                                token),
+                            }, stockingProvider, itemProvider, locationProvider, token),
                             SizedBox(
                               height: 15.w,
                             ),
@@ -301,9 +278,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               const Spacer(),
                               IconButton(
                                 onPressed: () async {
-                                  Uint8List result = await compute(
-                                      generateLaporanPersediaan,
-                                      itemProvider.item);
+                                  Uint8List result =
+                                      await compute(generateLaporanPersediaan, itemProvider.item);
                                   generatePDF(result);
                                 },
                                 tooltip: "Print Stock Persediaan",
@@ -312,14 +288,11 @@ class _DashboardPageState extends State<DashboardPage> {
                               10.horizontalSpaceRadius,
                               IconButton(
                                 onPressed: () async {
-                                  await Provider.of<SubCategoryProvider>(
-                                          context,
-                                          listen: false)
+                                  await Provider.of<SubCategoryProvider>(context, listen: false)
                                       .getAllSubCategory(token);
-                                  await Provider.of<CategoryProvider>(context,
-                                          listen: false)
+                                  await Provider.of<CategoryProvider>(context, listen: false)
                                       .getAllCategory(token);
-                                  Navigator.pushNamed(context, "/sub-category");
+                                  context.go("/dashboard/sub-category");
                                 },
                                 tooltip: " Menu Sub Kategori",
                                 icon: const Icon(Iconsax.setting_2),
@@ -327,10 +300,9 @@ class _DashboardPageState extends State<DashboardPage> {
                               10.horizontalSpace,
                               IconButton(
                                 onPressed: () async {
-                                  await Provider.of<CategoryProvider>(context,
-                                          listen: false)
+                                  await Provider.of<CategoryProvider>(context, listen: false)
                                       .getAllCategory(token);
-                                  Navigator.pushNamed(context, "/category");
+                                  context.go('/dashboard/category');
                                 },
                                 tooltip: "Menu Kategori",
                                 icon: const Icon(Iconsax.setting),
@@ -344,15 +316,12 @@ class _DashboardPageState extends State<DashboardPage> {
                                     // false = user must tap button, true = tap outside dialog
                                     builder: (BuildContext dialogContext) {
                                       return AlertDialog(
-                                        title: Text('Silahkan Pilih Gudang',
-                                            style: titleText),
-                                        content:
-                                            LocationWidget(locationProvider),
+                                        title: Text('Silahkan Pilih Gudang', style: titleText),
+                                        content: LocationWidget(locationProvider),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.pushNamed(
-                                                  context, "/location");
+                                              context.go("/dashboard/location");
                                             },
                                             child: const Text('Tambah Gudang'),
                                           )
@@ -372,30 +341,25 @@ class _DashboardPageState extends State<DashboardPage> {
                                     // false = user must tap button, true = tap outside dialog
                                     builder: (BuildContext dialogContext) {
                                       return AlertDialog(
-                                        title: Text('Apakah Anda Yakin ?',
-                                            style: normalText),
+                                        title: Text('Apakah Anda Yakin ?', style: normalText),
                                         content: Text(
                                             'Anda akan keluar dari akun ini dan diarahkan kehalaman login kembali',
                                             style: normalText),
                                         actions: <Widget>[
                                           TextButton(
-                                            child: Text('Tidak',
-                                                style: normalText),
+                                            child: Text('Tidak', style: normalText),
                                             onPressed: () {
                                               Navigator.of(dialogContext)
                                                   .pop(); // Dismiss alert dialog
                                             },
                                           ),
                                           TextButton(
-                                            child:
-                                                Text('Ya', style: normalText),
+                                            child: Text('Ya', style: normalText),
                                             onPressed: () async {
-                                              if (await Provider.of<
-                                                          AuthProvider>(context,
+                                              if (await Provider.of<AuthProvider>(context,
                                                       listen: false)
                                                   .logout()) {
-                                                Navigator.pushNamed(
-                                                    context, "/login");
+                                                context.go("/login");
                                               }
                                             },
                                           ),
@@ -414,15 +378,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             Flexible(
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   headerContent(
                                       0,
                                       "Total Stock In",
-                                      chartProvider.itemInfoModel?.totalStockIn
-                                              .toString() ??
-                                          "0",
+                                      chartProvider.itemInfoModel?.totalStockIn.toString() ?? "0",
                                       "Start From 1 Jan 2022",
                                       null,
                                       stockingProvider,
@@ -432,9 +393,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                   headerContent(
                                       1,
                                       "Total Stock Out",
-                                      chartProvider.itemInfoModel?.totalStockOut
-                                              .toString() ??
-                                          "0",
+                                      chartProvider.itemInfoModel?.totalStockOut.toString() ?? "0",
                                       "Start From 1 Jan 2022",
                                       null,
                                       stockingProvider,
@@ -444,16 +403,12 @@ class _DashboardPageState extends State<DashboardPage> {
                                   headerContent(
                                       2,
                                       "Total Barang",
-                                      chartProvider.itemInfoModel?.totalBarang
-                                              .toString() ??
-                                          "0",
+                                      chartProvider.itemInfoModel?.totalBarang.toString() ?? "0",
                                       "+ Tambah Barang Baru", () async {
-                                    print(Provider.of<LocationProvider>(context,
-                                            listen: false)
+                                    print(Provider.of<LocationProvider>(context, listen: false)
                                         .selectedLocation
                                         ?.locationCode);
-                                    if (Provider.of<LocationProvider>(context,
-                                                listen: false)
+                                    if (Provider.of<LocationProvider>(context, listen: false)
                                             .selectedLocation
                                             ?.locationCode ==
                                         null) {
@@ -468,15 +423,13 @@ class _DashboardPageState extends State<DashboardPage> {
                                         return AlertDialog(
                                           title: Text('Tambah Barang',
                                               style: TextStyle(
-                                                  fontSize: 20.sp,
-                                                  fontWeight: FontWeight.w700)),
+                                                  fontSize: 20.sp, fontWeight: FontWeight.w700)),
                                           content: AddBarangWidget(),
                                           actions: const <Widget>[],
                                         );
                                       },
                                     );
-                                  }, stockingProvider, itemProvider,
-                                      locationProvider, token),
+                                  }, stockingProvider, itemProvider, locationProvider, token),
                                 ],
                               ),
                               flex: 5,
@@ -488,24 +441,21 @@ class _DashboardPageState extends State<DashboardPage> {
                               child: InkWell(
                                 onTap: () async {
                                   if (await itemProvider.getProject(token)) {
-                                    Navigator.pushNamed(context, "/home");
+                                    context.go("/dashboard/home");
                                   }
                                 },
-                                customBorder: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20)),
+                                customBorder:
+                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                                 child: Ink(
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                       color: blue,
                                       border: Border.all(color: Colors.black12),
                                       borderRadius: BorderRadius.circular(20),
-                                      gradient: LinearGradient(
-                                          colors: [
-                                            "#9bafd9".toColor(),
-                                            "#103783".toColor(),
-                                          ],
-                                          end: Alignment.bottomLeft,
-                                          begin: Alignment.topRight),
+                                      gradient: LinearGradient(colors: [
+                                        "#9bafd9".toColor(),
+                                        "#103783".toColor(),
+                                      ], end: Alignment.bottomLeft, begin: Alignment.topRight),
                                       boxShadow: const [
                                         BoxShadow(
                                           color: Colors.black12,
@@ -524,8 +474,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                       ),
                                       Text('Mulai Scan',
                                           style: normalText.copyWith(
-                                              color: Colors.white,
-                                              fontSize: 20.sp)),
+                                              color: Colors.white, fontSize: 20.sp)),
                                     ],
                                   ),
                                 ),
@@ -561,8 +510,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         decoration: BoxDecoration(
                             border: Border.all(color: "#DAE7F0".toColor()),
                             borderRadius: BorderRadius.circular(5)),
-                        padding: EdgeInsets.only(
-                            left: 10.w, right: 10.w, bottom: 10.w),
+                        padding: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 10.w),
                         child: const BarChartWidget()),
                   )
                 ],
@@ -601,9 +549,7 @@ class _DashboardPageState extends State<DashboardPage> {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
-            boxShadow: [
-              BoxShadow(color: grey, blurRadius: 10, spreadRadius: 2)
-            ],
+            boxShadow: [BoxShadow(color: grey, blurRadius: 10, spreadRadius: 2)],
             border: Border.all(color: grey)),
         height: 200.w,
         width: 200.w,
@@ -648,9 +594,7 @@ class _DashboardPageState extends State<DashboardPage> {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
-            boxShadow: [
-              BoxShadow(color: grey, blurRadius: 10, spreadRadius: 2)
-            ],
+            boxShadow: [BoxShadow(color: grey, blurRadius: 10, spreadRadius: 2)],
             border: Border.all(color: grey)),
         height: 300.w,
         width: 200.w,
@@ -718,8 +662,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 height: 40.h,
                 width: 40.h,
                 decoration: BoxDecoration(
-                    color: textColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(5)),
+                    color: textColor.withOpacity(0.2), borderRadius: BorderRadius.circular(5)),
                 child: Icon(iconData, color: textColor),
               ),
               const Spacer(),
@@ -728,36 +671,16 @@ class _DashboardPageState extends State<DashboardPage> {
                     if (index == 0) {
                       var startDate = Helper.getToday.decrement(value: 7);
                       var endDate = Helper.getToday.normal();
-                      if (await itemProvider.getDetailStock(
-                          token,
-                          startDate,
-                          endDate,
-                          "IN",
-                          locationProvider.selectedLocation?.locationCode ??
-                              "-")) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DetailStockPage(
-                                      isStockIn: true,
-                                    )));
+                      if (await itemProvider.getDetailStock(token, startDate, endDate, "IN",
+                          locationProvider.selectedLocation?.locationCode ?? "-")) {
+                        context.go("/dashboard/detail-stock", extra: true);
                       }
                     } else if (index == 1) {
                       var startDate = Helper.getToday.decrement(value: 7);
                       var endDate = Helper.getToday.normal();
-                      if (await itemProvider.getDetailStock(
-                          token,
-                          startDate,
-                          endDate,
-                          "OUT",
-                          locationProvider.selectedLocation?.locationCode ??
-                              "-")) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DetailStockPage(
-                                      isStockIn: false,
-                                    )));
+                      if (await itemProvider.getDetailStock(token, startDate, endDate, "OUT",
+                          locationProvider.selectedLocation?.locationCode ?? "-")) {
+                        context.go("/dashboard/detail-stock", extra: false);
                       }
                     }
                   },
@@ -768,13 +691,11 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           const Spacer(),
-          Text(title,
-              style: normalText.copyWith(color: textColor.withOpacity(0.5))),
+          Text(title, style: normalText.copyWith(color: textColor.withOpacity(0.5))),
           SizedBox(
             height: 3.h,
           ),
-          Text(value,
-              style: titleText.copyWith(color: textColor, fontSize: 28.sp)),
+          Text(value, style: titleText.copyWith(color: textColor, fontSize: 28.sp)),
           Divider(color: textColor.withOpacity(0.5)),
           handleClick != null
               ? Material(
@@ -783,15 +704,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     onTap: handleClick,
                     splashColor: blue,
                     child: Ink(
-                      child: Text(footer,
-                          style: normalText.copyWith(
-                              color: blue, fontSize: 12.sp)),
+                      child: Text(footer, style: normalText.copyWith(color: blue, fontSize: 12.sp)),
                     ),
                   ),
                 )
               : Text(footer,
-                  style: normalText.copyWith(
-                      color: textColor.withOpacity(0.5), fontSize: 12.sp)),
+                  style: normalText.copyWith(color: textColor.withOpacity(0.5), fontSize: 12.sp)),
         ],
       ),
     );
@@ -849,8 +767,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 height: 40.h,
                 width: 40.h,
                 decoration: BoxDecoration(
-                    color: textColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(5)),
+                    color: textColor.withOpacity(0.2), borderRadius: BorderRadius.circular(5)),
                 child: Icon(iconData, color: textColor),
               ),
               const Spacer(),
@@ -859,36 +776,16 @@ class _DashboardPageState extends State<DashboardPage> {
                     if (index == 0) {
                       var startDate = Helper.getToday.decrement(value: 7);
                       var endDate = Helper.getToday.normal();
-                      if (await itemProvider.getDetailStock(
-                          token,
-                          startDate,
-                          endDate,
-                          "IN",
-                          locationProvider.selectedLocation?.locationCode ??
-                              "-")) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DetailStockPage(
-                                      isStockIn: true,
-                                    )));
+                      if (await itemProvider.getDetailStock(token, startDate, endDate, "IN",
+                          locationProvider.selectedLocation?.locationCode ?? "-")) {
+                        context.go("/dashboard/detail-stock", extra: true);
                       }
                     } else if (index == 1) {
                       var startDate = Helper.getToday.decrement(value: 7);
                       var endDate = Helper.getToday.normal();
-                      if (await itemProvider.getDetailStock(
-                          token,
-                          startDate,
-                          endDate,
-                          "OUT",
-                          locationProvider.selectedLocation?.locationCode ??
-                              "-")) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DetailStockPage(
-                                      isStockIn: false,
-                                    )));
+                      if (await itemProvider.getDetailStock(token, startDate, endDate, "OUT",
+                          locationProvider.selectedLocation?.locationCode ?? "-")) {
+                        context.go("/dashboard/detail-stock", extra: false);
                       }
                     }
                   },
@@ -899,15 +796,11 @@ class _DashboardPageState extends State<DashboardPage> {
             ],
           ),
           const Spacer(),
-          Text(title,
-              style:
-                  normalTextMobile.copyWith(color: textColor.withOpacity(0.5))),
+          Text(title, style: normalTextMobile.copyWith(color: textColor.withOpacity(0.5))),
           SizedBox(
             height: 3.h,
           ),
-          Text(value,
-              style:
-                  titleTextMobile.copyWith(color: textColor, fontSize: 60.sp)),
+          Text(value, style: titleTextMobile.copyWith(color: textColor, fontSize: 60.sp)),
           Divider(color: textColor.withOpacity(0.5)),
           handleClick != null
               ? Material(
@@ -917,8 +810,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     splashColor: blue,
                     child: Ink(
                       child: Text(footer,
-                          style: normalTextMobile.copyWith(
-                              color: blue, fontSize: 30.sp)),
+                          style: normalTextMobile.copyWith(color: blue, fontSize: 30.sp)),
                     ),
                   ),
                 )

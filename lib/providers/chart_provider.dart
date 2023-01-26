@@ -55,17 +55,14 @@ class ChartProvider extends ChangeNotifier {
   }
 
   Future<bool> getItemInfo(String token) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
-      SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
-      String locationCode =
-          sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
-      ItemInfoModel response =
-          await compute(_endPoint.getItemInfo, locationCode);
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      String locationCode = sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
+      ItemInfoModel response = await compute(_endPoint.getItemInfo, locationCode);
       itemInfoModel = response;
       notifyListeners();
       loadingProvider!.stopLoading();
@@ -83,26 +80,23 @@ class ChartProvider extends ChangeNotifier {
   }
 
   Future<bool> getDashboardChart(String token) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String locationCode =
-        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
+    String locationCode = sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
-      ChartBarangModel response =
-          await compute(_endPoint.getChartDashboard, locationCode);
+      ChartBarangModel response = await compute(_endPoint.getChartDashboard, locationCode);
       chartBarangModel = response;
       List<BarChartGroupData> items = [];
       List<int>? lengthName = [];
       for (var i = 0; i < chartBarangModel!.stock.length; i++) {
-        items.add(makeGroupData(chartBarangModel!.namaBarang[i],
-            chartBarangModel!.stock[i].toDouble()));
+        items.add(
+            makeGroupData(chartBarangModel!.namaBarang[i], chartBarangModel!.stock[i].toDouble()));
       }
       listBarChartGroupData = items;
-      lengthName =
-          List<int>.from(chartBarangModel!.listBarang.map((e) => e.length));
+      lengthName = List<int>.from(chartBarangModel!.listBarang.map((e) => e.length));
       lengthName.sort();
       longestName = lengthName.isEmpty ? 10 : lengthName.last;
       notifyListeners();
@@ -122,13 +116,12 @@ class ChartProvider extends ChangeNotifier {
 
   Future<bool> getDetailChart(
       String token, String barcode, String startDate, String endDate) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String locationCode =
-        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
+    String locationCode = sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
       RequestEnd ??= DateTime.now().add(const Duration(seconds: 3));
       if (DateTime.now().isAfter(RequestEnd!)) {
@@ -136,12 +129,10 @@ class ChartProvider extends ChangeNotifier {
       } else {
         if (DateTime.now().isBefore(RequestEnd!)) {
           ChartDetailBarangModel response = await compute(
-              _endPoint.getDetailChart,
-              GetDetailParam(startDate, endDate, barcode, locationCode));
+              _endPoint.getDetailChart, GetDetailParam(startDate, endDate, barcode, locationCode));
           List<FlSpot> hasil = [];
           for (var i = 0; i < response.stock.length; i++) {
-            hasil.add(FlSpot(
-                response.label[i].toDouble(), response.stock[i].toDouble()));
+            hasil.add(FlSpot(response.label[i].toDouble(), response.stock[i].toDouble()));
           }
           chartDetailBarangModel = response;
           chartDetail = hasil;
@@ -170,13 +161,12 @@ class ChartProvider extends ChangeNotifier {
   }
 
   Future<bool> getChartAnnual(String token, String barcode) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String locationCode =
-        sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
+    String locationCode = sharedPreferences.getString(LocationProvider.KODE_LOKASI) ?? "-";
     try {
       RequestEnd ??= DateTime.now().add(const Duration(seconds: 3));
       if (DateTime.now().isAfter(RequestEnd!)) {
@@ -185,11 +175,10 @@ class ChartProvider extends ChangeNotifier {
       } else {
         if (DateTime.now().isBefore(RequestEnd!)) {
           print("MASUK AFTER ANNUAL");
-          List<ChartAnnual> responseIn = await compute(_endPoint.getAnnualChart,
-              GetAnnualChartParam(barcode, "IN", locationCode));
+          List<ChartAnnual> responseIn = await compute(
+              _endPoint.getAnnualChart, GetAnnualChartParam(barcode, "IN", locationCode));
           List<ChartAnnual> responseOut = await compute(
-              _endPoint.getAnnualChart,
-              GetAnnualChartParam(barcode, "OUT", locationCode));
+              _endPoint.getAnnualChart, GetAnnualChartParam(barcode, "OUT", locationCode));
           chartAnnualIn = responseIn;
           chartAnnualOut = responseOut;
           notifyListeners();

@@ -10,8 +10,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 3),
-        () => {Navigator.pushReplacementNamed(context, "/login")});
+    Timer(const Duration(seconds: 3), () => {context.go('/login')});
     super.initState();
   }
 

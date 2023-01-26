@@ -2,12 +2,10 @@ part of 'widgets.dart';
 
 class BottomSheetSelectedItem extends StatefulWidget {
   final ItemModel itemModel;
-  const BottomSheetSelectedItem({Key? key, required this.itemModel})
-      : super(key: key);
+  const BottomSheetSelectedItem({Key? key, required this.itemModel}) : super(key: key);
 
   @override
-  _BottomSheetSelectedItemState createState() =>
-      _BottomSheetSelectedItemState();
+  _BottomSheetSelectedItemState createState() => _BottomSheetSelectedItemState();
 }
 
 class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
@@ -61,8 +59,7 @@ class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
                                       child: Text(
                                     widget.itemModel.barcode,
                                     style: normalText.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 17.sp),
+                                        fontWeight: FontWeight.w600, fontSize: 17.sp),
                                   ))
                                 ],
                               ),
@@ -80,8 +77,7 @@ class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
                                       child: Text(
                                     widget.itemModel.qty.toString(),
                                     style: normalText.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 17.sp),
+                                        fontWeight: FontWeight.w600, fontSize: 17.sp),
                                   ))
                                 ],
                               )
@@ -97,16 +93,14 @@ class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
           ),
           GestureDetector(
             onTap: () => {
-              Navigator.pushNamed(context, "/stocking",
-                  arguments: StockingArgumenModel(
-                      itemModel: widget.itemModel, isStockIn: true))
+              context.go('/dashboard/home/stocking',
+                  extra: StockingArgumenModel(itemModel: widget.itemModel, isStockIn: true))
             },
             child: BounceInUp(
               child: Container(
                 width: 160.w,
                 height: 150.h,
-                decoration: BoxDecoration(
-                    color: blue, borderRadius: BorderRadius.circular(15)),
+                decoration: BoxDecoration(color: blue, borderRadius: BorderRadius.circular(15)),
                 child: Column(
                   children: [
                     SizedBox(
@@ -135,16 +129,14 @@ class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
           ),
           GestureDetector(
             onTap: () => {
-              Navigator.pushNamed(context, "/stocking",
-                  arguments: StockingArgumenModel(
-                      itemModel: widget.itemModel, isStockIn: false))
+              context.go('/dashboard/home/stocking',
+                  extra: StockingArgumenModel(itemModel: widget.itemModel, isStockIn: false))
             },
             child: BounceInUp(
               child: Container(
                 width: 160.w,
                 height: 150.h,
-                decoration: BoxDecoration(
-                    color: red, borderRadius: BorderRadius.circular(15)),
+                decoration: BoxDecoration(color: red, borderRadius: BorderRadius.circular(15)),
                 child: Column(
                   children: [
                     SizedBox(
@@ -176,16 +168,13 @@ class _BottomSheetSelectedItemState extends State<BottomSheetSelectedItem> {
 
 class BottomSheetSelectedItemMobile extends StatefulWidget {
   final ItemModel itemModel;
-  const BottomSheetSelectedItemMobile({Key? key, required this.itemModel})
-      : super(key: key);
+  const BottomSheetSelectedItemMobile({Key? key, required this.itemModel}) : super(key: key);
 
   @override
-  _BottomSheetSelectedItemMobileState createState() =>
-      _BottomSheetSelectedItemMobileState();
+  _BottomSheetSelectedItemMobileState createState() => _BottomSheetSelectedItemMobileState();
 }
 
-class _BottomSheetSelectedItemMobileState
-    extends State<BottomSheetSelectedItemMobile> {
+class _BottomSheetSelectedItemMobileState extends State<BottomSheetSelectedItemMobile> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -240,8 +229,7 @@ class _BottomSheetSelectedItemMobileState
                                     child: Text(
                                   widget.itemModel.barcode,
                                   style: normalTextMobile.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 30.sp),
+                                      fontWeight: FontWeight.w600, fontSize: 30.sp),
                                 ))
                               ],
                             ),
@@ -259,8 +247,7 @@ class _BottomSheetSelectedItemMobileState
                                     child: Text(
                                   widget.itemModel.qty.toString(),
                                   style: normalTextMobile.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 30.sp),
+                                      fontWeight: FontWeight.w600, fontSize: 30.sp),
                                 ))
                               ],
                             )
@@ -278,16 +265,14 @@ class _BottomSheetSelectedItemMobileState
             children: [
               GestureDetector(
                 onTap: () => {
-                  Navigator.pushNamed(context, "/stocking",
-                      arguments: StockingArgumenModel(
-                          itemModel: widget.itemModel, isStockIn: true))
+                  context.go('/dashboard/home/stocking',
+                      extra: StockingArgumenModel(itemModel: widget.itemModel, isStockIn: true))
                 },
                 child: BounceInUp(
                   child: Container(
                     width: 110.h,
                     height: 110.h,
-                    decoration: BoxDecoration(
-                        color: blue, borderRadius: BorderRadius.circular(15)),
+                    decoration: BoxDecoration(color: blue, borderRadius: BorderRadius.circular(15)),
                     child: Column(
                       children: [
                         SizedBox(
@@ -316,16 +301,14 @@ class _BottomSheetSelectedItemMobileState
               ),
               GestureDetector(
                 onTap: () => {
-                  Navigator.pushNamed(context, "/stocking",
-                      arguments: StockingArgumenModel(
-                          itemModel: widget.itemModel, isStockIn: false))
+                  context.go('/dashboard/home/stocking',
+                      extra: StockingArgumenModel(itemModel: widget.itemModel, isStockIn: false))
                 },
                 child: BounceInUp(
                   child: Container(
                     width: 110.h,
                     height: 110.h,
-                    decoration: BoxDecoration(
-                        color: red, borderRadius: BorderRadius.circular(15)),
+                    decoration: BoxDecoration(color: red, borderRadius: BorderRadius.circular(15)),
                     child: Column(
                       children: [
                         SizedBox(

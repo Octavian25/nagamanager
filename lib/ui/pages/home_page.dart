@@ -12,16 +12,11 @@ class _HomePageState extends State<HomePage> {
   TextEditingController search = TextEditingController();
 
   void updateData() async {
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-    ItemProvider itemProvider =
-        Provider.of<ItemProvider>(context, listen: false);
-    ChartProvider chartProvider =
-        Provider.of<ChartProvider>(context, listen: false);
-    LocationProvider locationProvider =
-        Provider.of<LocationProvider>(context, listen: false);
-    CategoryProvider categoryProvider =
-        Provider.of<CategoryProvider>(context, listen: false);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    ItemProvider itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    ChartProvider chartProvider = Provider.of<ChartProvider>(context, listen: false);
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
     SubCategoryProvider subCategoryProvider =
         Provider.of<SubCategoryProvider>(context, listen: false);
 
@@ -59,26 +54,19 @@ class _HomePageState extends State<HomePage> {
                         width: 16.w,
                       ),
                       ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: "#E8ECF2".toColor(), elevation: 0),
+                        style: ElevatedButton.styleFrom(primary: "#E8ECF2".toColor(), elevation: 0),
                         child: Row(
                           children: [
-                            Icon(Iconsax.arrow_square_left,
-                                color: text, size: 20),
+                            Icon(Iconsax.arrow_square_left, color: text, size: 20),
                           ],
                         ),
                         onPressed: () async {
                           String token =
-                              Provider.of<AuthProvider>(context, listen: false)
-                                  .user!
-                                  .accessToken;
-                          ChartProvider chart = Provider.of<ChartProvider>(
-                              context,
-                              listen: false);
+                              Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+                          ChartProvider chart = Provider.of<ChartProvider>(context, listen: false);
                           if (await chart.getDashboardChart(token)) {
                             updateData();
-                            Navigator.pushReplacementNamed(
-                                context, "/dashboard");
+                            context.go('dashboard');
                           } else {
                             showToast("Ambil Data Terbaru Gagal", false);
                           }
@@ -96,16 +84,13 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(
-                              context, "/tracking-camera",
-                              arguments: true);
+                          context.go('/dasboard/home/tracking-camera', extra: true);
                         },
                         child: Container(
                           width: 100.h,
                           height: 100.h,
-                          decoration: BoxDecoration(
-                              color: blue,
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration:
+                              BoxDecoration(color: blue, borderRadius: BorderRadius.circular(15)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -120,8 +105,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text(
                                 "Track In",
-                                style: normalTextMobile.copyWith(
-                                    color: Colors.white),
+                                style: normalTextMobile.copyWith(color: Colors.white),
                               )
                             ],
                           ),
@@ -132,16 +116,13 @@ class _HomePageState extends State<HomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(
-                              context, "/tracking-camera",
-                              arguments: false);
+                          context.go('/dashboard/home/tracking-camera', extra: false);
                         },
                         child: Container(
                           width: 100.h,
                           height: 100.h,
-                          decoration: BoxDecoration(
-                              color: red,
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration:
+                              BoxDecoration(color: red, borderRadius: BorderRadius.circular(15)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -156,8 +137,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text(
                                 "Track Out",
-                                style: normalTextMobile.copyWith(
-                                    color: Colors.white),
+                                style: normalTextMobile.copyWith(color: Colors.white),
                               )
                             ],
                           ),
@@ -230,13 +210,9 @@ class _HomePageState extends State<HomePage> {
                                 height: 100.sh,
                                 child: Column(
                                   children: [
-                                    Expanded(
-                                        child: Lottie.asset(
-                                            "assets/empty_state.json")),
-                                    Text(
-                                        'Barang Masih Kosong, Silahkan Tambahkan Barang Dahulu',
-                                        style: normalText.copyWith(
-                                            fontSize: 18.sp)),
+                                    Expanded(child: Lottie.asset("assets/empty_state.json")),
+                                    Text('Barang Masih Kosong, Silahkan Tambahkan Barang Dahulu',
+                                        style: normalText.copyWith(fontSize: 18.sp)),
                                   ],
                                 ),
                               )
@@ -249,8 +225,7 @@ class _HomePageState extends State<HomePage> {
                                     itemModel: itemProvider.item!
                                         .where((element) => element.name
                                             .toLowerCase()
-                                            .contains(
-                                                searchResult.toLowerCase()))
+                                            .contains(searchResult.toLowerCase()))
                                         .toList()[index]),
                                 itemCount: itemProvider.item!
                                     .where((element) => element.name
@@ -278,11 +253,8 @@ class _HomePageState extends State<HomePage> {
                 InkWell(
                   onTap: () async {
                     String token =
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .user!
-                            .accessToken;
-                    ChartProvider chart =
-                        Provider.of<ChartProvider>(context, listen: false);
+                        Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+                    ChartProvider chart = Provider.of<ChartProvider>(context, listen: false);
                     if (await chart.getDashboardChart(token)) {
                       updateData();
                       Navigator.pop(context);
@@ -295,8 +267,7 @@ class _HomePageState extends State<HomePage> {
                     height: 45.h,
                     width: 90.w,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.r),
-                        color: "#E8ECF2".toColor()),
+                        borderRadius: BorderRadius.circular(10.r), color: "#E8ECF2".toColor()),
                     child: Row(
                       children: [
                         SizedBox(
@@ -323,16 +294,13 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(
-                              context, "/tracking-camera",
-                              arguments: true);
+                          context.go('/dashboard/home/tracking-camera', extra: false);
                         },
                         child: Container(
                           width: 160.w,
                           height: 150.w,
-                          decoration: BoxDecoration(
-                              color: blue,
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration:
+                              BoxDecoration(color: blue, borderRadius: BorderRadius.circular(15)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -358,16 +326,13 @@ class _HomePageState extends State<HomePage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(
-                              context, "/tracking-camera",
-                              arguments: false);
+                          context.go('/dashboard/home/tracking-camera', extra: true);
                         },
                         child: Container(
                           width: 160.w,
                           height: 150.w,
-                          decoration: BoxDecoration(
-                              color: red,
-                              borderRadius: BorderRadius.circular(15)),
+                          decoration:
+                              BoxDecoration(color: red, borderRadius: BorderRadius.circular(15)),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -509,13 +474,9 @@ class _HomePageState extends State<HomePage> {
                                 height: 100.sh,
                                 child: Column(
                                   children: [
-                                    Expanded(
-                                        child: Lottie.asset(
-                                            "assets/empty_state.json")),
-                                    Text(
-                                        'Barang Masih Kosong, Silahkan Tambahkan Barang Dahulu',
-                                        style: normalText.copyWith(
-                                            fontSize: 18.sp)),
+                                    Expanded(child: Lottie.asset("assets/empty_state.json")),
+                                    Text('Barang Masih Kosong, Silahkan Tambahkan Barang Dahulu',
+                                        style: normalText.copyWith(fontSize: 18.sp)),
                                   ],
                                 ),
                               )

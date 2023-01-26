@@ -21,18 +21,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void checkLastUser() async {
-    if (await Provider.of<AuthProvider>(context, listen: false)
-        .checkLastLogin()) {
-      AuthProvider authProvider =
-          Provider.of<AuthProvider>(context, listen: false);
-      ItemProvider itemProvider =
-          Provider.of<ItemProvider>(context, listen: false);
-      ChartProvider chartProvider =
-          Provider.of<ChartProvider>(context, listen: false);
-      LocationProvider locationProvider =
-          Provider.of<LocationProvider>(context, listen: false);
-      CategoryProvider categoryProvider =
-          Provider.of<CategoryProvider>(context, listen: false);
+    if (await Provider.of<AuthProvider>(context, listen: false).checkLastLogin()) {
+      AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+      ItemProvider itemProvider = Provider.of<ItemProvider>(context, listen: false);
+      ChartProvider chartProvider = Provider.of<ChartProvider>(context, listen: false);
+      LocationProvider locationProvider = Provider.of<LocationProvider>(context, listen: false);
+      CategoryProvider categoryProvider = Provider.of<CategoryProvider>(context, listen: false);
       SubCategoryProvider subCategoryProvider =
           Provider.of<SubCategoryProvider>(context, listen: false);
 
@@ -43,18 +37,15 @@ class _LoginPageState extends State<LoginPage> {
         isLoading = false;
       });
       await categoryProvider.getAllCategory(authProvider.user!.accessToken);
-      await subCategoryProvider
-          .getAllSubCategory(authProvider.user!.accessToken);
+      await subCategoryProvider.getAllSubCategory(authProvider.user!.accessToken);
       await itemProvider.getProject(authProvider.user!.accessToken);
       await itemProvider.getTotalIn(authProvider.user!.accessToken);
       await itemProvider.getTotalOut(authProvider.user!.accessToken);
       await locationProvider.getAllLocation(authProvider.user!.accessToken);
       locationProvider.checkLastLocation();
-
-      if (await chartProvider
-          .getDashboardChart(authProvider.user!.accessToken)) {
+      if (await chartProvider.getDashboardChart(authProvider.user!.accessToken)) {
         if (await chartProvider.getItemInfo(authProvider.user!.accessToken)) {
-          Navigator.pushReplacementNamed(context, "/dashboard");
+          context.go('/dashboard');
         }
       }
     } else {}
@@ -77,14 +68,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void loginHandler() async {
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-    ItemProvider itemProvider =
-        Provider.of<ItemProvider>(context, listen: false);
-    ChartProvider chartProvider =
-        Provider.of<ChartProvider>(context, listen: false);
-    LocationProvider locationProvider =
-        Provider.of<LocationProvider>(context, listen: false);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    ItemProvider itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    ChartProvider chartProvider = Provider.of<ChartProvider>(context, listen: false);
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context, listen: false);
 
     setState(() {
       isLoading = true;
@@ -100,10 +87,9 @@ class _LoginPageState extends State<LoginPage> {
       await locationProvider.getAllLocation(authProvider.user!.accessToken);
       locationProvider.checkLastLocation();
 
-      if (await chartProvider
-          .getDashboardChart(authProvider.user!.accessToken)) {
+      if (await chartProvider.getDashboardChart(authProvider.user!.accessToken)) {
         if (await chartProvider.getItemInfo(authProvider.user!.accessToken)) {
-          Navigator.pushReplacementNamed(context, "/dashboard");
+          context.go('/dashboard');
         }
       }
     } else {
@@ -171,9 +157,8 @@ class _LoginPageState extends State<LoginPage> {
                           height: 53.h,
                           width: 1.sw,
                           padding: EdgeInsets.only(left: 30.w),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: grey),
+                          decoration:
+                              BoxDecoration(borderRadius: BorderRadius.circular(15), color: grey),
                           child: Center(
                             child: TextFormField(
                               style: normalTextMobile,
@@ -209,9 +194,8 @@ class _LoginPageState extends State<LoginPage> {
                           height: 53.h,
                           width: 1.sw,
                           padding: EdgeInsets.only(left: 30.w),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: grey),
+                          decoration:
+                              BoxDecoration(borderRadius: BorderRadius.circular(15), color: grey),
                           child: Row(children: [
                             Expanded(
                               child: TextFormField(
@@ -232,9 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                                   showPassword = !showPassword;
                                 });
                               },
-                              icon: Icon(!showPassword
-                                  ? Iconsax.eye_slash
-                                  : Iconsax.eye),
+                              icon: Icon(!showPassword ? Iconsax.eye_slash : Iconsax.eye),
                             )
                           ]),
                         ),
@@ -252,8 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () async {
                           loginHandler();
                         },
-                        style: ElevatedButton.styleFrom(
-                            primary: blue, onPrimary: white),
+                        style: ElevatedButton.styleFrom(primary: blue, onPrimary: white),
                         child: isLoading
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -357,8 +338,7 @@ class _LoginPageState extends State<LoginPage> {
                               width: 309.w,
                               padding: EdgeInsets.only(left: 20.w),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: grey),
+                                  borderRadius: BorderRadius.circular(15), color: grey),
                               child: Center(
                                 child: TextFormField(
                                   style: normalText,
@@ -395,8 +375,7 @@ class _LoginPageState extends State<LoginPage> {
                               width: 309.w,
                               padding: EdgeInsets.only(left: 20.w),
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  color: grey),
+                                  borderRadius: BorderRadius.circular(15), color: grey),
                               child: Row(children: [
                                 Expanded(
                                   child: TextFormField(
@@ -417,9 +396,7 @@ class _LoginPageState extends State<LoginPage> {
                                       showPassword = !showPassword;
                                     });
                                   },
-                                  icon: Icon(!showPassword
-                                      ? Iconsax.eye_slash
-                                      : Iconsax.eye),
+                                  icon: Icon(!showPassword ? Iconsax.eye_slash : Iconsax.eye),
                                 )
                               ]),
                             ),
@@ -437,8 +414,7 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               loginHandler();
                             },
-                            style: ElevatedButton.styleFrom(
-                                primary: blue, onPrimary: white),
+                            style: ElevatedButton.styleFrom(primary: blue, onPrimary: white),
                             child: isLoading
                                 ? Row(
                                     mainAxisAlignment: MainAxisAlignment.center,

@@ -10,13 +10,7 @@ class DetailStockPage extends StatefulWidget {
 
 class _DetailStockPageState extends State<DetailStockPage> {
   String dropdownValue = "Mingguan";
-  List<String> dropdownItem = [
-    'Harian',
-    'Mingguan',
-    'Bulanan',
-    'Tahunan',
-    "Pilih Tanggal.."
-  ];
+  List<String> dropdownItem = ['Harian', 'Mingguan', 'Bulanan', 'Tahunan', "Pilih Tanggal.."];
   String startDate = "";
   String endDate = "";
   bool isStockIn = false;
@@ -31,24 +25,16 @@ class _DetailStockPageState extends State<DetailStockPage> {
       });
     }
     dropdownItem.removeWhere((element) => element.contains("-"));
-    dropdownItem.add(
-        "${Helper.convertDate(startDate)} - ${Helper.convertDate(endDate)}");
-    dropdownValue =
-        "${Helper.convertDate(startDate)} - ${Helper.convertDate(endDate)}";
+    dropdownItem.add("${Helper.convertDate(startDate)} - ${Helper.convertDate(endDate)}");
+    dropdownValue = "${Helper.convertDate(startDate)} - ${Helper.convertDate(endDate)}";
   }
 
   void _onSelectedDate() async {
     Navigator.pop(context);
     ItemProvider chart = Provider.of<ItemProvider>(context, listen: false);
-    LocationProvider locationProvider =
-        Provider.of<LocationProvider>(context, listen: false);
-    String token =
-        Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
-    if (await chart.getDetailStock(
-        token,
-        startDate,
-        endDate,
-        isStockIn ? "IN" : "OUT",
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    String token = Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+    if (await chart.getDetailStock(token, startDate, endDate, isStockIn ? "IN" : "OUT",
         locationProvider.selectedLocation?.locationCode ?? "-")) {
       showToast("Data Berhasil Diperbarui", false);
     }
@@ -56,15 +42,9 @@ class _DetailStockPageState extends State<DetailStockPage> {
 
   void _onSelected() async {
     ItemProvider chart = Provider.of<ItemProvider>(context, listen: false);
-    String token =
-        Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
-    LocationProvider locationProvider =
-        Provider.of<LocationProvider>(context, listen: false);
-    if (await chart.getDetailStock(
-        token,
-        startDate,
-        endDate,
-        isStockIn ? "IN" : "OUT",
+    String token = Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context, listen: false);
+    if (await chart.getDetailStock(token, startDate, endDate, isStockIn ? "IN" : "OUT",
         locationProvider.selectedLocation?.locationCode ?? "-")) {
       showToast("Data Berhasil Diperbarui", false);
     }
@@ -98,8 +78,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                         TextButton(
                           child: Text('Close', style: normalTextMobile),
                           onPressed: () {
-                            Navigator.of(dialogContext)
-                                .pop(); // Dismiss alert dialog
+                            Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                           },
                         ),
                       ],
@@ -129,12 +108,11 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   primary: "#E8ECF2".toColor(), elevation: 0),
                               child: Row(
                                 children: [
-                                  Icon(Iconsax.arrow_square_left,
-                                      color: text, size: 20),
+                                  Icon(Iconsax.arrow_square_left, color: text, size: 20),
                                 ],
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, "/dashboard");
+                                context.go("/dashboard");
                               },
                             ),
                           ],
@@ -147,10 +125,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                         ),
                         Expanded(
                           flex: 3,
-                          child: Text(
-                              isStockIn
-                                  ? 'Detail Stock In'
-                                  : 'Detail Stock Out',
+                          child: Text(isStockIn ? 'Detail Stock In' : 'Detail Stock Out',
                               style: titleTextMobile),
                         ),
                         const Spacer(),
@@ -161,8 +136,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                             value: dropdownValue,
                             icon: const Icon(Icons.keyboard_arrow_down),
                             elevation: 16,
-                            style:
-                                normalTextMobile.copyWith(color: Colors.black),
+                            style: normalTextMobile.copyWith(color: Colors.black),
                             underline: Container(),
                             onChanged: (String? newValue) {
                               switch (newValue) {
@@ -176,8 +150,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   break;
                                 case "Mingguan":
                                   setState(() {
-                                    startDate =
-                                        Helper.getToday.decrement(value: 7);
+                                    startDate = Helper.getToday.decrement(value: 7);
                                     endDate = Helper.getToday.normal();
                                     dropdownValue = newValue!;
                                   });
@@ -185,8 +158,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   break;
                                 case "Bulanan":
                                   setState(() {
-                                    startDate =
-                                        Helper.getToday.decrement(value: 30);
+                                    startDate = Helper.getToday.decrement(value: 30);
                                     endDate = Helper.getToday.normal();
                                     dropdownValue = newValue!;
                                   });
@@ -194,8 +166,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   break;
                                 case "Tahunan":
                                   setState(() {
-                                    startDate =
-                                        Helper.getToday.decrement(value: 365);
+                                    startDate = Helper.getToday.decrement(value: 365);
                                     endDate = Helper.getToday.normal();
                                     dropdownValue = newValue!;
                                   });
@@ -206,15 +177,12 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   break;
                               }
                             },
-                            items: dropdownItem
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: dropdownItem.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value,
                                     style: normalTextMobile.copyWith(
-                                        color: value == dropdownValue
-                                            ? blue
-                                            : Colors.black)),
+                                        color: value == dropdownValue ? blue : Colors.black)),
                               );
                             }).toList(),
                           ),
@@ -227,8 +195,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                     ),
                     Expanded(
                       child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15),
@@ -241,34 +208,27 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Center(
-                                      child: Lottie.asset(
-                                          "assets/empty_state.json",
-                                          fit: BoxFit.cover,
-                                          width: 500.w),
+                                      child: Lottie.asset("assets/empty_state.json",
+                                          fit: BoxFit.cover, width: 500.w),
                                     ),
                                     SizedBox(
                                       height: 20.h,
                                     ),
                                     Center(
                                         child: Text('Data Kosong',
-                                            style: normalText.copyWith(
-                                                fontSize: 50.sp))),
+                                            style: normalText.copyWith(fontSize: 50.sp))),
                                     Center(
-                                        child: Text(
-                                            'Coba Pilih Rentang Tanggal Yang Lain..',
-                                            style: normalText.copyWith(
-                                                fontSize: 30.sp))),
+                                        child: Text('Coba Pilih Rentang Tanggal Yang Lain..',
+                                            style: normalText.copyWith(fontSize: 30.sp))),
                                   ],
                                 )
                               : ListView.separated(
                                   physics: const BouncingScrollPhysics(),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return ListTile(
                                       title: Text(
                                           itemProvider.listDetailStock
-                                              .where((element) =>
-                                                  element.isShow == true)
+                                              .where((element) => element.isShow == true)
                                               .toList()[index]
                                               .name,
                                           style: normalTextMobile),
@@ -277,21 +237,18 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                           style: normalTextMobile),
                                       trailing: Text(
                                           itemProvider.listDetailStock
-                                              .where((element) =>
-                                                  element.isShow == true)
+                                              .where((element) => element.isShow == true)
                                               .toList()[index]
                                               .totalStockIn
                                               .toString(),
                                           style: titleTextMobile),
                                     );
                                   },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
+                                  separatorBuilder: (BuildContext context, int index) {
                                     return const Divider();
                                   },
                                   itemCount: itemProvider.listDetailStock
-                                      .where(
-                                          (element) => element.isShow == true)
+                                      .where((element) => element.isShow == true)
                                       .toList()
                                       .length)),
                     )
@@ -315,8 +272,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                         TextButton(
                           child: const Text('Close'),
                           onPressed: () {
-                            Navigator.of(dialogContext)
-                                .pop(); // Dismiss alert dialog
+                            Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                           },
                         ),
                       ],
@@ -337,22 +293,20 @@ class _DetailStockPageState extends State<DetailStockPage> {
                     ),
                     InkWell(
                       onTap: () async {
-                        Navigator.pushNamed(context, "/dashboard");
+                        context.go("/dashboard");
                       },
                       borderRadius: BorderRadius.circular(10.r),
                       child: Ink(
                         height: 45.h,
                         width: 90.w,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
-                            color: "#E8ECF2".toColor()),
+                            borderRadius: BorderRadius.circular(10.r), color: "#E8ECF2".toColor()),
                         child: Row(
                           children: [
                             SizedBox(
                               width: 15.w,
                             ),
-                            Icon(Iconsax.arrow_square_left,
-                                color: text, size: 20),
+                            Icon(Iconsax.arrow_square_left, color: text, size: 20),
                             SizedBox(
                               width: 10.w,
                             ),
@@ -372,10 +326,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                         ),
                         Expanded(
                           flex: 3,
-                          child: Text(
-                              isStockIn
-                                  ? 'Detail Stock In'
-                                  : 'Detail Stock Out',
+                          child: Text(isStockIn ? 'Detail Stock In' : 'Detail Stock Out',
                               style: titleText),
                         ),
                         const Spacer(),
@@ -400,8 +351,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   break;
                                 case "Mingguan":
                                   setState(() {
-                                    startDate =
-                                        Helper.getToday.decrement(value: 7);
+                                    startDate = Helper.getToday.decrement(value: 7);
                                     endDate = Helper.getToday.normal();
                                     dropdownValue = newValue!;
                                   });
@@ -409,8 +359,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   break;
                                 case "Bulanan":
                                   setState(() {
-                                    startDate =
-                                        Helper.getToday.decrement(value: 30);
+                                    startDate = Helper.getToday.decrement(value: 30);
                                     endDate = Helper.getToday.normal();
                                     dropdownValue = newValue!;
                                   });
@@ -418,8 +367,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   break;
                                 case "Tahunan":
                                   setState(() {
-                                    startDate =
-                                        Helper.getToday.decrement(value: 365);
+                                    startDate = Helper.getToday.decrement(value: 365);
                                     endDate = Helper.getToday.normal();
                                     dropdownValue = newValue!;
                                   });
@@ -430,15 +378,12 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   break;
                               }
                             },
-                            items: dropdownItem
-                                .map<DropdownMenuItem<String>>((String value) {
+                            items: dropdownItem.map<DropdownMenuItem<String>>((String value) {
                               return DropdownMenuItem<String>(
                                 value: value,
                                 child: Text(value,
                                     style: normalText.copyWith(
-                                        color: value == dropdownValue
-                                            ? blue
-                                            : Colors.black)),
+                                        color: value == dropdownValue ? blue : Colors.black)),
                               );
                             }).toList(),
                           ),
@@ -451,8 +396,7 @@ class _DetailStockPageState extends State<DetailStockPage> {
                     ),
                     Expanded(
                       child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(15),
@@ -465,54 +409,44 @@ class _DetailStockPageState extends State<DetailStockPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Center(
-                                      child: Lottie.asset(
-                                          "assets/empty_state.json",
-                                          fit: BoxFit.cover,
-                                          width: 500.w),
+                                      child: Lottie.asset("assets/empty_state.json",
+                                          fit: BoxFit.cover, width: 500.w),
                                     ),
                                     SizedBox(
                                       height: 20.h,
                                     ),
                                     Center(
                                         child: Text('Data Kosong',
-                                            style: normalText.copyWith(
-                                                fontSize: 40.sp))),
+                                            style: normalText.copyWith(fontSize: 40.sp))),
                                     Center(
-                                        child: Text(
-                                            'Coba Pilih Rentang Tanggal Yang Lain..',
-                                            style: normalText.copyWith(
-                                                fontSize: 15.sp))),
+                                        child: Text('Coba Pilih Rentang Tanggal Yang Lain..',
+                                            style: normalText.copyWith(fontSize: 15.sp))),
                                   ],
                                 )
                               : ListView.separated(
                                   physics: const BouncingScrollPhysics(),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemBuilder: (BuildContext context, int index) {
                                     return ListTile(
                                       title: Text(itemProvider.listDetailStock
-                                          .where((element) =>
-                                              element.isShow == true)
+                                          .where((element) => element.isShow == true)
                                           .toList()[index]
                                           .name),
                                       subtitle: Text(
                                           "${itemProvider.listDetailStock.where((element) => element.isShow == true).toList()[index].barcode} / ${NumberFormat.currency(symbol: "Rp. ", decimalDigits: 0).format(itemProvider.listDetailStock.where((element) => element.isShow == true).toList()[index].price)} / ${itemProvider.listDetailStock.where((element) => element.isShow == true).toList()[index].type}"),
                                       trailing: Text(
                                           itemProvider.listDetailStock
-                                              .where((element) =>
-                                                  element.isShow == true)
+                                              .where((element) => element.isShow == true)
                                               .toList()[index]
                                               .totalStockIn
                                               .toString(),
                                           style: titleText),
                                     );
                                   },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
+                                  separatorBuilder: (BuildContext context, int index) {
                                     return const Divider();
                                   },
                                   itemCount: itemProvider.listDetailStock
-                                      .where(
-                                          (element) => element.isShow == true)
+                                      .where((element) => element.isShow == true)
                                       .toList()
                                       .length)),
                     )

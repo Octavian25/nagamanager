@@ -14,14 +14,10 @@ class _LocationPageState extends State<LocationPage> {
   String id = "";
   void updateData() async {
     Navigator.pop(context);
-    AuthProvider authProvider =
-        Provider.of<AuthProvider>(context, listen: false);
-    ItemProvider itemProvider =
-        Provider.of<ItemProvider>(context, listen: false);
-    ChartProvider chartProvider =
-        Provider.of<ChartProvider>(context, listen: false);
-    LocationProvider locationProvider =
-        Provider.of<LocationProvider>(context, listen: false);
+    AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+    ItemProvider itemProvider = Provider.of<ItemProvider>(context, listen: false);
+    ChartProvider chartProvider = Provider.of<ChartProvider>(context, listen: false);
+    LocationProvider locationProvider = Provider.of<LocationProvider>(context, listen: false);
 
     await itemProvider.getProject(authProvider.user!.accessToken);
     await itemProvider.getTotalIn(authProvider.user!.accessToken);
@@ -41,22 +37,18 @@ class _LocationPageState extends State<LocationPage> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding:
-              EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 10.w),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.w, top: 10.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               InkWell(
                 onTap: () async {
                   String token =
-                      Provider.of<AuthProvider>(context, listen: false)
-                          .user!
-                          .accessToken;
-                  ChartProvider chart =
-                      Provider.of<ChartProvider>(context, listen: false);
+                      Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+                  ChartProvider chart = Provider.of<ChartProvider>(context, listen: false);
                   if (await chart.getDashboardChart(token)) {
                     updateData();
-                    Navigator.pop(context);
+                    context.go("/dashboard");
                   } else {
                     showToast("Ambil Data Terbaru Gagal", false);
                   }
@@ -66,8 +58,7 @@ class _LocationPageState extends State<LocationPage> {
                   height: 45.h,
                   width: 90.w,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.r),
-                      color: "#E8ECF2".toColor()),
+                      borderRadius: BorderRadius.circular(10.r), color: "#E8ECF2".toColor()),
                   child: Row(
                     children: [
                       SizedBox(
@@ -110,9 +101,7 @@ class _LocationPageState extends State<LocationPage> {
                           width: 200.w),
                       20.horizontalSpace,
                       TextFieldCustom(
-                          controller: locationNameController,
-                          title: "Nama Lokasi",
-                          width: 300.w),
+                          controller: locationNameController, title: "Nama Lokasi", width: 300.w),
                     ],
                   ),
                   Align(
@@ -120,18 +109,15 @@ class _LocationPageState extends State<LocationPage> {
                     child: InkWell(
                       onTap: () async {
                         String token =
-                            Provider.of<AuthProvider>(context, listen: false)
-                                .user!
-                                .accessToken;
+                            Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
                         LocationModel payload = LocationModel(
                             locationCode: locationCodeController.text,
                             locationName: locationNameController.text,
                             id: "-");
-                        EditLocationModel payloadEdit = EditLocationModel(
-                            locationName: locationNameController.text, id: id);
+                        EditLocationModel payloadEdit =
+                            EditLocationModel(locationName: locationNameController.text, id: id);
                         if (isEdited) {
-                          await locationProvider.editLocation(
-                              token, payloadEdit);
+                          await locationProvider.editLocation(token, payloadEdit);
                           await locationProvider.getAllLocation(token);
                         } else {
                           await locationProvider.addLocation(token, payload);
@@ -146,9 +132,8 @@ class _LocationPageState extends State<LocationPage> {
                           isEdited ? "Rubah" : 'Simpan',
                           style: normalText.copyWith(color: Colors.white),
                         )),
-                        decoration: BoxDecoration(
-                            color: green,
-                            borderRadius: BorderRadius.circular(5)),
+                        decoration:
+                            BoxDecoration(color: green, borderRadius: BorderRadius.circular(5)),
                       ),
                     ),
                   ),
@@ -160,14 +145,12 @@ class _LocationPageState extends State<LocationPage> {
                         Expanded(
                           child: Text("Kode Lokasi",
                               style: normalText.copyWith(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold)),
+                                  fontSize: 18.sp, fontWeight: FontWeight.bold)),
                         ),
                         Expanded(
                           child: Text("Nama Lokasi",
                               style: normalText.copyWith(
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold)),
+                                  fontSize: 18.sp, fontWeight: FontWeight.bold)),
                         ),
                       ],
                     ),
@@ -190,22 +173,18 @@ class _LocationPageState extends State<LocationPage> {
                                   TextButton(
                                     child: const Text('Batal'),
                                     onPressed: () {
-                                      Navigator.of(dialogContext)
-                                          .pop(); // Dismiss alert dialog
+                                      Navigator.of(dialogContext).pop(); // Dismiss alert dialog
                                     },
                                   ),
                                   TextButton(
                                     child: const Text('Hapus'),
                                     onPressed: () async {
-                                      String token = Provider.of<AuthProvider>(
-                                              context,
-                                              listen: false)
-                                          .user!
-                                          .accessToken;
+                                      String token =
+                                          Provider.of<AuthProvider>(context, listen: false)
+                                              .user!
+                                              .accessToken;
                                       if (await locationProvider.deleteLocation(
-                                          token,
-                                          locationProvider
-                                              .listLocation[index].id)) {
+                                          token, locationProvider.listLocation[index].id)) {
                                         Navigator.pop(context);
                                       }
                                     },
@@ -231,12 +210,10 @@ class _LocationPageState extends State<LocationPage> {
                             children: [
                               10.horizontalSpace,
                               Expanded(
-                                child: Text(locationProvider
-                                    .listLocation[index].locationCode),
+                                child: Text(locationProvider.listLocation[index].locationCode),
                               ),
                               Expanded(
-                                child: Text(locationProvider
-                                    .listLocation[index].locationName),
+                                child: Text(locationProvider.listLocation[index].locationName),
                               ),
                             ],
                           ),

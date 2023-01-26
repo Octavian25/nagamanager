@@ -16,13 +16,12 @@ class SubCategoryProvider extends ChangeNotifier {
   }
 
   Future<bool> getAllSubCategory(String token) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
-      List<SubCategoryModel> project =
-          await compute(_endPoint.getAllSubCategory, null);
+      List<SubCategoryModel> project = await compute(_endPoint.getAllSubCategory, null);
       listSubCategory = project;
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
@@ -40,8 +39,8 @@ class SubCategoryProvider extends ChangeNotifier {
   }
 
   Future<bool> addSubCategory(String token, SubCategoryModel data) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
@@ -61,10 +60,9 @@ class SubCategoryProvider extends ChangeNotifier {
     }
   }
 
-  Future<bool> editSubCategory(
-      String token, SubCategoryModel categoryModel) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+  Future<bool> editSubCategory(String token, SubCategoryModel categoryModel) async {
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
@@ -86,8 +84,8 @@ class SubCategoryProvider extends ChangeNotifier {
   }
 
   Future<bool> deleteSubCategory(String token, String id) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {

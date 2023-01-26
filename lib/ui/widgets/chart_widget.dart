@@ -8,6 +8,7 @@ import 'package:nagamanager/providers/providers.dart';
 import 'package:nagamanager/shared/helper.dart';
 import 'package:nagamanager/shared/shared.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 class BarChartWidget extends StatefulWidget {
   const BarChartWidget({Key? key}) : super(key: key);
@@ -27,9 +28,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
   Widget build(BuildContext context) {
     List<BarChartGroupData>? listChartGroup =
         Provider.of<ChartProvider>(context).listBarChartGroupData;
-    ChartBarangModel? chartBarangModel =
-        Provider.of<ChartProvider>(context).chartBarangModel;
-    int longestName = Provider.of<ChartProvider>(context).longestName!;
+    ChartBarangModel? chartBarangModel = Provider.of<ChartProvider>(context).chartBarangModel;
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
@@ -53,91 +52,63 @@ class BarChartWidgetState extends State<BarChartWidget> {
                           padding: EdgeInsets.only(top: 10.h),
                           child: BarChart(
                             BarChartData(
-                              maxY: chartBarangModel?.UpperBound.toDouble() ??
-                                  100,
-                              barTouchData: BarTouchData(touchCallback:
-                                  (FlTouchEvent event, response) async {
-                                if (event is FlTapDownEvent) {
-                                  String startDate =
-                                      Helper.getToday.decrement(value: 7);
-                                  String endDate =
-                                      Helper.getToday.decrement(value: 0);
-                                  if (response?.spot != null) {
-                                    int index =
-                                        response!.spot!.touchedBarGroupIndex;
-                                    ChartProvider chart =
-                                        Provider.of<ChartProvider>(context,
-                                            listen: false);
-                                    String token = Provider.of<AuthProvider>(
-                                            context,
-                                            listen: false)
-                                        .user!
-                                        .accessToken;
-                                    if (await chart.getDetailChart(
-                                        token,
-                                        chartBarangModel!.barcode[index],
-                                        startDate,
-                                        endDate)) {
-                                      if (await chart.getChartAnnual(token,
-                                          chartBarangModel.barcode[index])) {
-                                        chart.setInformation(
-                                            barangSelectedd:
-                                                chartBarangModel.listBarang[
-                                                    response.spot!
-                                                        .touchedBarGroupIndex],
-                                            startDatee: startDate,
-                                            endDatee: endDate,
-                                            barcodeSelectedd: chartBarangModel
-                                                .barcode[index]);
-                                        Navigator.pushNamed(
-                                            context, "/detail-chart");
+                              maxY: chartBarangModel?.UpperBound.toDouble() ?? 100,
+                              barTouchData: BarTouchData(
+                                  allowTouchBarBackDraw: true,
+                                  touchCallback: (FlTouchEvent event, response) async {
+                                    if (event is FlTapDownEvent) {
+                                      String startDate = Helper.getToday.decrement(value: 7);
+                                      String endDate = Helper.getToday.decrement(value: 0);
+                                      if (response?.spot != null) {
+                                        int index = response!.spot!.touchedBarGroupIndex;
+                                        ChartProvider chart =
+                                            Provider.of<ChartProvider>(context, listen: false);
+                                        String token =
+                                            Provider.of<AuthProvider>(context, listen: false)
+                                                .user!
+                                                .accessToken;
+                                        if (await chart.getDetailChart(token,
+                                            chartBarangModel!.barcode[index], startDate, endDate)) {
+                                          if (await chart.getChartAnnual(
+                                              token, chartBarangModel.barcode[index])) {
+                                            chart.setInformation(
+                                                barangSelectedd: chartBarangModel.listBarang[
+                                                    response.spot!.touchedBarGroupIndex],
+                                                startDatee: startDate,
+                                                endDatee: endDate,
+                                                barcodeSelectedd: chartBarangModel.barcode[index]);
+                                            context.go('/dashboard/detail-chart');
+                                          }
+                                        }
                                       }
                                     }
-                                  }
-                                }
-                              }),
+                                  }),
                               titlesData: FlTitlesData(
                                 show: true,
                                 rightTitles: SideTitles(showTitles: false),
                                 topTitles: SideTitles(showTitles: false),
                                 bottomTitles: SideTitles(
                                     showTitles: true,
-                                    getTextStyles: (context, value) =>
-                                        normalText,
+                                    getTextStyles: (context, value) => normalText,
                                     margin: 10.w,
                                     getTitles: (double value) {
-                                      if (chartBarangModel!
-                                              .listBarang[value.toInt()]
-                                              .length >
-                                          15) {
-                                        return chartBarangModel
-                                            .listBarang[value.toInt()]
+                                      if (chartBarangModel!.listBarang[value.toInt()].length > 15) {
+                                        return chartBarangModel.listBarang[value.toInt()]
                                             .substring(0, 15);
                                       } else {
-                                        var length = chartBarangModel
-                                            .listBarang[value.toInt()].length;
+                                        var length =
+                                            chartBarangModel.listBarang[value.toInt()].length;
                                         var mustInsert = 7 - length;
                                         var space = "";
                                         for (var i = 0; i < mustInsert; i++) {
                                           space += " ";
                                         }
-                                        return chartBarangModel
-                                                .listBarang[value.toInt()] +
-                                            space;
+                                        return chartBarangModel.listBarang[value.toInt()] + space;
                                       }
                                     },
                                     interval: 5,
                                     reservedSize: 100,
                                     rotateAngle: 35),
-                                leftTitles: SideTitles(
-                                  showTitles: true,
-                                  getTextStyles: (context, value) => normalText,
-                                  reservedSize: 70,
-                                  interval: 20,
-                                  getTitles: (value) {
-                                    return value.toString();
-                                  },
-                                ),
                               ),
                               borderData: FlBorderData(
                                 show: false,
@@ -157,8 +128,7 @@ class BarChartWidgetState extends State<BarChartWidget> {
                   child: Column(
                     children: [
                       Expanded(child: Lottie.asset("assets/empty_state.json")),
-                      Text(
-                          'Stock Barang Masih Kosong, Silahkan Tambahkan Barang Dahulu',
+                      Text('Stock Barang Masih Kosong, Silahkan Tambahkan Barang Dahulu',
                           style: normalText.copyWith(fontSize: 18.sp)),
                     ],
                   ),
@@ -187,8 +157,7 @@ class BarChartWidgetMobileState extends State<BarChartWidgetMobile> {
   Widget build(BuildContext context) {
     List<BarChartGroupData>? listChartGroup =
         Provider.of<ChartProvider>(context).listBarChartGroupData;
-    ChartBarangModel? chartBarangModel =
-        Provider.of<ChartProvider>(context).chartBarangModel;
+    ChartBarangModel? chartBarangModel = Provider.of<ChartProvider>(context).chartBarangModel;
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
@@ -212,44 +181,30 @@ class BarChartWidgetMobileState extends State<BarChartWidgetMobile> {
                           padding: EdgeInsets.only(top: 10.h),
                           child: BarChart(
                             BarChartData(
-                              maxY: chartBarangModel?.UpperBound.toDouble() ??
-                                  100,
-                              barTouchData: BarTouchData(touchCallback:
-                                  (FlTouchEvent event, response) async {
+                              maxY: chartBarangModel?.UpperBound.toDouble() ?? 100,
+                              barTouchData:
+                                  BarTouchData(touchCallback: (FlTouchEvent event, response) async {
                                 if (!event.isInterestedForInteractions) {
-                                  String startDate =
-                                      Helper.getToday.decrement(value: 7);
-                                  String endDate =
-                                      Helper.getToday.decrement(value: 0);
+                                  String startDate = Helper.getToday.decrement(value: 7);
+                                  String endDate = Helper.getToday.decrement(value: 0);
                                   if (response?.spot != null) {
-                                    int index =
-                                        response!.spot!.touchedBarGroupIndex;
+                                    int index = response!.spot!.touchedBarGroupIndex;
                                     ChartProvider chart =
-                                        Provider.of<ChartProvider>(context,
-                                            listen: false);
-                                    String token = Provider.of<AuthProvider>(
-                                            context,
-                                            listen: false)
+                                        Provider.of<ChartProvider>(context, listen: false);
+                                    String token = Provider.of<AuthProvider>(context, listen: false)
                                         .user!
                                         .accessToken;
-                                    if (await chart.getDetailChart(
-                                        token,
-                                        chartBarangModel!.barcode[index],
-                                        startDate,
-                                        endDate)) {
-                                      if (await chart.getChartAnnual(token,
-                                          chartBarangModel.barcode[index])) {
+                                    if (await chart.getDetailChart(token,
+                                        chartBarangModel!.barcode[index], startDate, endDate)) {
+                                      if (await chart.getChartAnnual(
+                                          token, chartBarangModel.barcode[index])) {
                                         chart.setInformation(
-                                            barangSelectedd:
-                                                chartBarangModel.listBarang[
-                                                    response.spot!
-                                                        .touchedBarGroupIndex],
+                                            barangSelectedd: chartBarangModel
+                                                .listBarang[response.spot!.touchedBarGroupIndex],
                                             startDatee: startDate,
                                             endDatee: endDate,
-                                            barcodeSelectedd: chartBarangModel
-                                                .barcode[index]);
-                                        Navigator.pushNamed(
-                                            context, "/detail-chart");
+                                            barcodeSelectedd: chartBarangModel.barcode[index]);
+                                        context.go('/dashboard//detail-chart');
                                       }
                                     }
                                   }
@@ -262,28 +217,21 @@ class BarChartWidgetMobileState extends State<BarChartWidgetMobile> {
                                 bottomTitles: SideTitles(
                                     showTitles: true,
                                     getTextStyles: (context, value) =>
-                                        normalTextMobile.copyWith(
-                                            fontSize: 20.sp),
+                                        normalTextMobile.copyWith(fontSize: 20.sp),
                                     margin: 20.w,
                                     getTitles: (double value) {
-                                      if (chartBarangModel!
-                                              .listBarang[value.toInt()]
-                                              .length >
-                                          15) {
-                                        return chartBarangModel
-                                            .listBarang[value.toInt()]
+                                      if (chartBarangModel!.listBarang[value.toInt()].length > 15) {
+                                        return chartBarangModel.listBarang[value.toInt()]
                                             .substring(0, 15);
                                       } else {
-                                        var length = chartBarangModel
-                                            .listBarang[value.toInt()].length;
+                                        var length =
+                                            chartBarangModel.listBarang[value.toInt()].length;
                                         var mustInsert = 7 - length;
                                         var space = "";
                                         for (var i = 0; i < mustInsert; i++) {
                                           space += " ";
                                         }
-                                        return chartBarangModel
-                                                .listBarang[value.toInt()] +
-                                            space;
+                                        return chartBarangModel.listBarang[value.toInt()] + space;
                                       }
                                     },
                                     interval: 1,
@@ -292,8 +240,7 @@ class BarChartWidgetMobileState extends State<BarChartWidgetMobile> {
                                 leftTitles: SideTitles(
                                   showTitles: true,
                                   getTextStyles: (context, value) =>
-                                      normalTextMobile.copyWith(
-                                          fontSize: 30.sp),
+                                      normalTextMobile.copyWith(fontSize: 30.sp),
                                   reservedSize: 40,
                                   interval: 20,
                                   getTitles: (value) {
@@ -319,8 +266,7 @@ class BarChartWidgetMobileState extends State<BarChartWidgetMobile> {
                   child: Column(
                     children: [
                       Expanded(child: Lottie.asset("assets/empty_state.json")),
-                      Text(
-                          'Stock Barang Masih Kosong, Silahkan Tambahkan Barang Dahulu',
+                      Text('Stock Barang Masih Kosong, Silahkan Tambahkan Barang Dahulu',
                           style: normalText.copyWith(fontSize: 18.sp)),
                     ],
                   ),

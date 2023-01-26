@@ -9,13 +9,7 @@ class DetailChartPage extends StatefulWidget {
 
 class _DetailChartPageState extends State<DetailChartPage> {
   String dropdownValue = "Mingguan";
-  List<String> dropdownItem = [
-    'Harian',
-    'Mingguan',
-    'Bulanan',
-    'Tahunan',
-    "Pilih Tanggal.."
-  ];
+  List<String> dropdownItem = ['Harian', 'Mingguan', 'Bulanan', 'Tahunan', "Pilih Tanggal.."];
   String startDate = "";
   String endDate = "";
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -29,20 +23,16 @@ class _DetailChartPageState extends State<DetailChartPage> {
       });
     }
     dropdownItem.removeWhere((element) => element.contains("-"));
-    dropdownItem.add(
-        "${Helper.convertDate(startDate)} - ${Helper.convertDate(endDate)}");
-    dropdownValue =
-        "${Helper.convertDate(startDate)} - ${Helper.convertDate(endDate)}";
+    dropdownItem.add("${Helper.convertDate(startDate)} - ${Helper.convertDate(endDate)}");
+    dropdownValue = "${Helper.convertDate(startDate)} - ${Helper.convertDate(endDate)}";
   }
 
   void _onSelectedDate() async {
     Navigator.pop(context);
     ChartProvider chart = Provider.of<ChartProvider>(context, listen: false);
-    String token =
-        Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+    String token = Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
     chart.updateDate(startDate: startDate, endDate: endDate);
-    if (await chart.getDetailChart(
-        token, chart.barcodeSelected, startDate, endDate)) {
+    if (await chart.getDetailChart(token, chart.barcodeSelected, startDate, endDate)) {
       if (await chart.getChartAnnual(token, chart.barcodeSelected)) {
         showToast("Data Berhasil Diperbarui", false);
       }
@@ -51,10 +41,8 @@ class _DetailChartPageState extends State<DetailChartPage> {
 
   void _onSelected() async {
     ChartProvider chart = Provider.of<ChartProvider>(context, listen: false);
-    String token =
-        Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
-    if (await chart.getDetailChart(
-        token, chart.barcodeSelected, startDate, endDate)) {
+    String token = Provider.of<AuthProvider>(context, listen: false).user!.accessToken;
+    if (await chart.getDetailChart(token, chart.barcodeSelected, startDate, endDate)) {
       if (await chart.getChartAnnual(token, chart.barcodeSelected)) {
         showToast("Data Berhasil Diperbarui", false);
       }
@@ -63,8 +51,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
 
   void generatePDF(Uint8List pdfInBytes) {
     html.AnchorElement(
-        href:
-            "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfInBytes)}")
+        href: "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfInBytes)}")
       ..setAttribute("download", "Laporan Stock.pdf")
       ..click();
   }
@@ -72,10 +59,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
   @override
   Widget build(BuildContext context) {
     ChartProvider chartProvider = Provider.of<ChartProvider>(context);
-    int stockLength = Provider.of<ChartProvider>(context)
-        .chartDetailBarangModel!
-        .stock
-        .length;
+    int stockLength = Provider.of<ChartProvider>(context).chartDetailBarangModel!.stock.length;
     String barcode = Provider.of<ChartProvider>(context).barcodeSelected;
     ItemModel? itemModel = Provider.of<ItemProvider>(context).item!.firstWhere(
         (element) => element.barcode == barcode,
@@ -113,12 +97,11 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   primary: "#E8ECF2".toColor(), elevation: 0),
                               child: Row(
                                 children: [
-                                  Icon(Iconsax.arrow_square_left,
-                                      color: text, size: 20),
+                                  Icon(Iconsax.arrow_square_left, color: text, size: 20),
                                 ],
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, "/dashboard");
+                                context.go("/dashboard");
                               },
                             ),
                           ],
@@ -134,20 +117,17 @@ class _DetailChartPageState extends State<DetailChartPage> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: green, elevation: 0),
+                              style: ElevatedButton.styleFrom(primary: green, elevation: 0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Iconsax.paperclip,
-                                      color: Colors.white, size: 20),
+                                  const Icon(Iconsax.paperclip, color: Colors.white, size: 20),
                                   SizedBox(
                                     width: 10.w,
                                   ),
                                   Text(
                                     'Create Excel',
-                                    style: normalTextMobile.copyWith(
-                                        color: Colors.white),
+                                    style: normalTextMobile.copyWith(color: Colors.white),
                                   )
                                 ],
                               ),
@@ -159,30 +139,25 @@ class _DetailChartPageState extends State<DetailChartPage> {
                           ),
                           Expanded(
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: red, elevation: 0),
+                              style: ElevatedButton.styleFrom(primary: red, elevation: 0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Iconsax.paperclip,
-                                      color: Colors.white, size: 20),
+                                  const Icon(Iconsax.paperclip, color: Colors.white, size: 20),
                                   SizedBox(
                                     width: 10.w,
                                   ),
                                   Text(
                                     'Create PDF',
-                                    style: normalTextMobile.copyWith(
-                                        color: Colors.white),
+                                    style: normalTextMobile.copyWith(color: Colors.white),
                                   )
                                 ],
                               ),
                               onPressed: () {
                                 if (stockLength < 2) {
-                                  showToast(
-                                      "History Barang Kosong, PDF Belum Tersedia",
-                                      true);
+                                  showToast("History Barang Kosong, PDF Belum Tersedia", true);
                                 } else {
-                                  Navigator.pushNamed(context, "/create-pdf");
+                                  context.go("/dashboard/create-pdf");
                                 }
                               },
                             ),
@@ -220,27 +195,22 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                          color: "#DAE7F0".toColor())),
+                                      border: Border.all(color: "#DAE7F0".toColor())),
                                   child: Row(
                                     children: [
                                       Expanded(
                                         child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                           child: Container(
                                             child: itemModel.imagePath == "-"
-                                                ? Image.asset(
-                                                    "assets/empty-image.png",
+                                                ? Image.asset("assets/empty-image.png",
                                                     fit: BoxFit.contain)
-                                                : Image.network(
-                                                    itemModel.imagePath,
+                                                : Image.network(itemModel.imagePath,
                                                     fit: BoxFit.contain),
                                             width: double.infinity,
                                             height: double.infinity,
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
+                                              borderRadius: BorderRadius.circular(5),
                                             ),
                                           ),
                                         ),
@@ -250,13 +220,11 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                       ),
                                       Expanded(
                                           child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(itemModel.name,
                                               style: normalTextMobile.copyWith(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 40.sp),
+                                                  fontWeight: FontWeight.w700, fontSize: 40.sp),
                                               maxLines: 2,
                                               textAlign: TextAlign.center),
                                           SizedBox(
@@ -273,8 +241,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                               ),
                                               Text(itemModel.qty.toString(),
                                                   style:
-                                                      normalTextMobile.copyWith(
-                                                          fontSize: 30.sp)),
+                                                      normalTextMobile.copyWith(fontSize: 30.sp)),
                                               SizedBox(
                                                 width: 10.w,
                                               ),
@@ -287,8 +254,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                               ),
                                               Text(itemModel.barcode,
                                                   style:
-                                                      normalTextMobile.copyWith(
-                                                          fontSize: 30.sp)),
+                                                      normalTextMobile.copyWith(fontSize: 30.sp)),
                                               SizedBox(
                                                 width: 10.w,
                                               ),
@@ -301,12 +267,9 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                               ),
                                               Text(
                                                   NumberFormat.currency(
-                                                          symbol: "Rp. ",
-                                                          decimalDigits: 0)
+                                                          symbol: "Rp. ", decimalDigits: 0)
                                                       .format(itemModel.price),
-                                                  style:
-                                                      normalTextMobile.copyWith(
-                                                          fontSize: 30.sp))
+                                                  style: normalTextMobile.copyWith(fontSize: 30.sp))
                                             ],
                                           ),
                                         ],
@@ -335,8 +298,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   ),
                                   Expanded(
                                     flex: 3,
-                                    child: Text('Daily Stock Report',
-                                        style: normalTextMobile),
+                                    child: Text('Daily Stock Report', style: normalTextMobile),
                                   ),
                                   const Spacer(),
                                   Expanded(
@@ -344,50 +306,40 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                     child: DropdownButton<String>(
                                       isExpanded: true,
                                       value: dropdownValue,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
+                                      icon: const Icon(Icons.keyboard_arrow_down),
                                       elevation: 16,
-                                      style: normalTextMobile.copyWith(
-                                          color: Colors.black),
+                                      style: normalTextMobile.copyWith(color: Colors.black),
                                       underline: Container(),
                                       onChanged: (String? newValue) {
                                         switch (newValue) {
                                           case "Harian":
                                             setState(() {
-                                              startDate =
-                                                  Helper.getToday.normal();
-                                              endDate =
-                                                  Helper.getToday.normal();
+                                              startDate = Helper.getToday.normal();
+                                              endDate = Helper.getToday.normal();
                                               dropdownValue = newValue!;
                                             });
                                             _onSelected();
                                             break;
                                           case "Mingguan":
                                             setState(() {
-                                              startDate = Helper.getToday
-                                                  .decrement(value: 7);
-                                              endDate =
-                                                  Helper.getToday.normal();
+                                              startDate = Helper.getToday.decrement(value: 7);
+                                              endDate = Helper.getToday.normal();
                                               dropdownValue = newValue!;
                                             });
                                             _onSelected();
                                             break;
                                           case "Bulanan":
                                             setState(() {
-                                              startDate = Helper.getToday
-                                                  .decrement(value: 30);
-                                              endDate =
-                                                  Helper.getToday.normal();
+                                              startDate = Helper.getToday.decrement(value: 30);
+                                              endDate = Helper.getToday.normal();
                                               dropdownValue = newValue!;
                                             });
                                             _onSelected();
                                             break;
                                           case "Tahunan":
                                             setState(() {
-                                              startDate = Helper.getToday
-                                                  .decrement(value: 365);
-                                              endDate =
-                                                  Helper.getToday.normal();
+                                              startDate = Helper.getToday.decrement(value: 365);
+                                              endDate = Helper.getToday.normal();
                                               dropdownValue = newValue!;
                                             });
                                             _onSelected();
@@ -398,8 +350,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                         }
                                       },
                                       items: dropdownItem
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
+                                          .map<DropdownMenuItem<String>>((String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value,
@@ -426,10 +377,8 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                         padding: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            border: Border.all(
-                                                color: "#DAE7F0".toColor())),
+                                            borderRadius: BorderRadius.circular(15),
+                                            border: Border.all(color: "#DAE7F0".toColor())),
                                         child: Column(
                                           children: [
                                             SizedBox(
@@ -437,10 +386,8 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                             ),
                                             const Expanded(
                                               child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(right: 30),
-                                                child:
-                                                    DetailChartWidgetMobile(),
+                                                padding: EdgeInsets.only(right: 30),
+                                                child: DetailChartWidgetMobile(),
                                               ),
                                             )
                                           ],
@@ -483,28 +430,22 @@ class _DetailChartPageState extends State<DetailChartPage> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
-                                  border:
-                                      Border.all(color: "#DAE7F0".toColor())),
+                                  border: Border.all(color: "#DAE7F0".toColor())),
                               child: Row(
                                 children: [
                                   Expanded(
                                     flex: 3,
                                     child: ListView.separated(
-                                        separatorBuilder:
-                                            (BuildContext context, index) {
+                                        separatorBuilder: (BuildContext context, index) {
                                           return SizedBox(
                                             height: 20.h,
                                           );
                                         },
                                         physics: const BouncingScrollPhysics(),
-                                        itemCount:
-                                            chartProvider.chartAnnualIn.length,
-                                        itemBuilder:
-                                            (BuildContext context, index) {
+                                        itemCount: chartProvider.chartAnnualIn.length,
+                                        itemBuilder: (BuildContext context, index) {
                                           return headerPieChartMobile(
-                                              chartProvider
-                                                  .chartAnnualIn[index],
-                                              index);
+                                              chartProvider.chartAnnualIn[index], index);
                                         }),
                                   ),
                                   const Expanded(
@@ -551,28 +492,22 @@ class _DetailChartPageState extends State<DetailChartPage> {
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(15),
-                                  border:
-                                      Border.all(color: "#DAE7F0".toColor())),
+                                  border: Border.all(color: "#DAE7F0".toColor())),
                               child: Row(
                                 children: [
                                   Expanded(
                                     flex: 3,
                                     child: ListView.separated(
-                                        separatorBuilder:
-                                            (BuildContext context, index) {
+                                        separatorBuilder: (BuildContext context, index) {
                                           return SizedBox(
                                             height: 20.h,
                                           );
                                         },
                                         physics: const BouncingScrollPhysics(),
-                                        itemCount:
-                                            chartProvider.chartAnnualOut.length,
-                                        itemBuilder:
-                                            (BuildContext context, index) {
+                                        itemCount: chartProvider.chartAnnualOut.length,
+                                        itemBuilder: (BuildContext context, index) {
                                           return headerPieChartMobile(
-                                              chartProvider
-                                                  .chartAnnualOut[index],
-                                              index);
+                                              chartProvider.chartAnnualOut[index], index);
                                         }),
                                   ),
                                   const Expanded(
@@ -610,7 +545,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                         children: [
                           InkWell(
                             onTap: () async {
-                              Navigator.pushNamed(context, "/dashboard");
+                              context.go('/dashboard');
                             },
                             borderRadius: BorderRadius.circular(10.r),
                             child: Ink(
@@ -624,8 +559,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   SizedBox(
                                     width: 15.w,
                                   ),
-                                  Icon(Iconsax.arrow_square_left,
-                                      color: text, size: 20),
+                                  Icon(Iconsax.arrow_square_left, color: text, size: 20),
                                   SizedBox(
                                     width: 10.w,
                                   ),
@@ -645,8 +579,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                               height: 45.h,
                               width: 120.w,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: green),
+                                  borderRadius: BorderRadius.circular(10.r), color: green),
                               child: Row(
                                 children: [
                                   SizedBox(
@@ -654,8 +587,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   ),
                                   Text(
                                     'Create Excel',
-                                    style: normalText.copyWith(
-                                        color: Colors.white),
+                                    style: normalText.copyWith(color: Colors.white),
                                   )
                                 ],
                               ),
@@ -667,15 +599,11 @@ class _DetailChartPageState extends State<DetailChartPage> {
                           InkWell(
                             onTap: () async {
                               if (stockLength < 2) {
-                                showToast(
-                                    "History Barang Kosong, PDF Belum Tersedia",
-                                    true);
+                                showToast("History Barang Kosong, PDF Belum Tersedia", true);
                               } else {
                                 final GenerateLaporanStock res =
-                                    GenerateLaporanStock(
-                                        context, chartProvider);
-                                final result = await compute(
-                                    res.generateLaporanTracking, null);
+                                    GenerateLaporanStock(context, chartProvider);
+                                final result = await compute(res.generateLaporanTracking, null);
                                 generatePDF(result);
                               }
                             },
@@ -684,8 +612,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                               height: 45.h,
                               width: 120.w,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                  color: red),
+                                  borderRadius: BorderRadius.circular(10.r), color: red),
                               child: Row(
                                 children: [
                                   SizedBox(
@@ -693,8 +620,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   ),
                                   Text(
                                     'Create PDF',
-                                    style: normalText.copyWith(
-                                        color: Colors.white),
+                                    style: normalText.copyWith(color: Colors.white),
                                   )
                                 ],
                               ),
@@ -731,27 +657,22 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                          color: "#DAE7F0".toColor())),
+                                      border: Border.all(color: "#DAE7F0".toColor())),
                                   child: Column(
                                     children: [
                                       Expanded(
                                         child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                           child: Container(
                                             child: itemModel.imagePath == "-"
-                                                ? Image.asset(
-                                                    "assets/empty-image.png",
+                                                ? Image.asset("assets/empty-image.png",
                                                     fit: BoxFit.contain)
-                                                : Image.network(
-                                                    itemModel.imagePath,
+                                                : Image.network(itemModel.imagePath,
                                                     fit: BoxFit.contain),
                                             width: double.infinity,
                                             height: double.infinity,
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
+                                              borderRadius: BorderRadius.circular(5),
                                             ),
                                           ),
                                         ),
@@ -761,8 +682,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                       ),
                                       Text(itemModel.name,
                                           style: normalText.copyWith(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 18.sp),
+                                              fontWeight: FontWeight.w700, fontSize: 18.sp),
                                           maxLines: 2,
                                           textAlign: TextAlign.center),
                                       SizedBox(
@@ -779,8 +699,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                             width: 10.w,
                                           ),
                                           Text(itemModel.qty.toString(),
-                                              style: normalText.copyWith(
-                                                  fontSize: 14.sp)),
+                                              style: normalText.copyWith(fontSize: 14.sp)),
                                           SizedBox(
                                             width: 10.w,
                                           ),
@@ -792,8 +711,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                             width: 10.w,
                                           ),
                                           Text(itemModel.barcode,
-                                              style: normalText.copyWith(
-                                                  fontSize: 14.sp)),
+                                              style: normalText.copyWith(fontSize: 14.sp)),
                                           SizedBox(
                                             width: 10.w,
                                           ),
@@ -806,11 +724,9 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                           ),
                                           Text(
                                               NumberFormat.currency(
-                                                      symbol: "Rp. ",
-                                                      decimalDigits: 0)
+                                                      symbol: "Rp. ", decimalDigits: 0)
                                                   .format(itemModel.price),
-                                              style: normalText.copyWith(
-                                                  fontSize: 14.sp))
+                                              style: normalText.copyWith(fontSize: 14.sp))
                                         ],
                                       ),
                                     ],
@@ -836,8 +752,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   ),
                                   Expanded(
                                     flex: 3,
-                                    child: Text('Daily Stock Report',
-                                        style: titleText),
+                                    child: Text('Daily Stock Report', style: titleText),
                                   ),
                                   const Spacer(),
                                   Expanded(
@@ -845,50 +760,40 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                     child: DropdownButton<String>(
                                       isExpanded: true,
                                       value: dropdownValue,
-                                      icon:
-                                          const Icon(Icons.keyboard_arrow_down),
+                                      icon: const Icon(Icons.keyboard_arrow_down),
                                       elevation: 16,
-                                      style: normalText.copyWith(
-                                          color: Colors.black),
+                                      style: normalText.copyWith(color: Colors.black),
                                       underline: Container(),
                                       onChanged: (String? newValue) {
                                         switch (newValue) {
                                           case "Harian":
                                             setState(() {
-                                              startDate =
-                                                  Helper.getToday.normal();
-                                              endDate =
-                                                  Helper.getToday.normal();
+                                              startDate = Helper.getToday.normal();
+                                              endDate = Helper.getToday.normal();
                                               dropdownValue = newValue!;
                                             });
                                             _onSelected();
                                             break;
                                           case "Mingguan":
                                             setState(() {
-                                              startDate = Helper.getToday
-                                                  .decrement(value: 7);
-                                              endDate =
-                                                  Helper.getToday.normal();
+                                              startDate = Helper.getToday.decrement(value: 7);
+                                              endDate = Helper.getToday.normal();
                                               dropdownValue = newValue!;
                                             });
                                             _onSelected();
                                             break;
                                           case "Bulanan":
                                             setState(() {
-                                              startDate = Helper.getToday
-                                                  .decrement(value: 30);
-                                              endDate =
-                                                  Helper.getToday.normal();
+                                              startDate = Helper.getToday.decrement(value: 30);
+                                              endDate = Helper.getToday.normal();
                                               dropdownValue = newValue!;
                                             });
                                             _onSelected();
                                             break;
                                           case "Tahunan":
                                             setState(() {
-                                              startDate = Helper.getToday
-                                                  .decrement(value: 365);
-                                              endDate =
-                                                  Helper.getToday.normal();
+                                              startDate = Helper.getToday.decrement(value: 365);
+                                              endDate = Helper.getToday.normal();
                                               dropdownValue = newValue!;
                                             });
                                             _onSelected();
@@ -899,8 +804,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                         }
                                       },
                                       items: dropdownItem
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
+                                          .map<DropdownMenuItem<String>>((String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value,
@@ -927,10 +831,8 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                         padding: const EdgeInsets.all(10),
                                         decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            border: Border.all(
-                                                color: "#DAE7F0".toColor())),
+                                            borderRadius: BorderRadius.circular(15),
+                                            border: Border.all(color: "#DAE7F0".toColor())),
                                         child: Column(
                                           children: [
                                             SizedBox(
@@ -938,8 +840,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                             ),
                                             const Expanded(
                                               child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(right: 30),
+                                                padding: EdgeInsets.only(right: 30),
                                                 child: DetailChartWidget(),
                                               ),
                                             )
@@ -988,33 +889,25 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                          color: "#DAE7F0".toColor())),
+                                      border: Border.all(color: "#DAE7F0".toColor())),
                                   child: Row(
                                     children: [
                                       Expanded(
                                         flex: 3,
                                         child: ListView.separated(
-                                            separatorBuilder:
-                                                (BuildContext context, index) {
+                                            separatorBuilder: (BuildContext context, index) {
                                               return SizedBox(
                                                 height: 20.h,
                                               );
                                             },
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemCount: chartProvider
-                                                .chartAnnualIn.length,
-                                            itemBuilder:
-                                                (BuildContext context, index) {
+                                            physics: const BouncingScrollPhysics(),
+                                            itemCount: chartProvider.chartAnnualIn.length,
+                                            itemBuilder: (BuildContext context, index) {
                                               return headerPieChart(
-                                                  chartProvider
-                                                      .chartAnnualIn[index],
-                                                  index);
+                                                  chartProvider.chartAnnualIn[index], index);
                                             }),
                                       ),
-                                      const Expanded(
-                                          flex: 2, child: PieChartWidget())
+                                      const Expanded(flex: 2, child: PieChartWidget())
                                     ],
                                   ),
                                 ),
@@ -1052,33 +945,25 @@ class _DetailChartPageState extends State<DetailChartPage> {
                                   decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(15),
-                                      border: Border.all(
-                                          color: "#DAE7F0".toColor())),
+                                      border: Border.all(color: "#DAE7F0".toColor())),
                                   child: Row(
                                     children: [
                                       Expanded(
                                         flex: 3,
                                         child: ListView.separated(
-                                            separatorBuilder:
-                                                (BuildContext context, index) {
+                                            separatorBuilder: (BuildContext context, index) {
                                               return SizedBox(
                                                 height: 20.h,
                                               );
                                             },
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemCount: chartProvider
-                                                .chartAnnualOut.length,
-                                            itemBuilder:
-                                                (BuildContext context, index) {
+                                            physics: const BouncingScrollPhysics(),
+                                            itemCount: chartProvider.chartAnnualOut.length,
+                                            itemBuilder: (BuildContext context, index) {
                                               return headerPieChart(
-                                                  chartProvider
-                                                      .chartAnnualOut[index],
-                                                  index);
+                                                  chartProvider.chartAnnualOut[index], index);
                                             }),
                                       ),
-                                      const Expanded(
-                                          flex: 2, child: PieChartOutWidget())
+                                      const Expanded(flex: 2, child: PieChartOutWidget())
                                     ],
                                   ),
                                 ),
@@ -1101,8 +986,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
 
   Future<void> _generateExcel() async {
     ChartDetailBarangModel chartDetailBarangModel =
-        Provider.of<ChartProvider>(context, listen: false)
-            .chartDetailBarangModel!;
+        Provider.of<ChartProvider>(context, listen: false).chartDetailBarangModel!;
     final excel.Workbook workbook = excel.Workbook();
     final excel.Worksheet worksheet = workbook.worksheets[0];
     if (chartDetailBarangModel.historyDetail!.isNotEmpty) {
@@ -1115,24 +999,21 @@ class _DetailChartPageState extends State<DetailChartPage> {
         worksheet
             .getRangeByName("A$index")
             .setText(chartDetailBarangModel.historyDetail![i].tanggal);
-        worksheet.getRangeByName("B$index").setNumber(
-            chartDetailBarangModel.historyDetail![i].stockIn.toDouble());
-        worksheet.getRangeByName("C$index").setNumber(
-            chartDetailBarangModel.historyDetail![i].stockOut.toDouble());
-        worksheet.getRangeByName("D$index").setNumber(
-            chartDetailBarangModel.historyDetail![i].available.toDouble());
+        worksheet
+            .getRangeByName("B$index")
+            .setNumber(chartDetailBarangModel.historyDetail![i].stockIn.toDouble());
+        worksheet
+            .getRangeByName("C$index")
+            .setNumber(chartDetailBarangModel.historyDetail![i].stockOut.toDouble());
+        worksheet
+            .getRangeByName("D$index")
+            .setNumber(chartDetailBarangModel.historyDetail![i].available.toDouble());
       }
       int lastIndex = chartDetailBarangModel.historyDetail!.length + 1;
       worksheet.getRangeByName("A$lastIndex").setText("TOTAL");
-      worksheet
-          .getRangeByName("B$lastIndex")
-          .setFormula("=SUM(B2:B${lastIndex - 1})");
-      worksheet
-          .getRangeByName("C$lastIndex")
-          .setFormula("=SUM(C2:C${lastIndex - 1})");
-      worksheet
-          .getRangeByName("D$lastIndex")
-          .setFormula("=SUM(D2:D${lastIndex - 1})");
+      worksheet.getRangeByName("B$lastIndex").setFormula("=SUM(B2:B${lastIndex - 1})");
+      worksheet.getRangeByName("C$lastIndex").setFormula("=SUM(C2:C${lastIndex - 1})");
+      worksheet.getRangeByName("D$lastIndex").setFormula("=SUM(D2:D${lastIndex - 1})");
       final List<int> bytes = workbook.saveAsStream();
       saveFile(bytes, "Daily Stock Report.xlsx");
     }
@@ -1141,8 +1022,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
   void saveFile(bytes, String name) async {
     if (kIsWeb) {
       html.AnchorElement(
-          href:
-              "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
+          href: "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
         ..setAttribute("download", "Laporan Stock.xlsx")
         ..click();
     } else {
@@ -1189,8 +1069,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
       height: 80.h,
       padding: EdgeInsets.only(left: 20.w),
       margin: EdgeInsets.only(bottom: 10.h),
-      decoration: BoxDecoration(
-          color: backgroundItem, borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(color: backgroundItem, borderRadius: BorderRadius.circular(10)),
       child: Row(
         children: [
           Flexible(
@@ -1202,8 +1081,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('No Transaksi',
-                        style: normalText.copyWith(
-                            color: Colors.black.withOpacity(0.3))),
+                        style: normalText.copyWith(color: Colors.black.withOpacity(0.3))),
                     Text(historyDetail.trackNumber, style: normalText),
                   ],
                 ),
@@ -1217,8 +1095,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Tanggal',
-                        style: normalText.copyWith(
-                            color: Colors.black.withOpacity(0.3))),
+                        style: normalText.copyWith(color: Colors.black.withOpacity(0.3))),
                     Text(historyDetail.tanggal, style: normalText),
                   ],
                 ),
@@ -1232,8 +1109,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Jumlah In',
-                        style: normalText.copyWith(
-                            color: Colors.black.withOpacity(0.3))),
+                        style: normalText.copyWith(color: Colors.black.withOpacity(0.3))),
                     Text(historyDetail.stockIn.toString(), style: normalText),
                   ],
                 ),
@@ -1247,8 +1123,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Jumlah Out',
-                        style: normalText.copyWith(
-                            color: Colors.black.withOpacity(0.3))),
+                        style: normalText.copyWith(color: Colors.black.withOpacity(0.3))),
                     Text(historyDetail.stockOut.toString(), style: normalText),
                   ],
                 ),
@@ -1262,8 +1137,7 @@ class _DetailChartPageState extends State<DetailChartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Available',
-                        style: normalText.copyWith(
-                            color: Colors.black.withOpacity(0.3))),
+                        style: normalText.copyWith(color: Colors.black.withOpacity(0.3))),
                     Text(historyDetail.available.toString(), style: normalText),
                   ],
                 ),
@@ -1279,8 +1153,8 @@ class _DetailChartPageState extends State<DetailChartPage> {
         Container(
           height: 15.h,
           width: 15.h,
-          decoration: BoxDecoration(
-              color: listColor[index], borderRadius: BorderRadius.circular(5)),
+          decoration:
+              BoxDecoration(color: listColor[index], borderRadius: BorderRadius.circular(5)),
         ),
         SizedBox(
           width: 5.w,
@@ -1296,14 +1170,13 @@ class _DetailChartPageState extends State<DetailChartPage> {
         Container(
           height: 20.h,
           width: 20.h,
-          decoration: BoxDecoration(
-              color: listColor[index], borderRadius: BorderRadius.circular(5)),
+          decoration:
+              BoxDecoration(color: listColor[index], borderRadius: BorderRadius.circular(5)),
         ),
         SizedBox(
           width: 15.w,
         ),
-        Text("${value.month} / ${value.value}",
-            style: normalTextMobile.copyWith(fontSize: 28.sp)),
+        Text("${value.month} / ${value.value}", style: normalTextMobile.copyWith(fontSize: 28.sp)),
       ],
     );
   }

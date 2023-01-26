@@ -7,17 +7,13 @@ class ItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => EditItemPage(itemModel: itemModel)));
+        context.go("/dashboard/home/edit-item", extra: itemModel);
       },
       onTap: () => {
         showModalBottomSheet(
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(15),
-                    topLeft: Radius.circular(15))),
+                borderRadius:
+                    BorderRadius.only(topRight: Radius.circular(15), topLeft: Radius.circular(15))),
             context: context,
             builder: (BuildContext context) {
               return BottomSheetSelectedItem(
@@ -28,8 +24,7 @@ class ItemCard extends StatelessWidget {
       child: Container(
         width: 271.w,
         height: 130.h,
-        decoration: BoxDecoration(
-            color: backgroundItem, borderRadius: BorderRadius.circular(5)),
+        decoration: BoxDecoration(color: backgroundItem, borderRadius: BorderRadius.circular(5)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -44,17 +39,14 @@ class ItemCard extends StatelessWidget {
                   )
                 : CachedNetworkImage(
                     imageUrl: itemModel.imagePath,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
+                    progressIndicatorBuilder: (context, url, downloadProgress) => Center(
                       child: SizedBox(
                         width: 50.h,
                         height: 50.h,
-                        child: CircularProgressIndicator(
-                            value: downloadProgress.progress),
+                        child: CircularProgressIndicator(value: downloadProgress.progress),
                       ),
                     ),
-                    errorWidget: (context, url, error) =>
-                        Image.asset("assets/empty-image.png"),
+                    errorWidget: (context, url, error) => Image.asset("assets/empty-image.png"),
                     width: 100.w,
                     height: 100.h,
                   ),
@@ -90,8 +82,8 @@ class ItemCard extends StatelessWidget {
                             Expanded(
                                 child: Text(
                               itemModel.barcode,
-                              style: normalText.copyWith(
-                                  fontWeight: FontWeight.w600, fontSize: 14.sp),
+                              style:
+                                  normalText.copyWith(fontWeight: FontWeight.w600, fontSize: 14.sp),
                             ))
                           ],
                         ),
@@ -108,8 +100,8 @@ class ItemCard extends StatelessWidget {
                             Expanded(
                                 child: Text(
                               itemModel.qty.toString(),
-                              style: normalText.copyWith(
-                                  fontWeight: FontWeight.w600, fontSize: 14.sp),
+                              style:
+                                  normalText.copyWith(fontWeight: FontWeight.w600, fontSize: 14.sp),
                             ))
                           ],
                         )
@@ -148,8 +140,7 @@ class ItemCardMobile extends StatelessWidget {
       child: Container(
         width: 271.w,
         height: 130.h,
-        decoration: BoxDecoration(
-            color: backgroundItem, borderRadius: BorderRadius.circular(5)),
+        decoration: BoxDecoration(color: backgroundItem, borderRadius: BorderRadius.circular(5)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -164,17 +155,14 @@ class ItemCardMobile extends StatelessWidget {
                   )
                 : CachedNetworkImage(
                     imageUrl: itemModel.imagePath,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
+                    progressIndicatorBuilder: (context, url, downloadProgress) => Center(
                       child: SizedBox(
                         width: 50.h,
                         height: 50.h,
-                        child: CircularProgressIndicator(
-                            value: downloadProgress.progress),
+                        child: CircularProgressIndicator(value: downloadProgress.progress),
                       ),
                     ),
-                    errorWidget: (context, url, error) =>
-                        Image.asset("assets/empty-image.png"),
+                    errorWidget: (context, url, error) => Image.asset("assets/empty-image.png"),
                     width: 150.h,
                     height: 150.h,
                   ),

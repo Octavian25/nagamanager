@@ -26,18 +26,16 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> login(
-      {required String username, required String password}) async {
+  Future<bool> login({required String username, required String password}) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    Client _client = Client("");
+    Client _client = Client();
     var _endPoint = EndPointProvider(_client.init());
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
       sharedPreferences.setString("username", username);
       sharedPreferences.setString("password", password);
-      LoginFeedback user =
-          await compute(_endPoint.login, loginParam(username, password));
+      LoginFeedback user = await compute(_endPoint.login, loginParam(username, password));
       _user = user;
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();

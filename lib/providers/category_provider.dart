@@ -16,13 +16,12 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   Future<bool> getAllCategory(String token) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
-      List<CategoryModel> project =
-          await compute(_endPoint.getAllCategory, null);
+      List<CategoryModel> project = await compute(_endPoint.getAllCategory, null);
       listCategory = project;
       loadingProvider!.stopLoading();
       loadingProvider!.notifyListeners();
@@ -40,8 +39,8 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   Future<bool> addCategory(String token, CategoryModel data) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {
@@ -62,8 +61,8 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   Future<bool> editCategory(String token, CategoryModel categoryModel) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     print("EDIT");
@@ -86,8 +85,8 @@ class CategoryProvider extends ChangeNotifier {
   }
 
   Future<bool> deleteCategory(String token, String id) async {
-    Client _client = Client(token);
-    var _endPoint = EndPointProvider(_client.init());
+    Client _client = Client();
+    var _endPoint = EndPointProvider(_client.init(token: token));
     loadingProvider!.setLoading();
     loadingProvider!.notifyListeners();
     try {

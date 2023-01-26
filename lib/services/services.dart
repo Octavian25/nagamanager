@@ -39,7 +39,7 @@ class EndPointProvider {
     });
     try {
       var response = await _client.post(url, data: body);
-      print(response.statusCode);
+
       if (response.statusCode == 200) {
         LoginFeedback loginFeedback = LoginFeedback.fromJson(response.data);
         return loginFeedback;
@@ -47,7 +47,6 @@ class EndPointProvider {
         throw Exception('Gagal Login');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -56,8 +55,7 @@ class EndPointProvider {
     var url = "items";
     try {
       var response = await _client.get(url, queryParameters: {
-        "location_code":
-            Encryptor.doEncrypt(locationCode).toString().toUpperCase()
+        "location_code": Encryptor.doEncrypt(locationCode).toString().toUpperCase()
       });
       if (response.statusCode == 200) {
         List<ItemModel> items = [];
@@ -66,7 +64,7 @@ class EndPointProvider {
             items.add(ItemModel.fromJson(item));
           }
         }
-        // print(items[0].toJson());
+        //
         return items;
       } else {
         throw Exception('Gagal Ambil Project');
@@ -79,10 +77,8 @@ class EndPointProvider {
   Future<int> getTotal(Map<String, String> data) async {
     var url = "stockings/global";
     try {
-      var response = await _client.get(url, queryParameters: {
-        "type": data['type'],
-        "location_code": data['location_code']
-      });
+      var response = await _client.get(url,
+          queryParameters: {"type": data['type'], "location_code": data['location_code']});
       if (response.statusCode == 200) {
         return int.parse(response.data);
       } else {
@@ -96,11 +92,9 @@ class EndPointProvider {
   Future<ChartBarangModel> getChartDashboard(String locationCode) async {
     var url = "chart/chart-barang";
     try {
-      var response = await _client
-          .get(url, queryParameters: {"location_code": locationCode});
+      var response = await _client.get(url, queryParameters: {"location_code": locationCode});
       if (response.statusCode == 200) {
-        ChartBarangModel chartBarangModel =
-            ChartBarangModel.fromJson(response.data);
+        ChartBarangModel chartBarangModel = ChartBarangModel.fromJson(response.data);
         return chartBarangModel;
       } else {
         throw Exception('Gagal Ambil Project');
@@ -164,11 +158,9 @@ class EndPointProvider {
     var url = "trackings";
     try {
       var data = param.stockingModel.map((e) => e.toJson()).toList();
-      var response = await _client
-          .post(url, data: data, queryParameters: {"type": param.type});
+      var response = await _client.post(url, data: data, queryParameters: {"type": param.type});
       if (response.statusCode == 201) {
-        return List<TrackingFeedback>.from(
-            response.data.map((x) => TrackingFeedback.fromJson(x)));
+        return List<TrackingFeedback>.from(response.data.map((x) => TrackingFeedback.fromJson(x)));
       } else {
         throw Exception('Gagal Ambil Project');
       }
@@ -194,8 +186,7 @@ class EndPointProvider {
   Future<String> updateBarang(ItemModel item) async {
     var url = "items";
     try {
-      var response =
-          await _client.put("$url/${item.id}", data: item.updateJson());
+      var response = await _client.put("$url/${item.id}", data: item.updateJson());
       if (response.statusCode == 200) {
         return "Berhasil";
       } else {
@@ -226,8 +217,7 @@ class EndPointProvider {
     try {
       var response = await _client.post(url, data: {"items": data});
       if (response.statusCode == 201) {
-        BatchItemResponse batchItemResponse =
-            BatchItemResponse.fromJson(response.data);
+        BatchItemResponse batchItemResponse = BatchItemResponse.fromJson(response.data);
         return batchItemResponse;
       } else {
         throw Exception('Gagal Ambil Project');
@@ -240,8 +230,7 @@ class EndPointProvider {
   Future<ItemInfoModel> getItemInfo(String locationCode) async {
     try {
       var url = "chart/item-info";
-      var response = await _client
-          .get(url, queryParameters: {"location_code": locationCode});
+      var response = await _client.get(url, queryParameters: {"location_code": locationCode});
       if (response.statusCode == 200) {
         ItemInfoModel infoModel = ItemInfoModel.fromJson(response.data);
         return infoModel;
@@ -263,8 +252,7 @@ class EndPointProvider {
         "location_code": data.locationCode
       });
       if (response.statusCode == 200) {
-        List<DetailStockModel> detailStock =
-            listDetailStockFromJson(response.data);
+        List<DetailStockModel> detailStock = listDetailStockFromJson(response.data);
         return detailStock;
       } else {
         throw Exception('Gagal Detail Stock In');
@@ -356,7 +344,6 @@ class EndPointProvider {
         throw Exception('Gagal Ambil Data Category');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -378,15 +365,13 @@ class EndPointProvider {
   Future<String> editCategory(CategoryModel data) async {
     try {
       var url = "Categories";
-      var response =
-          await _client.put("$url/${data.id}", data: data.toJsonEdit());
+      var response = await _client.put("$url/${data.id}", data: data.toJsonEdit());
       if (response.statusCode == 200) {
         return response.data['message'];
       } else {
         throw Exception('Gagal Edit Category');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -410,14 +395,12 @@ class EndPointProvider {
       var url = "sub-categories";
       var response = await _client.get(url);
       if (response.statusCode == 200) {
-        List<SubCategoryModel> listLocation =
-            listSubCategoryFromJson(response.data);
+        List<SubCategoryModel> listLocation = listSubCategoryFromJson(response.data);
         return listLocation;
       } else {
         throw Exception('Gagal Ambil Data Category');
       }
     } catch (e) {
-      print(e);
       throw Exception(e);
     }
   }
@@ -439,8 +422,7 @@ class EndPointProvider {
   Future<String> editSubCategory(SubCategoryModel data) async {
     try {
       var url = "sub-categories";
-      var response =
-          await _client.put("$url/${data.id}", data: data.toJsonEdit());
+      var response = await _client.put("$url/${data.id}", data: data.toJsonEdit());
       if (response.statusCode == 200) {
         return response.data['message'];
       } else {

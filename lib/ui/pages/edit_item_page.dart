@@ -30,13 +30,11 @@ class _EditItemPageState extends State<EditItemPage> {
     typeController.text = data.type;
     selectedCategory = Provider.of<CategoryProvider>(context, listen: false)
         .listCategory
+        .firstWhereIndexedOrNull((index, element) => element.categoryCode == data.categoryCode);
+    subCategorySelected = Provider.of<SubCategoryProvider>(context, listen: false)
+        .listSubCategory
         .firstWhereIndexedOrNull(
-            (index, element) => element.categoryCode == data.categoryCode);
-    subCategorySelected =
-        Provider.of<SubCategoryProvider>(context, listen: false)
-            .listSubCategory
-            .firstWhereIndexedOrNull((index, element) =>
-                element.subCategoryCode == data.subCategoryCode);
+            (index, element) => element.subCategoryCode == data.subCategoryCode);
   }
 
   printBarcode(String barcode, String jumlah) async {
@@ -60,8 +58,7 @@ class _EditItemPageState extends State<EditItemPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<LocationModel> listLocation =
-        Provider.of<LocationProvider>(context).listLocation;
+    List<LocationModel> listLocation = Provider.of<LocationProvider>(context).listLocation;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -78,7 +75,7 @@ class _EditItemPageState extends State<EditItemPage> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          Navigator.pushNamed(context, "/dashboard");
+                          context.go("/dashboard/home");
                         },
                         borderRadius: BorderRadius.circular(10.r),
                         child: Ink(
@@ -92,8 +89,7 @@ class _EditItemPageState extends State<EditItemPage> {
                               SizedBox(
                                 width: 15.w,
                               ),
-                              Icon(Iconsax.arrow_square_left,
-                                  color: text, size: 20),
+                              Icon(Iconsax.arrow_square_left, color: text, size: 20),
                               SizedBox(
                                 width: 10.w,
                               ),
@@ -121,8 +117,7 @@ class _EditItemPageState extends State<EditItemPage> {
                           height: 200.w,
                           decoration: BoxDecoration(
                               image: DecorationImage(
-                                  image:
-                                      NetworkImage(widget.itemModel.imagePath),
+                                  image: NetworkImage(widget.itemModel.imagePath),
                                   fit: BoxFit.cover)),
                         ),
                       ],
@@ -135,9 +130,7 @@ class _EditItemPageState extends State<EditItemPage> {
                     child: ListView(
                       children: [
                         TextFieldCustom(
-                            controller: nameController,
-                            title: "Nama Barang",
-                            width: 400.w),
+                            controller: nameController, title: "Nama Barang", width: 400.w),
                         DropdownCustom(
                             locationModel: listLocation,
                             controller: nameController,
@@ -147,9 +140,7 @@ class _EditItemPageState extends State<EditItemPage> {
                               });
                             },
                             selectedLocation: listLocation.firstWhere(
-                                (element) =>
-                                    element.locationCode ==
-                                    widget.itemModel.locationCode),
+                                (element) => element.locationCode == widget.itemModel.locationCode),
                             title: "Nama Lokasi",
                             width: 400.w),
                         SizedBox(
@@ -158,9 +149,7 @@ class _EditItemPageState extends State<EditItemPage> {
                             children: [
                               CustomDropdown<CategoryModel>(
                                   title: "Kode Kategori",
-                                  listData: Provider.of<CategoryProvider>(
-                                          context,
-                                          listen: false)
+                                  listData: Provider.of<CategoryProvider>(context, listen: false)
                                       .listCategory
                                       .map((e) => DropdownMenuItem(
                                             child: Text(e.name),
@@ -178,13 +167,10 @@ class _EditItemPageState extends State<EditItemPage> {
                               20.horizontalSpace,
                               CustomDropdown<SubCategoryModel?>(
                                   title: "Kode Sub Kategori",
-                                  listData: Provider.of<SubCategoryProvider>(
-                                          context,
-                                          listen: false)
+                                  listData: Provider.of<SubCategoryProvider>(context, listen: false)
                                       .listSubCategory
                                       .where((element) =>
-                                          element.categoryCode ==
-                                          selectedCategory?.categoryCode)
+                                          element.categoryCode == selectedCategory?.categoryCode)
                                       .map((e) => DropdownMenuItem(
                                             child: Text(e.name),
                                             value: e,
@@ -201,41 +187,29 @@ class _EditItemPageState extends State<EditItemPage> {
                           ),
                         ),
                         TextFieldCustom(
-                            controller: barcodeController,
-                            title: "Barcode Barang",
-                            width: 400.w),
+                            controller: barcodeController, title: "Barcode Barang", width: 400.w),
                         TextFieldCustom(
-                            controller: stockController,
-                            title: "Stock Barang",
-                            width: 400.w),
+                            controller: stockController, title: "Stock Barang", width: 400.w),
                         TextFieldCustom(
-                            controller: priceController,
-                            title: "Harga Barang",
-                            width: 400.w),
+                            controller: priceController, title: "Harga Barang", width: 400.w),
                         TextFieldCustom(
-                            controller: typeController,
-                            title: "Type Barang",
-                            width: 400.w),
+                            controller: typeController, title: "Type Barang", width: 400.w),
                         20.verticalSpacingRadius,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             InkWell(
                               onTap: () async {
-                                String token = Provider.of<AuthProvider>(
-                                        context,
-                                        listen: false)
+                                String token = Provider.of<AuthProvider>(context, listen: false)
                                     .user!
                                     .accessToken;
-                                if (await Provider.of<ItemProvider>(context,
-                                        listen: false)
+                                if (await Provider.of<ItemProvider>(context, listen: false)
                                     .deleteItems(token, widget.itemModel)) {
                                   showToast("Barang berhasil DIhapus", false);
                                   Navigator.pop(context);
                                 } else {
                                   showToast(
-                                      "Barang Gagal Dirubah, Coba Beberapa saat lagi..",
-                                      true);
+                                      "Barang Gagal Dirubah, Coba Beberapa saat lagi..", true);
                                 }
                               },
                               child: Ink(
@@ -244,60 +218,48 @@ class _EditItemPageState extends State<EditItemPage> {
                                 child: Center(
                                     child: Text(
                                   'Delete Barang',
-                                  style:
-                                      normalText.copyWith(color: Colors.white),
+                                  style: normalText.copyWith(color: Colors.white),
                                 )),
                                 decoration: BoxDecoration(
-                                    color: red,
-                                    borderRadius: BorderRadius.circular(5)),
+                                    color: red, borderRadius: BorderRadius.circular(5)),
                               ),
                             ),
                             10.horizontalSpaceRadius,
                             InkWell(
-                              onTap: () => {
-                                printBarcode(barcodeController.text,
-                                    stockController.text)
-                              },
+                              onTap: () =>
+                                  {printBarcode(barcodeController.text, stockController.text)},
                               child: Ink(
                                 width: 100.w,
                                 height: 45.h,
                                 child: Center(
                                     child: Text(
                                   'Cetak Barcode',
-                                  style:
-                                      normalText.copyWith(color: Colors.white),
+                                  style: normalText.copyWith(color: Colors.white),
                                 )),
                                 decoration: BoxDecoration(
-                                    color: red,
-                                    borderRadius: BorderRadius.circular(5)),
+                                    color: red, borderRadius: BorderRadius.circular(5)),
                               ),
                             ),
                             10.horizontalSpaceRadius,
                             InkWell(
                               onTap: () async {
-                                String token = Provider.of<AuthProvider>(
-                                        context,
-                                        listen: false)
+                                String token = Provider.of<AuthProvider>(context, listen: false)
                                     .user!
                                     .accessToken;
                                 ItemModel payload = widget.itemModel.copyWith(
                                     name: nameController.text,
                                     qty: int.parse(stockController.text),
-                                    subCategoryCode:
-                                        subCategorySelected?.subCategoryCode,
-                                    categoryCode:
-                                        subCategorySelected?.categoryCode,
+                                    subCategoryCode: subCategorySelected?.subCategoryCode,
+                                    categoryCode: subCategorySelected?.categoryCode,
                                     price: int.parse(priceController.text),
                                     locationCode: locationCode);
-                                if (await Provider.of<ItemProvider>(context,
-                                        listen: false)
+                                if (await Provider.of<ItemProvider>(context, listen: false)
                                     .updateItems(token, payload)) {
                                   showToast("Barang berhasil Dirubah", false);
                                   Navigator.pop(context);
                                 } else {
                                   showToast(
-                                      "Barang Gagal Dirubah, Coba Beberapa saat lagi..",
-                                      true);
+                                      "Barang Gagal Dirubah, Coba Beberapa saat lagi..", true);
                                 }
                               },
                               child: Ink(
@@ -306,12 +268,10 @@ class _EditItemPageState extends State<EditItemPage> {
                                 child: Center(
                                     child: Text(
                                   'Rubah',
-                                  style:
-                                      normalText.copyWith(color: Colors.white),
+                                  style: normalText.copyWith(color: Colors.white),
                                 )),
                                 decoration: BoxDecoration(
-                                    color: green,
-                                    borderRadius: BorderRadius.circular(5)),
+                                    color: green, borderRadius: BorderRadius.circular(5)),
                               ),
                             ),
                           ],
